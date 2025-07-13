@@ -1,0 +1,26 @@
+/* Import google font */
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Package imports */
+@import 'tailwindcss';
+
+/* Font Setting */
+.font-oxygen {
+  font-family: "Oxygen", sans-serif;
+}
+.font-libreBas {
+  font-family: "Libre Baskerville", serif;
+}
+.font-jost {
+  font-family: "Jost", sans-serif;
+}
+
+:root {
+  --primary: #f22d3a;
+  --secondary: #ffe6e7;
+  --accent: #a3a3a3;
+  --dark: #000;
+  --white: #fff;
+}
