@@ -7,6 +7,7 @@ import { useState } from "react";
 import useAuth from "../../../hooks/useAuth/useAuth";
 import Swal from "sweetalert2";
 import axios from "axios";
+import toast from 'react-hot-toast';
 
 const Register = () => {
     const { createUser, updateUserProfile } = useAuth();
@@ -50,8 +51,8 @@ const Register = () => {
                 setTimeout(async () => {
                     navigate(location?.state?.from?.pathname || '/');
                 }, 3000);
-            }).catch(error => {
-                console.log(error);
+            }).catch(err => {
+                toast.error(err.message === "Firebase: Error (auth/email-already-in-use)." ? "Email already in use" : err.message);
             });
     };
 
@@ -188,6 +189,18 @@ const Register = () => {
                         className="sm:mt-0.5 w-full px-3 py-1.5 border border-gray-300 rounded-md"
                     />
                 </div>
+
+                {/* Terms & Conditions Checkbox */}
+                <div className="flex items-center justify-start gap-2 mb-0">
+                    <input
+                        type="checkbox"
+                        {...register("terms", { required: "You must accept the terms & conditions" })}
+                    />
+                    <label className={`text-sm ${errors.terms ? "text-red-600 font-semibold" : "text-gray-700"}`}>
+                        I accept the terms & conditions
+                    </label>
+                </div>
+             
 
                 {/* Submit */}
                 <button

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Outlet } from "react-router-dom";
 import authPic from "../assets/auth-pic.png";
 import logo from '/logo.png';
+import SocialLogin from '../pages/Authentication/SocialLogin';
 
 const AuthRoot = () => {
     return (
@@ -18,12 +19,13 @@ const AuthRoot = () => {
                     <h2 className="text-[40px] font-bold">Welcome to</h2>
                     <p className="text-xl">Bangladesh EchoNow Library System</p>
                     <p className="mt-2 text-sm">Sign in to Continue Access</p>
+                    <SocialLogin />
                 </div>
                 
             </div>
 
             {/* Right Side - Form Area */}
-            <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[var(--white)]">
+            <div className="flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-[var(--white)]">
                 <div className="max-w-md w-full">
                     <Outlet />
                 </div>
