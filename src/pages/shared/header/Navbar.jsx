@@ -1,4 +1,4 @@
-// Navbar.jsx
+import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import { VscMenu } from "react-icons/vsc";
 import { FiSearch } from "react-icons/fi";
@@ -195,7 +195,7 @@ const Navbar = () => {
             <div className="flex justify-between items-center px-3 pt-3 pb-4 sm:px-6 lg:pt-6 lg:pb-7">
                 {/* Left: Hamburger + Subscribe */}
                 <div className="flex items-center gap-4">
-                    <VscMenu className="text-2xl sm:text-3xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-500" onClick={() => setIsSidebarOpen(true)} />
+                    <VscMenu className="text-2xl sm:text-3xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" onClick={() => setIsSidebarOpen(true)} />
                     <Link to="/subscription">
                         <div className="hidden md:flex items-center group relative h-8 w-30 overflow-hidden rounded-full bg-[var(--primary)] text-white cursor-pointer">
                             <div className="absolute inset-0 flex items-center justify-center gap-2 transform transition-transform duration-500 group-hover:-translate-y-full">
@@ -203,7 +203,7 @@ const Navbar = () => {
                                 <span className="text-sm font-semibold font-jost">Subscribe</span>
                             </div>
 
-                            <div className="absolute inset-0 flex items-center justify-center gap-2 transform translate-y-full transition-transform duration-500 group-hover:translate-y-0">
+                            <div className="absolute inset-0 flex items-center justify-center gap-2 transform translate-y-full transition-transform duration-300 group-hover:translate-y-0">
                                 <FaEnvelope className="text-white -mr-0.5" />
                                 <span className="text-sm font-semibold font-jost">Subscribe</span>
                             </div>
@@ -221,8 +221,10 @@ const Navbar = () => {
                 {/* Right: Search + Cart */}
                 <div className="flex items-center md:gap-4">
                     <FiSearch className="text-2xl cursor-pointer" />
-                    <Link to="/login">
-                        <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold /></button></Link>
+                    <Link to="/auth/login">
+                        <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold />
+                        </button>
+                        </Link>
                 </div>
             </div>
 
