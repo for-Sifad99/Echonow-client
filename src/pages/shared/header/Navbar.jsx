@@ -12,11 +12,14 @@ import { SlSocialPintarest } from "react-icons/sl";
 import { LiaGithub } from "react-icons/lia";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { PiSignInBold } from "react-icons/pi";
+import { FaFaceGrinWide } from "react-icons/fa6";
 import logo from '/logo.png';
 import EchoLogo from "../EchoLogo/EchoLogo";
 import { Link, NavLink } from "react-router-dom";
+import useAuth from '../../../../hooks/useAuth/useAuth';
 
 const Navbar = () => {
+    const { user } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef();
 
@@ -68,10 +71,10 @@ const Navbar = () => {
                     </span>
                 )}
             </NavLink>
-            <NavLink to="/add-articles" className={mainNavLinkClass}>
+            <NavLink to="/add-article" className={mainNavLinkClass}>
                 {({ isActive }) => (
                     <span className='flex gap-1 items-center'>
-                        Add Articles
+                        Add Article
                         {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
                     </span>
                 )}
@@ -143,11 +146,11 @@ const Navbar = () => {
                         {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
                     </span>
                 )}</NavLink>
-            <NavLink to="/add-articles" className={sideNavLinkClass} onClick={closeSidebar}>
+            <NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
                 {({ isActive }) => (
 
                     <span className='flex justify-between items-center'>
-                        Add Articles
+                        Add Article
                         {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
                     </span>
                 )}</NavLink>
@@ -196,16 +199,18 @@ const Navbar = () => {
                 {/* Left: Hamburger + Subscribe */}
                 <div className="flex items-center gap-4">
                     <VscMenu className="text-2xl sm:text-3xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" onClick={() => setIsSidebarOpen(true)} />
-                    <Link to="/subscription">
+                    <Link to={`${user ? '/subscription' : '/'}`}>
                         <div className="hidden md:flex items-center group relative h-8 w-30 overflow-hidden rounded-full bg-[var(--primary)] text-white cursor-pointer">
                             <div className="absolute inset-0 flex items-center justify-center gap-2 transform transition-transform duration-500 group-hover:-translate-y-full">
-                                <FaEnvelope className="text-white -mr-0.5" />
-                                <span className="text-sm font-semibold font-jost">Subscribe</span>
+                                {user ? <><FaEnvelope className="text-white -mr-0.5" />
+                                    <span className="text-sm font-semibold font-jost">Subscribe</span></> : <><FaFaceGrinWide className="text-white -mr-0.5" />
+                                    <span className="text-sm font-semibold font-jost">Welcome</span></>}
                             </div>
 
                             <div className="absolute inset-0 flex items-center justify-center gap-2 transform translate-y-full transition-transform duration-300 group-hover:translate-y-0">
-                                <FaEnvelope className="text-white -mr-0.5" />
-                                <span className="text-sm font-semibold font-jost">Subscribe</span>
+                                {user ? <><FaEnvelope className="text-white -mr-0.5" />
+                                    <span className="text-sm font-semibold font-jost">Subscribe</span></> : <><FaFaceGrinWide className="text-white -mr-0.5" />
+                                    <span className="text-sm font-semibold font-jost">Welcome</span></>}
                             </div>
                         </div></Link>
                 </div>
@@ -224,7 +229,7 @@ const Navbar = () => {
                     <Link to="/auth/login">
                         <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold />
                         </button>
-                        </Link>
+                    </Link>
                 </div>
             </div>
 
@@ -260,8 +265,30 @@ const Navbar = () => {
                     {/* Sidebar Links */}
                     <nav className="flex flex-col px-4 text-lg font-jost font-semibold">{sidebarLinks}</nav>
 
+                    {/* Sidebar Conditional Buttons */}
+                    {user ? (
+                        <Link to='/all-articles'>
+                            <button
+                                onClick={closeSidebar}
+                                type="submit"
+                                className="mx-4 w-[250px] bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white font-oxygen font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
+                            >
+                                Explore Articles
+                            </button>
+                        </Link>
+                    ) : <Link to='/auth/login'>
+                        <button
+                            onClick={closeSidebar}
+                            type="submit"
+                            className="mx-4 w-[250px] bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white font-oxygen font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
+                        >
+                            Sign In
+                        </button>
+                    </Link>
+                    }
+
                     {/* Sidebar Footer */}
-                    <footer className="px-4 pt-20 pb-5 font-jost">
+                    <footer className="px-4 pt-5 pb-5 font-jost">
                         <div className="flex items-center -ml-1 gap-3 text-xl mb-2">
                             <a href="#" className=" hover:text-blue-600 cursor-pointer"><BiLogoFacebook /></a>
                             <a href="#" className="hover:text-blue-400 cursor-pointer"><RiTwitterLine /></a>

@@ -3,16 +3,38 @@ import useAuth from '../../../hooks/useAuth/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaGoogle } from "react-icons/fa";
 import Swal from 'sweetalert2';
+import useAxiosInstance from '../../../hooks/useAxiosSecure/useAxios';
 
 const SocialLogin = () => {
     const { googleSignIn } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
+    const axiosInstance = useAxiosInstance();
+    const { name, email, photo } = useAuth().user || {};
+
     const handleSubmit = () => {
         googleSignIn()
-            .then(result => {
+            .then(async result => {
                 console.log(result.user);
+
+                // Set user profile data:
+                const userProfile = {
+                    name,
+                    email,
+                    photo: photo,
+                    isVerified: false,
+                    role: "user",
+                    premiumTaken: null,
+                };
+
+                // Send user profile data to the server:
+                const res = await axiosInstance.post('/users', userProfile);
+                if (res.data.insertedId) {
+                    console.log('User profile created successfully:', res.data);
+                } else {
+                    console.log('Failed to create user profile:', res.data);
+                };
 
                 // Sweet Alert
                 const Toast = Swal.mixin({
@@ -30,7 +52,6 @@ const SocialLogin = () => {
                     icon: "success",
                     title: "Now you can continue..."
                 });
-
                 setTimeout(() => {
                     navigate(location?.state || '/');
                 }, 3000);

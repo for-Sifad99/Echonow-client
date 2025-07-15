@@ -57,9 +57,17 @@ const AuthProvider = ({ children }) => {
 
     //? Observer:
     useEffect(() => {
-        const unSubscribe = onAuthStateChanged(auth, currentUser => {
+        const unSubscribe = onAuthStateChanged(auth, async currentUser => {
             setUser(currentUser);
-            console.log('this form observer:', currentUser)
+            console.log('this form observer:', currentUser);
+
+            if (currentUser) {
+                const token = await currentUser.getIdToken(); 
+                localStorage.setItem('access-token', token);
+            } else {
+                localStorage.removeItem('access-token');
+            };
+
             setLoading(false);
         });
 

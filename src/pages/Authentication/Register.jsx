@@ -8,6 +8,8 @@ import useAuth from "../../../hooks/useAuth/useAuth";
 import Swal from "sweetalert2";
 import axios from "axios";
 import toast from 'react-hot-toast';
+import useAxiosInstance from "../../../hooks/useAxiosSecure/useAxios";
+
 
 const Register = () => {
     const { createUser, updateUserProfile } = useAuth();
@@ -16,12 +18,25 @@ const Register = () => {
     const [photo, setPhoto] = useState(null);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = useState(false);
-    const [uploadSuccess, setUploadSuccess] = useState(false); 
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+
+    const axiosInstance = useAxiosInstance();
 
     const onSubmit = data => {
         const { name, email, password } = data;
         createUser(email, password)
-            .then(() => {
+            .then(async () => {
+                // Set user profile data:
+                const userProfile = {
+                    name,
+                    email,
+                    photo: photo,
+                    isVerified: false,
+                    role: "user",
+                    premiumTaken: null,
+                };
+                await axiosInstance.post('/users', userProfile);
+
                 // Update user profile in firebase:
                 updateUserProfile({ displayName: name, photoURL: photo })
                     .then(() => {
@@ -66,10 +81,10 @@ const Register = () => {
             const res = await axios.post(url, formData);
             const photoUrl = res.data.data.url;
             setPhoto(photoUrl);
-            setUploadSuccess(true); 
+            setUploadSuccess(true);
         } catch (error) {
             console.error("Image upload failed:", error);
-            setUploadSuccess(false); 
+            setUploadSuccess(false);
         }
     };
 
@@ -200,7 +215,7 @@ const Register = () => {
                         I accept the terms & conditions
                     </label>
                 </div>
-             
+
 
                 {/* Submit */}
                 <button

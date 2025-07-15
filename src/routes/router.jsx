@@ -5,6 +5,8 @@ import AllArticles from "../pages/AllArticles/AllArticles";
 import AuthRoot from "../Layouts/AuthRoot";
 import Register from "../pages/Authentication/Register";
 import Login from "../pages/Authentication/Login";
+import AddArticle from "../pages/AddArticle/AddArticle";
+import ArticleDetails from "../pages/ArticleDetails/ArticleDetails";
 
 
 const router = createBrowserRouter([
@@ -14,6 +16,8 @@ const router = createBrowserRouter([
         children: [
             { index: true, Component: Home},
             { path: 'all-articles', Component: AllArticles},
+            { path: 'add-article', Component: AddArticle},
+            { path: 'article/:id', Component: ArticleDetails},
         ],
     },
     {
