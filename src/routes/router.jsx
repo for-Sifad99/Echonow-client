@@ -9,6 +9,7 @@ import AddArticle from "../pages/AddArticle/AddArticle";
 import ArticleDetails from "../pages/ArticleDetails/ArticleDetails";
 import Subscription from "../pages/Subscription/Subscription";
 import Payment from "../pages/Subscription/Payment";
+import PremiumArticles from "../pages/PremiumArticles/PremiumArticles";
 
 
 const router = createBrowserRouter([
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
             { path: '/add-article', Component: AddArticle },
             { path: '/article/:id', Component: ArticleDetails },
             { path: '/subscription', Component: Subscription },
-            { path: '/payment/:duration/:cost', Component: Payment }
+            { path: '/payment/:duration/:cost', Component: Payment },
+            { path: '/premium-articles', Component: PremiumArticles }
         ],
     },
     {

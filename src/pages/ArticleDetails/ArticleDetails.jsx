@@ -56,7 +56,7 @@ const ArticleDetails = () => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-10">
+        <div className="relative max-w-4xl mx-auto px-4 py-10">
             <h1 className="text-3xl font-bold text-[var(--dark)] mb-4">{article?.title}</h1>
 
             <img
@@ -76,6 +76,12 @@ const ArticleDetails = () => {
             <div className="text-gray-800 leading-7 whitespace-pre-line">
                 {article?.description}
             </div>
+
+            {article.isPremium && (
+                <span className="absolute top-36 right-8 bg-yellow-400 text-base font-bold text-black px-6 py-1.5 rounded-md shadow">
+                    Premium
+                </span>
+            )}
         </div>
     );
 };

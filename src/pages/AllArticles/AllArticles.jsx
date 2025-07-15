@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
+import useAuth from '../../../hooks/useAuth/useAuth';
 import Pagination from "../../pages/shared/Pagination/Pagination";
+import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
+import toast from "react-hot-toast";
 
 const AllArticles = () => {
+    const { user: authUser } = useAuth();
     const [search, setSearch] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedPublisher, setSelectedPublisher] = useState("");
+    const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
 
     const { data, isPending } = useQuery({
         queryKey: ["articles", { search, tags: selectedTags, publisher: selectedPublisher, page }],
@@ -21,7 +27,7 @@ const AllArticles = () => {
                     tags: selectedTags.join(","),
                     publisher: selectedPublisher,
                     page,
-                    limit: 6 ,
+                    limit: 6,
                 },
             });
             return res.data;
@@ -35,6 +41,30 @@ const AllArticles = () => {
 
     const tags = [...new Set(articles.map((a) => a.tags).flat())];
     const publishers = [...new Set(articles.map((a) => a.publisher))];
+
+    // Fetch logged-in user's info (for isPremium)
+    const {
+        data: dbUser,
+    } = useQuery({
+        queryKey: ['user-info', authUser?.email],
+        queryFn: async () => {
+            const res = await axiosPublic.get(`/users/${authUser?.email}`);
+            return res.data;
+        },
+        enabled: !!authUser?.email,
+    });
+
+    const handleNavigate = (article, id) => {
+        if (article.isPremium && dbUser?.isPremium) {
+            navigate(`/article/${id}`);
+        } else if (!article.isPremium) {
+            navigate(`/article/${id}`);
+        }
+        else if (article.isPremium && !dbUser?.isPremium) {
+            toast.error('Please get subscription first!')
+        }
+
+    }
 
     return (
         <div className="w-full py-8 px-4 lg:px-10 grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -102,8 +132,8 @@ const AllArticles = () => {
                                     setPage(1);
                                 }}
                                 className={`px-3 py-1 rounded-full border text-sm ${selectedTags.includes(tag)
-                                        ? "bg-[var(--primary)] text-white"
-                                        : "text-gray-600 border-gray-300"
+                                    ? "bg-[var(--primary)] text-white"
+                                    : "text-gray-600 border-gray-300"
                                     }`}
                             >
                                 {tag}
@@ -117,9 +147,9 @@ const AllArticles = () => {
             <div className="lg:col-span-3 flex flex-col gap-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {isPending ? (
-                        <p className="text-gray-500 col-span-full">Loading...</p>
+                        <p className="text-gray-500 col-span-full text-center text-2xl font-oxygen">LOADING...</p>
                     ) : articles.length === 0 ? (
-                        <p className="text-gray-500 col-span-full">No articles found.</p>
+                        <p className="text-xl text-gray-600 col-span-full text-center font-libreBas">No premium articles found.</p>
                     ) : (
                         articles.map((article) => (
                             <div
@@ -127,8 +157,8 @@ const AllArticles = () => {
                                 className={`bg-white rounded-lg border shadow group overflow-hidden relative transition duration-300 hover:shadow-md ${article.isPremium ? "border-yellow-500" : "border-gray-200"
                                     }`}
                             >
-                                <div className="p-4 space-y-2">
-                                    <h3 className="text-lg font-bold text-gray-800 mb-2">
+                                <div className="px-4 pt-4 pb-2 space-y-2">
+                                    <h3 className="mt-4 font-jost leading-6 text-lg font-bold text-gray-800 mb-2">
                                         {article.title.length > 60
                                             ? article.title.slice(0, 60) + "..."
                                             : article.title}
@@ -154,19 +184,15 @@ const AllArticles = () => {
 
                                     <div className="text-xs text-gray-500">Author: {article.authorName}</div>
 
-                                    <Link
-                                        to={`/article/${article._id}`}
-                                        className={`block w-full mt-3 text-center px-4 py-2 rounded-md text-sm font-semibold transition duration-700  cursor-pointer ${article.isPremium && !article.subscribedUser
-                                                ? "bg-gray-400 cursor-not-allowed text-white"
-                                            : "bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white"
-                                            }`}
-                                        disabled={article.isPremium && !article.subscribedUser}
-                                    >
-                                        Details
-                                    </Link>
+                                    <button
+                                        onClick={() => handleNavigate(article, article._id)}
+                                        className={`block w-full mt-3 text-center px-4 py-2 rounded-md text-sm font-semibold transition duration-700 cursor-pointer ${(article.isPremium && !dbUser?.isPremium)
+                                            ? 'bg-gradient-to-r from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-400 cursor-not-allowed text-white transition duration-500'
+                                            : `text-white bg-gradient-to-r transition duration-500 ${article.isPremium && dbUser?.isPremium ? 'from-orange-300 to-orange-400 hover:from-orange-400 hover:to-orange-300' : 'from-red-400 to-red-600 hover:from-red-500 hover:to-red-400'}`
+                                            }`}>Details</button>
 
                                     {article.isPremium && (
-                                        <span className="absolute top-2 right-2 bg-yellow-400 text-xs font-bold text-black px-2 py-0.5 rounded shadow">
+                                        <span className="absolute top-4 right-4 bg-yellow-400 text-xs font-bold text-black px-3 py-1 rounded shadow">
                                             Premium
                                         </span>
                                     )}
