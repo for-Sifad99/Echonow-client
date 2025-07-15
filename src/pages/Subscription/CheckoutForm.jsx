@@ -25,11 +25,11 @@ const CheckoutForm = ({ duration, cost }) => {
         if (!card) return;
 
         try {
-            // ✅ Create payment intent via axiosSecure
+            // Create payment intent via axiosSecure
             const res = await axiosSecure.post('/create-payment-intent', { cost });
             const clientSecret = res.data.clientSecret;
 
-            // ✅ Confirm card payment
+            // Confirm card payment
             const { error } = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: { card },
             });
