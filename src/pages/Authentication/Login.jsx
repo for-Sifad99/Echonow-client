@@ -6,6 +6,7 @@ import logo from "/logo.png";
 import useAuth from "../../../hooks/useAuth/useAuth";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import useAxiosInstance from '../../../hooks/useAxiosSecure/useAxios';
 
 const Login = () => {
     const { signInUser, forgotPassword } = useAuth();
@@ -15,22 +16,50 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const email = watch("email");
 
+    const axiosInstance = useAxiosInstance();
     const onSubmit = (data) => {
         const { email, password } = data;
+
         signInUser(email, password)
-            .then(() => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Logged in successfully!",
+            .then(async (res) => {
+                console.log(res.user);
+
+                // Set user profile data:
+                const userProfile = {
+                    name: res.user.displayName,
+                    email: email,
+                    photo: res.user.photoURL,
+                    isVerified: false,
+                    role: "user",
+                    premiumTaken: null,
+                };
+
+                // Send user profile data to the server:
+                await axiosInstance.post('/users', userProfile);
+
+
+                // Sweet Alert
+                const Toast = Swal.mixin({
                     toast: true,
-                    timer: 3000,
+                    position: "top-end",
                     showConfirmButton: false,
-                    position: "top-end"
+                    timer: 4000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
                 });
-                navigate(location?.state?.from?.pathname || '/');
+                Toast.fire({
+                    icon: "success",
+                    title: "Now you can continue..."
+                });
+                setTimeout(() => {
+                    navigate(location?.state || '/');
+                }, 3000);
             })
             .catch(err => {
-                toast.error(err.message === "Firebase: Error (auth/invalid-credential)." ? "Email or password wrong!" : err.message);
+                toast.error(err.message === "Firebase: Error (auth/invalid-credential)." ? "Something went wrong! try again." : err.message);
             });
     };
 

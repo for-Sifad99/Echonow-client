@@ -3,62 +3,47 @@ import useAuth from '../../../hooks/useAuth/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaGoogle } from "react-icons/fa";
 import Swal from 'sweetalert2';
-import useAxiosInstance from '../../../hooks/useAxiosSecure/useAxios';
+import useAxiosPublic from '../../../hooks/useAxiosPublic/useAxios';
 
 const SocialLogin = () => {
     const { googleSignIn } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-
-    const axiosInstance = useAxiosInstance();
-    const { name, email, photo } = useAuth().user || {};
+    const axiosPublic = useAxiosPublic();
 
     const handleSubmit = () => {
         googleSignIn()
-            .then(async result => {
-                console.log(result.user);
+            .then(async (result) => {
+                const { displayName, email, photoURL } = result.user;
 
-                // Set user profile data:
                 const userProfile = {
-                    name,
+                    name: displayName,
                     email,
-                    photo: photo,
+                    photo: photoURL,
                     isVerified: false,
                     role: "user",
                     premiumTaken: null,
                 };
 
-                // Send user profile data to the server:
-                const res = await axiosInstance.post('/users', userProfile);
-                if (res.data.insertedId) {
-                    console.log('User profile created successfully:', res.data);
-                } else {
-                    console.log('Failed to create user profile:', res.data);
-                };
+                await axiosPublic.post('/users', userProfile);
 
-                // Sweet Alert
-                const Toast = Swal.mixin({
+                Swal.fire({
                     toast: true,
-                    position: "top-end",
+                    icon: 'success',
+                    title: 'Now you can continue...',
+                    position: 'top-end',
+                    timer: 3000,
                     showConfirmButton: false,
-                    timer: 4000,
                     timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Now you can continue..."
                 });
                 setTimeout(() => {
-                    navigate(location?.state || '/');
+                    navigate(location?.state || '/', { replace: true });
                 }, 3000);
             })
             .catch(error => {
-                console.log(error);
+                console.error("❌ Google Sign-In Error:", error);
             });
+
     };
 
     return (

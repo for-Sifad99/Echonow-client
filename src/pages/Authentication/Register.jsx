@@ -206,7 +206,7 @@ const Register = () => {
                 </div>
 
                 {/* Terms & Conditions Checkbox */}
-                <div className="flex items-center justify-start gap-2 mb-0">
+                <div className="flex items-center justify-start gap-2">
                     <input
                         type="checkbox"
                         {...register("terms", { required: "You must accept the terms & conditions" })}
@@ -220,7 +220,7 @@ const Register = () => {
                 {/* Submit */}
                 <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500  hover:to-red-400 text-white font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
+                    className="-mt-2.5 w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500  hover:to-red-400 text-white font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
                 >
                     Register
                 </button>

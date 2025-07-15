@@ -33,7 +33,7 @@ const ArticleDetails = () => {
         axiosSecure
             .patch(`/article/${id}/views`)
             .then(() => {
-                // After patch, refresh article to get updated viewCount
+                console.log("View count updated successfully");
                 refetch();
             })
             .catch(console.error);

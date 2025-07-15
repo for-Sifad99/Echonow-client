@@ -156,9 +156,9 @@ const AllArticles = () => {
 
                                     <Link
                                         to={`/article/${article._id}`}
-                                        className={`block w-full mt-3 text-center px-4 py-2 rounded-md text-sm font-semibold transition duration-200 ${article.isPremium && !article.subscribedUser
+                                        className={`block w-full mt-3 text-center px-4 py-2 rounded-md text-sm font-semibold transition duration-700  cursor-pointer ${article.isPremium && !article.subscribedUser
                                                 ? "bg-gray-400 cursor-not-allowed text-white"
-                                                : "bg-[var(--primary)] text-white hover:bg-[var(--dark)]"
+                                            : "bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white"
                                             }`}
                                         disabled={article.isPremium && !article.subscribedUser}
                                     >
