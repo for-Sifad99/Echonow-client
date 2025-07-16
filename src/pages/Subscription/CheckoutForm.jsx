@@ -5,13 +5,17 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useAuth from '../../../hooks/useAuth/useAuth';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const CheckoutForm = ({ duration, cost }) => {
-    const {user} = useAuth();
+    const { user } = useAuth();
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState('');
     const [selected, setSelected] = useState(null);
+    const navigate = useNavigate();
 
     const singleOption = { value: duration, label: `Period: ${duration}` };
     const axiosSecure = useAxiosSecure();
@@ -31,8 +35,13 @@ const CheckoutForm = ({ duration, cost }) => {
 
             // Confirm card payment
             const { error } = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: { card },
-            });
+                payment_method: {
+                    card,
+                    billing_details: {
+                        name : user.displayName,
+                        email : user.email
+                    }}
+                });
 
             if (error) {
                 setError(error.message);
@@ -42,18 +51,21 @@ const CheckoutForm = ({ duration, cost }) => {
                     icon: "success",
                     title: "Done! Subscription successful.",
                     toast: true,
-                    timer: 3000,
+                    timer: 2000,
                     showConfirmButton: false,
                     position: "top-end"
                 });
                 await axiosSecure.post('/users', {
                     email: user?.email,
                     premiumTaken: new Date(),
-                    duration: selected?.value 
+                    duration: selected?.value
                 });
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
             }
         } catch (err) {
-           toast.error(err);
+            toast.error(err);
             setError('Something went wrong during payment.');
         }
     };

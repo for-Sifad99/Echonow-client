@@ -111,7 +111,7 @@ const Navbar = () => {
                     </span>
                 )}
             </NavLink>
-            <NavLink to="/user-photo" className={mainNavLinkClass}>
+            <NavLink to="/my-profile" className={mainNavLinkClass}>
                 {({ isActive }) => (
                     <span className='flex gap-1 items-center'>
                         User Photo
@@ -182,7 +182,7 @@ const Navbar = () => {
                         {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
                     </span>
                 )}</NavLink>
-            <NavLink to="/user-photo" className={sideNavLinkClass} onClick={closeSidebar}>
+            <NavLink to="/my-profile" className={sideNavLinkClass} onClick={closeSidebar}>
                 {({ isActive }) => (
                     <span className='flex justify-between items-center'>
                         User Photo

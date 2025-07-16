@@ -11,6 +11,7 @@ import Subscription from "../pages/Subscription/Subscription";
 import Payment from "../pages/Subscription/Payment";
 import PremiumArticles from "../pages/PremiumArticles/PremiumArticles";
 import MyArticles from "../pages/MyArticles/MyArticles";
+import MyProfile from "../pages/MyProfile/MyProfile";
 
 
 const router = createBrowserRouter([
@@ -25,7 +26,8 @@ const router = createBrowserRouter([
             { path: '/subscription', Component: Subscription },
             { path: '/payment/:duration/:cost', Component: Payment },
             { path: '/premium-articles', Component: PremiumArticles },
-            { path: '/my-articles', Component: MyArticles }
+            { path: '/my-articles', Component: MyArticles },
+            { path: '/my-profile', Component: MyProfile },
         ],
     },
     {
