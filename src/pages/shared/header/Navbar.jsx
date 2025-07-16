@@ -47,7 +47,7 @@ const Navbar = () => {
     }, []);
 
     const mainNavLinkClass = ({ isActive }) =>
-        `text-sm relative after:absolute after:bottom-[-15px] after:left-0 after:h-[4px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
+        `${user ? 'text-sm' : 'text-base'} relative after:absolute after:bottom-[-15px] after:left-0 after:h-[4px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
         }`;
 
     const sideNavLinkClass = () =>
@@ -71,54 +71,57 @@ const Navbar = () => {
                     </span>
                 )}
             </NavLink>
-            <NavLink to="/add-article" className={mainNavLinkClass}>
-                {({ isActive }) => (
-                    <span className='flex gap-1 items-center'>
-                        Add Article
-                        {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                    </span>
-                )}
-            </NavLink>
-            <NavLink to="/subscription" className={`${mainNavLinkClass} lg:hidden`}>
-                {({ isActive }) => (
-                    <span className='flex gap-1 items-center'>
-                        Subscription
-                        {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                    </span>
-                )}
-            </NavLink>
-            <NavLink to="/dashboard" className={mainNavLinkClass}>
-                {({ isActive }) => (
-                    <span className='flex gap-1 items-center'>
-                        Dashboard
-                        {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                    </span>
-                )}
-            </NavLink>
-            <NavLink to="/my-articles" className={mainNavLinkClass}>
-                {({ isActive }) => (
-                    <span className='flex gap-1 items-center'>
-                        My Articles
-                        {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                    </span>
-                )}
-            </NavLink>
-            <NavLink to="/premium-articles" className={mainNavLinkClass}>
-                {({ isActive }) => (
-                    <span className='flex gap-1 items-center'>
-                        Premium Articles
-                        {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                    </span>
-                )}
-            </NavLink>
-            <NavLink to="/my-profile" className={mainNavLinkClass}>
-                {({ isActive }) => (
-                    <span className='flex gap-1 items-center'>
-                        User Photo
-                        {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                    </span>
-                )}
-            </NavLink>
+     {user && 
+     <>
+                <NavLink to="/add-article" className={mainNavLinkClass}>
+                    {({ isActive }) => (
+                        <span className='flex gap-1 items-center'>
+                            Add Article
+                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                        </span>
+                    )}
+                </NavLink>
+                <NavLink to="/subscription" className={`${mainNavLinkClass} lg:hidden`}>
+                    {({ isActive }) => (
+                        <span className='flex gap-1 items-center'>
+                            Subscription
+                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                        </span>
+                    )}
+                </NavLink>
+                <NavLink to="/dashboard" className={mainNavLinkClass}>
+                    {({ isActive }) => (
+                        <span className='flex gap-1 items-center'>
+                            Dashboard
+                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                        </span>
+                    )}
+                </NavLink>
+                <NavLink to="/my-articles" className={mainNavLinkClass}>
+                    {({ isActive }) => (
+                        <span className='flex gap-1 items-center'>
+                            My Articles
+                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                        </span>
+                    )}
+                </NavLink>
+                <NavLink to="/premium-articles" className={mainNavLinkClass}>
+                    {({ isActive }) => (
+                        <span className='flex gap-1 items-center'>
+                            Premium Articles
+                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                        </span>
+                    )}
+                </NavLink>
+                <NavLink to="/my-profile" className={mainNavLinkClass}>
+                    {({ isActive }) => (
+                        <span className='flex gap-1 items-center'>
+                            User Photo
+                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                        </span>
+                    )}
+                </NavLink></>
+     }
         </>
     );
 
@@ -146,49 +149,50 @@ const Navbar = () => {
                         {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
                     </span>
                 )}</NavLink>
-            <NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
-                {({ isActive }) => (
+            {user &&
+                <><NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
+                    {({ isActive }) => (
 
-                    <span className='flex justify-between items-center'>
-                        Add Article
-                        {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
-                    </span>
-                )}</NavLink>
-            <NavLink to="/subscription" className={sideNavLinkClass} onClick={closeSidebar}>
-                {({ isActive }) => (
-                    <span className='flex justify-between items-center'>
-                        Subscription
-                        {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
-                    </span>
-                )}</NavLink>
-            <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
-                {({ isActive }) => (
-                    <span className='flex justify-between items-center'>
-                        Dashboard
-                        {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
-                    </span>
-                )}</NavLink>
-            <NavLink to="/my-articles" className={sideNavLinkClass} onClick={closeSidebar}>
-                {({ isActive }) => (
-                    <span className='flex justify-between items-center'>
-                        My Articles
-                        {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
-                    </span>
-                )}</NavLink>
-            <NavLink to="/premium-articles" className={sideNavLinkClass} onClick={closeSidebar}>
-                {({ isActive }) => (
-                    <span className='flex justify-between items-center'>
-                        Premium Articles
-                        {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
-                    </span>
-                )}</NavLink>
-            <NavLink to="/my-profile" className={sideNavLinkClass} onClick={closeSidebar}>
-                {({ isActive }) => (
-                    <span className='flex justify-between items-center'>
-                        User Photo
-                        {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
-                    </span>
-                )}</NavLink>
+                        <span className='flex justify-between items-center'>
+                            Add Article
+                            {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
+                        </span>
+                    )}</NavLink>
+                    <NavLink to="/subscription" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
+                            <span className='flex justify-between items-center'>
+                                Subscription
+                                {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
+                            </span>
+                        )}</NavLink>
+                    <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
+                            <span className='flex justify-between items-center'>
+                                Dashboard
+                                {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
+                            </span>
+                        )}</NavLink>
+                    <NavLink to="/my-articles" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
+                            <span className='flex justify-between items-center'>
+                                My Articles
+                                {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
+                            </span>
+                        )}</NavLink>
+                    <NavLink to="/premium-articles" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
+                            <span className='flex justify-between items-center'>
+                                Premium Articles
+                                {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
+                            </span>
+                        )}</NavLink>
+                    <NavLink to="/my-profile" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
+                            <span className='flex justify-between items-center'>
+                                User Photo
+                                {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
+                            </span>
+                        )}</NavLink></>}
         </>
     );
 
@@ -265,43 +269,45 @@ const Navbar = () => {
                     {/* Sidebar Links */}
                     <nav className="flex flex-col px-4 text-lg font-jost font-semibold">{sidebarLinks}</nav>
 
-                    {/* Sidebar Conditional Buttons */}
-                    {user ? (
-                        <Link to='/all-articles'>
+                    <div className='flex flex-col justify-end mt-auto'>
+                        {/* Sidebar Conditional Buttons */}
+                        {user ? (
+                            <Link to='/all-articles'>
+                                <button
+                                    onClick={closeSidebar}
+                                    type="submit"
+                                    className="mx-4 w-[250px] bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white font-oxygen font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
+                                >
+                                    Explore Articles
+                                </button>
+                            </Link>
+                        ) : <Link to='/auth/login'>
                             <button
                                 onClick={closeSidebar}
                                 type="submit"
                                 className="mx-4 w-[250px] bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white font-oxygen font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
                             >
-                                Explore Articles
+                                Sign In
                             </button>
                         </Link>
-                    ) : <Link to='/auth/login'>
-                        <button
-                            onClick={closeSidebar}
-                            type="submit"
-                            className="mx-4 w-[250px] bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white font-oxygen font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
-                        >
-                            Sign In
-                        </button>
-                    </Link>
-                    }
+                        }
 
-                    {/* Sidebar Footer */}
-                    <footer className="px-4 pt-5 pb-5 font-jost">
-                        <div className="flex items-center -ml-1 gap-3 text-xl mb-2">
-                            <a href="#" className=" hover:text-blue-600 cursor-pointer"><BiLogoFacebook /></a>
-                            <a href="#" className="hover:text-blue-400 cursor-pointer"><RiTwitterLine /></a>
-                            <a href="#" className="hover:text-pink-500 cursor-pointer"><IoLogoInstagram /></a>
-                            <a href="#" className="hover:text-[var(--primary)] cursor-pointer"><AiOutlineYoutube /></a>
-                            <a href="#" className="text-base hover:text-[var(--primary)] cursor-pointer"><SlSocialPintarest /></a>
-                            <a href="#" className="hover:text-gray-700  cursor-pointer"><LiaGithub /></a>
-                        </div>
-                        <p className="text-xs">
-                            © Copyright {new Date().getFullYear()} EchoNow. All rights reserved<br />
-                            powered by EchoNow.com
-                        </p>
-                    </footer>
+                        {/* Sidebar Footer */}
+                        <footer className="px-4.5 pt-5 pb-5 font-jost">
+                            <div className="flex items-center -ml-1 gap-3 text-xl mb-2">
+                                <a href="#" className=" hover:text-blue-600 cursor-pointer"><BiLogoFacebook /></a>
+                                <a href="#" className="hover:text-blue-400 cursor-pointer"><RiTwitterLine /></a>
+                                <a href="#" className="hover:text-pink-500 cursor-pointer"><IoLogoInstagram /></a>
+                                <a href="#" className="hover:text-[var(--primary)] cursor-pointer"><AiOutlineYoutube /></a>
+                                <a href="#" className="text-base hover:text-[var(--primary)] cursor-pointer"><SlSocialPintarest /></a>
+                                <a href="#" className="hover:text-gray-700  cursor-pointer"><LiaGithub /></a>
+                            </div>
+                            <p className="text-xs">
+                                © Copyright {new Date().getFullYear()} EchoNow. All rights reserved<br />
+                                powered by EchoNow.com
+                            </p>
+                        </footer>
+                    </div>
                 </aside>
             </div>
         </header>

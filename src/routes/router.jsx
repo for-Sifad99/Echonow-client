@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import Root from "../Layouts/Root";
 import Home from '../pages/home/Home/Home';
+import PrivetRoute from '../routes/PrivetRoute'
 import AllArticles from "../pages/AllArticles/AllArticles";
 import AuthRoot from "../Layouts/AuthRoot";
 import Register from "../pages/Authentication/Register";
@@ -21,13 +22,13 @@ const router = createBrowserRouter([
         children: [
             { index: true, Component: Home },
             { path: '/all-articles', Component: AllArticles },
-            { path: '/add-article', Component: AddArticle },
-            { path: '/article/:id', Component: ArticleDetails },
-            { path: '/subscription', Component: Subscription },
-            { path: '/payment/:duration/:cost', Component: Payment },
-            { path: '/premium-articles', Component: PremiumArticles },
-            { path: '/my-articles', Component: MyArticles },
-            { path: '/my-profile', Component: MyProfile },
+            { path: '/add-article', element: <PrivetRoute><AddArticle /></PrivetRoute> },
+            { path: '/article/:id', element: <PrivetRoute><ArticleDetails /></PrivetRoute>},
+            { path: '/subscription', element: <PrivetRoute><Subscription /></PrivetRoute>  },
+            { path: '/payment/:duration/:cost', element: <PrivetRoute><Payment /></PrivetRoute>  },
+            { path: '/premium-articles', element: <PrivetRoute><PremiumArticles /></PrivetRoute>  },
+            { path: '/my-articles', element: <PrivetRoute><MyArticles /></PrivetRoute> },
+            { path: '/my-profile', element: <PrivetRoute><MyProfile /></PrivetRoute>  },
         ],
     },
     {
