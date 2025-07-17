@@ -58,8 +58,9 @@ const CheckoutForm = ({ duration, cost }) => {
                 await axiosSecure.post('/users', {
                     email: user?.email,
                     premiumTaken: new Date(),
-                    duration: selected?.value
+                    duration: selected?.value || duration
                 });
+
                 setTimeout(() => {
                     navigate('/');
                 }, 3000);

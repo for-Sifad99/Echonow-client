@@ -5,10 +5,14 @@ import Footer from '../pages/shared/Footer/Footer';
 
 const Root = () => {
   return (
-    <div>
-      <Header />
-      <Outlet className='min-h-screen' />
-      <Footer />
+    <div className="flex flex-col min-h-screen">
+      <Header />  {/* Top part */}
+
+      <main className="flex-1">
+        <Outlet />  {/* Main content */}
+      </main>
+
+      <Footer />  {/* Bottom part */}
     </div>
   );
 };

@@ -37,7 +37,6 @@ const Login = () => {
                 // Send user profile data to the server:
                 await axiosInstance.post('/users', userProfile);
 
-
                 // Sweet Alert
                 const Toast = Swal.mixin({
                     toast: true,

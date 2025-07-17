@@ -5,6 +5,7 @@
 
 /* Package imports */
 @import 'tailwindcss';
+@plugin "daisyui";
 
 /* Font Setting */
 .font-oxygen {
@@ -17,10 +18,16 @@
   font-family: "Jost", sans-serif;
 }
 
-:root {
+/* Theme related setting */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Website reusable colors */
+@theme {
   --primary: #f22d3a;
   --secondary: #ffe6e7;
   --accent: #a3a3a3;
   --dark: #000;
   --white: #fff;
 }
+
+

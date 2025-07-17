@@ -1,7 +1,8 @@
 import React from 'react';
 import { useEffect, useRef, useState } from "react";
+import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiMoon  } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaEnvelope } from "react-icons/fa";
 import { BiLogoFacebook } from "react-icons/bi";
@@ -17,9 +18,12 @@ import logo from '/logo.png';
 import EchoLogo from "../EchoLogo/EchoLogo";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from '../../../../hooks/useAuth/useAuth';
+import useTheme from '../../../../hooks/themeContext';
+import AccountAuthor from '../../MyProfile/AccountAuthor';
 
 const Navbar = () => {
     const { user } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef();
 
@@ -116,7 +120,7 @@ const Navbar = () => {
                 <NavLink to="/my-profile" className={mainNavLinkClass}>
                     {({ isActive }) => (
                         <span className='flex gap-1 items-center'>
-                            User Photo
+                            User Profile
                             {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
                         </span>
                     )}
@@ -189,7 +193,7 @@ const Navbar = () => {
                     <NavLink to="/my-profile" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
                             <span className='flex justify-between items-center'>
-                                User Photo
+                                User Profile
                                 {isActive ? <IoIosArrowDown /> : <MdKeyboardArrowRight size={28} className="-mr-1.5" />}
                             </span>
                         )}</NavLink></>}
@@ -228,12 +232,24 @@ const Navbar = () => {
                 </div>
 
                 {/* Right: Search + Cart */}
-                <div className="flex items-center md:gap-4">
-                    <FiSearch className="text-2xl cursor-pointer" />
-                    <Link to="/auth/login">
+                <div className="flex items-center justify-center gap-1 sm:gap-2 md:gap-4">
+                    {/* Theme */}
+                    <label className="swap swap-rotate md:-mr-1.5">
+                        <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
+
+                        {/* sun icon */}
+                        <TiWeatherSunny className="swap-off sm:text-[26px] text-[22px]" />
+
+                        {/* moon icon */}
+                        <FiMoon className="swap-on sm:text-[23px] text-xl" />
+                    </label>
+                    <FiSearch className="text-xl sm:text-2xl cursor-pointer" />
+                    {
+                        user ? <AccountAuthor /> :    <Link to="/auth/login">
                         <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold />
                         </button>
                     </Link>
+}
                 </div>
             </div>
 
@@ -295,16 +311,16 @@ const Navbar = () => {
                         {/* Sidebar Footer */}
                         <footer className="px-4.5 pt-5 pb-5 font-jost">
                             <div className="flex items-center -ml-1 gap-3 text-xl mb-2">
-                                <a href="#" className=" hover:text-blue-600 cursor-pointer"><BiLogoFacebook /></a>
-                                <a href="#" className="hover:text-blue-400 cursor-pointer"><RiTwitterLine /></a>
-                                <a href="#" className="hover:text-pink-500 cursor-pointer"><IoLogoInstagram /></a>
-                                <a href="#" className="hover:text-[var(--primary)] cursor-pointer"><AiOutlineYoutube /></a>
-                                <a href="#" className="text-base hover:text-[var(--primary)] cursor-pointer"><SlSocialPintarest /></a>
-                                <a href="#" className="hover:text-gray-700  cursor-pointer"><LiaGithub /></a>
+                                <a href="#" className=" hover:text-blue-600"><BiLogoFacebook /></a>
+                                <a href="#" className="hover:text-blue-400"><RiTwitterLine /></a>
+                                <a href="#" className="hover:text-pink-500"><IoLogoInstagram /></a>
+                                <a href="#" className="hover:text-[var(--primary)]"><AiOutlineYoutube /></a>
+                                <a href="#" className="text-base hover:text-[var(--primary)]"><SlSocialPintarest /></a>
+                                <a href="#" className="hover:text-gray-700"><LiaGithub /></a>
                             </div>
                             <p className="text-xs">
                                 © Copyright {new Date().getFullYear()} EchoNow. All rights reserved<br />
-                                powered by EchoNow.com
+                                powered by echonow.netlify.app
                             </p>
                         </footer>
                     </div>
