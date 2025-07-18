@@ -13,6 +13,8 @@ import Payment from "../pages/Subscription/Payment";
 import PremiumArticles from "../pages/PremiumArticles/PremiumArticles";
 import MyArticles from "../pages/MyArticles/MyArticles";
 import MyProfile from "../pages/MyProfile/MyProfile";
+import DashboardRoot from "../Layouts/DashboardRoot";
+import Dashboard from "../pages/Dashboard/Dashboard";
 
 
 const router = createBrowserRouter([
@@ -30,6 +32,13 @@ const router = createBrowserRouter([
             { path: '/my-articles', element: <PrivetRoute><MyArticles /></PrivetRoute> },
             { path: '/my-profile', element: <PrivetRoute><MyProfile /></PrivetRoute>  },
         ],
+    },
+    {
+        path: "/Dashboard",
+        Component: DashboardRoot,
+        children : [
+           { index: true, Component:Dashboard}
+        ]
     },
     {
         path: "/auth",

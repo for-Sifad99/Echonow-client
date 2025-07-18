@@ -4,10 +4,12 @@ import useAuth from '../../../hooks/useAuth/useAuth';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const MyProfile = () => {
     const axiosPublic = useAxiosPublic();
     const { user, signOutUser, updateUserProfile } = useAuth();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         name: '',
@@ -124,7 +126,7 @@ const MyProfile = () => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
-   
+
     const handleLogout = () => {
         Swal.fire({
             title: 'Are you sure?',
@@ -138,12 +140,15 @@ const MyProfile = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 signOutUser()
-                    .then(() => toast.success('You are successfully logged out!'))
+                    .then(() => {
+                        toast.success('You are successfully logged out!')
+                        navigate('/')
+                    })
                     .catch(() => toast.error('Sorry! Logout failed.'));
             }
         });
     };
-  
+
     if (loading) return <p className="text-center mt-10">Loading profile...</p>;
     if (error) return <p className="text-red-500 text-center mt-10">{error.message}</p>;
 

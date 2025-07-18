@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
-import { FiSearch, FiMoon  } from "react-icons/fi";
+import { FiSearch, FiMoon } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaEnvelope } from "react-icons/fa";
 import { BiLogoFacebook } from "react-icons/bi";
@@ -75,57 +75,57 @@ const Navbar = () => {
                     </span>
                 )}
             </NavLink>
-     {user && 
-     <>
-                <NavLink to="/add-article" className={mainNavLinkClass}>
-                    {({ isActive }) => (
-                        <span className='flex gap-1 items-center'>
-                            Add Article
-                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                        </span>
-                    )}
-                </NavLink>
-                <NavLink to="/subscription" className={`${mainNavLinkClass} lg:hidden`}>
-                    {({ isActive }) => (
-                        <span className='flex gap-1 items-center'>
-                            Subscription
-                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                        </span>
-                    )}
-                </NavLink>
-                <NavLink to="/dashboard" className={mainNavLinkClass}>
-                    {({ isActive }) => (
-                        <span className='flex gap-1 items-center'>
-                            Dashboard
-                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                        </span>
-                    )}
-                </NavLink>
-                <NavLink to="/my-articles" className={mainNavLinkClass}>
-                    {({ isActive }) => (
-                        <span className='flex gap-1 items-center'>
-                            My Articles
-                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                        </span>
-                    )}
-                </NavLink>
-                <NavLink to="/premium-articles" className={mainNavLinkClass}>
-                    {({ isActive }) => (
-                        <span className='flex gap-1 items-center'>
-                            Premium Articles
-                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                        </span>
-                    )}
-                </NavLink>
-                <NavLink to="/my-profile" className={mainNavLinkClass}>
-                    {({ isActive }) => (
-                        <span className='flex gap-1 items-center'>
-                            User Profile
-                            {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                        </span>
-                    )}
-                </NavLink></>
-     }
+            {user &&
+                <>
+                    <NavLink to="/add-article" className={mainNavLinkClass}>
+                        {({ isActive }) => (
+                            <span className='flex gap-1 items-center'>
+                                Add Article
+                                {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                            </span>
+                        )}
+                    </NavLink>
+                    <NavLink to="/subscription" className={`${mainNavLinkClass} lg:hidden`}>
+                        {({ isActive }) => (
+                            <span className='flex gap-1 items-center'>
+                                Subscription
+                                {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                            </span>
+                        )}
+                    </NavLink>
+                    <NavLink to="/dashboard" className={mainNavLinkClass}>
+                        {({ isActive }) => (
+                            <span className='flex gap-1 items-center'>
+                                Dashboard
+                                {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                            </span>
+                        )}
+                    </NavLink>
+                    <NavLink to="/my-articles" className={mainNavLinkClass}>
+                        {({ isActive }) => (
+                            <span className='flex gap-1 items-center'>
+                                My Articles
+                                {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                            </span>
+                        )}
+                    </NavLink>
+                    <NavLink to="/premium-articles" className={mainNavLinkClass}>
+                        {({ isActive }) => (
+                            <span className='flex gap-1 items-center'>
+                                Premium Articles
+                                {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                            </span>
+                        )}
+                    </NavLink>
+                    <NavLink to="/my-profile" className={mainNavLinkClass}>
+                        {({ isActive }) => (
+                            <span className='flex gap-1 items-center'>
+                                User Profile
+                                {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                            </span>
+                        )}
+                    </NavLink></>
+            }
         </>
     );
 
@@ -238,18 +238,18 @@ const Navbar = () => {
                         <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
 
                         {/* sun icon */}
-                        <TiWeatherSunny className="swap-off sm:text-[26px] text-[22px]" />
+                        <TiWeatherSunny className="swap-on sm:text-[26px] text-[22px]" />
 
                         {/* moon icon */}
-                        <FiMoon className="swap-on sm:text-[23px] text-xl" />
+                        <FiMoon className="swap-off sm:text-[23px] text-xl" />
                     </label>
                     <FiSearch className="text-xl sm:text-2xl cursor-pointer" />
                     {
-                        user ? <AccountAuthor /> :    <Link to="/auth/login">
-                        <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold />
-                        </button>
-                    </Link>
-}
+                        user ? <AccountAuthor /> : <Link to="/auth/login">
+                            <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold />
+                            </button>
+                        </Link>
+                    }
                 </div>
             </div>
 
