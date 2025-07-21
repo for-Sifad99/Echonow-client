@@ -18,6 +18,7 @@ const AddArticle = () => {
     } = useForm();
 
     const [publishers, setPublishers] = useState([]);
+    const [types, setTypes] = useState([]);
     const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
@@ -26,6 +27,11 @@ const AddArticle = () => {
             { label: "The Bugle", value: "bugle" },
             { label: "Global Times", value: "global-times" },
         ]);
+
+        setTypes([
+            { label: "Normal", value: "normal" },
+            { label: "Tending", value: "tending" },
+        ])
     }, []);
 
     const tagOptions = [
@@ -56,6 +62,7 @@ const AddArticle = () => {
                 authorEmail: user?.email,
                 status: "pending",
                 postedDate: new Date(),
+                type: data.type.value,
                 isPremium: false,
                 viewCount: 0,
             };
@@ -87,18 +94,33 @@ const AddArticle = () => {
                         {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
                     </div>
 
-                    <div>
-                        <label className="block font-medium text-gray-700 mb-1">Publisher</label>
-                        <Controller
-                            name="publisher"
-                            control={control}
-                            rules={{ required: "Publisher is required" }}
-                            render={({ field }) => (
-                                <Select {...field} options={publishers} placeholder="Select publisher" />
-                            )}
-                        />
-                        {errors.publisher && <p className="text-red-500 text-sm">{errors.publisher.message}</p>}
+                    <div className="flex flex-col sm:flex-row items-center w-full gap-4">
+                          <div className="w-full">
+                            <label className="block font-medium text-gray-700 mb-1">Publisher</label>
+                            <Controller
+                                name="publisher"
+                                control={control}
+                                rules={{ required: "Publisher is required" }}
+                                render={({ field }) => (
+                                    <Select {...field} options={publishers} placeholder="Select publisher" />
+                                )}
+                            />
+                            {errors.publisher && <p className="text-red-500 text-sm">{errors.publisher.message}</p>}
+                        </div>
+                        <div className="w-full">
+                            <label className="block font-medium text-gray-700 mb-1">Article Type</label>
+                            <Controller
+                                name="type"
+                                control={control}
+                                rules={{ required: "type is required" }}
+                                render={({ field }) => (
+                                    <Select {...field} options={types} placeholder="Select type" />
+                                )}
+                            />
+                            {errors.type && <p className="text-red-500 text-sm">{errors.type.message}</p>}
+                        </div>
                     </div>
+
 
                     <div>
                         <label className="block font-medium text-gray-700 mb-1">Tags</label>
@@ -113,6 +135,7 @@ const AddArticle = () => {
                         {errors.tags && <p className="text-red-500 text-sm">{errors.tags.message}</p>}
                     </div>
 
+
                     <div>
                         <label className="block font-medium text-gray-700 mb-1">Description</label>
                         <textarea
@@ -123,6 +146,7 @@ const AddArticle = () => {
                         ></textarea>
                         {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
                     </div>
+
 
                     <div>
                         <label className="block font-medium text-gray-700 mb-1">Upload Image</label>

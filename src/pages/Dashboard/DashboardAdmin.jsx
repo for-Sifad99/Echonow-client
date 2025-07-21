@@ -8,8 +8,6 @@ import useAuth from '../../../hooks/useAuth/useAuth';
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
-
-
 const DashboardAdmin = () => {
     const { signOutUser, user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
@@ -82,17 +80,17 @@ const DashboardAdmin = () => {
                     ref={profileRef}
                     src={user?.photoURL || "/default-user.png"}
                     alt="User"
-                    className="w-[40px] h-[40px] p-0.5  border border-blue-500 rounded-full"
+                    className="w-[40px] h-[40px] p-0.5  border border-blue-500  dark:border-blue-400  rounded-full"
                 />
                 <div className="font-jost">
-                    <h2 className="flex justify-between items-center text-base uppercase font-bold leading-4 text-[var(--dark)]">
+                    <h2 className="flex justify-between items-center text-base uppercase font-bold leading-4 dark:text-[var(--white)] text-[var(--dark)]">
                         {user?.displayName || "User Name"}
                         {
                             isOpen ? <FaCaretDown /> : <FaCaretUp />
                         }
 
                     </h2>
-                    <h2 className="text-xs text-gray-700">
+                    <h2 className="text-xs dark:text-[var(--accent-white)] text-[var(--dark-bg)]">
                         {user?.email || "User Email"}
                     </h2>
                 </div>
@@ -102,7 +100,7 @@ const DashboardAdmin = () => {
             {isOpen && (
                 <div
                     ref={modalRef}
-                    className="absolute top-10 md:top-13 sm:top-11 right-0 text-sm text-gray-700 dark:text-gray-100 font-oxygen w-44 bg-[var(--white)] dark:bg-[#343a46] shadow-sm rounded-md p-4 z-50"
+                    className="absolute top-10 md:top-13 sm:top-11 right-0 text-sm -[var(--accent)] dark:text-[var(--accent-white)] font-oxygen w-44 bg-[var(--white)] dark:bg-[var(--accent)] shadow-sm rounded-md p-4 z-50"
                 >
                     <Link to='/my-profile'>
                         <button
@@ -110,13 +108,13 @@ const DashboardAdmin = () => {
                                 setClickedOpen(false);
                                 setIsOpen(false);
                             }}
-                            className="w-full flex gap-2 items-center py-1 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700 hover:translate-x-1 transition-all duration-300 cursor-pointer"
+                            className="w-full flex gap-2 items-center py-1 px-3 rounded hover:bg-[var(--accent-white)] dark:hover:bg-gray-700 hover:translate-x-1 transition-all duration-300 cursor-pointer"
                         >
                             <FaFeatherPointed />  Edit Profile
                         </button></Link>
                     <button
                         onClick={handleSignOut}
-                        className="w-full flex gap-2 items-center py-1 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700 hover:translate-x-1 transition-all duration-300 cursor-pointer"
+                        className="w-full flex gap-2 items-center py-1 px-3 rounded hover:bg-[var(--accent-white)] dark:hover:bg-gray-700 hover:translate-x-1 transition-all duration-300 cursor-pointer"
                     >
                         <MdLogout />  Sign Out
                     </button>

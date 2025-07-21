@@ -25,9 +25,16 @@
 @theme {
   --primary: #f22d3a;
   --secondary: #ffe6e7;
-  --accent: #a3a3a3;
+  --dark-secondary: #34343e;
+  --accent: #5e5d72;
+  --accent-white: #f3f4f6;
   --dark: #000;
   --white: #fff;
+  --base-100:#C4C4C8;
+  --dark-bg: #3a3944;
 }
 
 
+.recharts-wrapper:focus {
+  outline: none;
+}

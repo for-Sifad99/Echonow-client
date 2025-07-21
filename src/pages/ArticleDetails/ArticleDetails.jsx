@@ -84,7 +84,6 @@ const ArticleDetails = () => {
 
                 <h3 className="font-oxygen">through <a href="#" className="font-bold underline">{article.publisher}</a></h3>
                 <div className="font-jost flex items-center gap-2">
-
                     {article.tags.map((t, index) => (
                         <span key={index} className="text-[10px] px-3 py-0.5 uppercase font-semibold bg-[var(--primary)] text-[var(--white)]">{t}</span>
                     ))}
