@@ -46,7 +46,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
         });
     };
     return (
-        <nav className={`sidebar pt-[64px] h-[100vh] overflow-y-scroll overflow-x-hidden fixed top-0 left-0 dark:bg-[var(--dark-bg)] bg-[var(--white)] transition-transform duration-300 ease-in-out w-[288px] z-20 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <nav className={`sidebar h-[100vh] overflow-x-hidden fixed top-16 left-0 dark:bg-[var(--dark-bg)] bg-[var(--white)] transition-transform duration-300 ease-in-out w-[288px] z-20 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <h1 className='w-40 mx-4 mt-1 sm:mt-0 text-xs opacity-50 font-bold dark:text-red-100 text-[var(--primary)] uppercase font-libreBas border-b-2'>main pages</h1>
 
             <div className='mx-auto font-oxygen flex md:hidden items-center bg-[var(--accent-white)] justify-between text-sm pl-4 pr-1 w-[250.19px] h-10 rounded-xl z-50 mt-6 sm:mt-8 -mb-5' >
@@ -57,7 +57,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                 <li>
                     <NavLink
                         className='flex justify-center items-center'
-                        to="/dashboard"
+                        to="/dashboard/dashboard"
                     >
                         {({ isActive }) => (
                             <MUILink
@@ -73,7 +73,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                 <li>
                     <NavLink
                         className='flex justify-center items-center'
-                        to="/all-users"
+                        to="/dashboard/all-users"
                     >
                         {({ isActive }) => (
                             <MUILink
@@ -89,7 +89,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                 <li>
                     <NavLink
                         className='flex justify-center items-center'
-                        to="/all-users"
+                        to="/dashboard/all-articles"
                     >
                         {({ isActive }) => (
                             <MUILink
@@ -105,7 +105,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                 <li>
                     <NavLink
                         className='flex justify-center items-center'
-                        to="/all-users"
+                        to="/dashboard/publisher"
                     >
                         {({ isActive }) => (
                             <MUILink

@@ -42,25 +42,25 @@ const DashboardRoot = () => {
     return (
         <section className="flex flex-col min-h-screen overflow-y-hidden">
             {/* Header */}
-            <header className='sticky top-0 left-0 flex justify-between items-center w-full h-16 px-4 dark:bg-[var(--dark-bg)] bg-[var(--white)] z-50'>
+            <header className='fixed top-0 left-0 flex justify-between items-center w-full h-16 px-4 dark:bg-[var(--dark-bg)] bg-[var(--white)] z-50'>
                 <div className="dark:hidden absolute left-0 md:left-[300px] lg:left-[400px] xl:left-[600px] -top-20 z-40 transform-gpu overflow-hidden blur-3xl" aria-hidden="true">
                     <div className="mx-auto aspect-1000/600 h-20 w-52 sm:w-96 bg-linear-to-tr from-[var(--primary)] to-[var(--secondary)]" ></div>
                 </div>
 
-                <div className='flex items-center w-fit gap-[37px]'>
+                <div className='flex items-center justify-between md:justify-center min-w-full md:min-w-fit md:gap-[37px]'>
                     <Link to='/'>
                         <div className='flex items-center mr-auto gap-1'>
                             <img className='w-10 sm:w-11' src={logo} alt="Echo website logo" />
                             <h1 className='text-[27px] sm:text-3xl dark:text-[var(--white)] text-[var(--dark)] font-bold font-jost'>EchoNow</h1>
                         </div>
                     </Link>
-                    <div className={`${isSidebarOpen ? 'flex' : 'hidden'} ml-auto`}>
+                    <div className={`${isSidebarOpen ? 'flex' : 'hidden'} ml-auto -mr-2`}>
                         <MUIButton
                             icon={<RiMenuUnfold2Fill size={14} />}
                             onClick={toggleSidebar}
                         />
                     </div>
-                    <div className={`${isSidebarOpen ? 'hidden' : 'flex'} ml-auto`}>
+                    <div className={`${isSidebarOpen ? 'hidden' : 'flex'} ml-auto -mr-2`}>
                         <MUIButton
                             icon={<RiMenuFold2Fill size={14} />}
                             onClick={toggleSidebar}
@@ -103,7 +103,7 @@ const DashboardRoot = () => {
 
                     {/* Main Content */}
                     <div
-                        className={`${isSidebarOpen ? 'w-full lg:w-[calc(100% - 288px)] p-8 ' : 'w-full p-8 sm:px-4 md:px-8 lg:px-12 xl:px-24' } flex-1 transition-all duration-400 ease-in-out z-10`}
+                        className={`${isSidebarOpen ? 'w-full lg:w-[calc(100% - 288px)] p-8 ' : 'w-full p-8 sm:px-4 md:px-8 lg:px-12 xl:px-24' } mt-15 flex-1 transition-all duration-400 ease-in-out z-10`}
                     >
                         <Outlet isSidebarOpen={isSidebarOpen} />
                     </div>

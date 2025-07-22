@@ -15,6 +15,8 @@ import MyArticles from "../pages/MyArticles/MyArticles";
 import MyProfile from "../pages/MyProfile/MyProfile";
 import DashboardRoot from "../Layouts/DashboardRoot";
 import Dashboard from "../pages/Dashboard/Dashboard/Dashboard";
+import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
+import DashHome from "../pages/Dashboard/DashHome/DashHome";
 
 
 const router = createBrowserRouter([
@@ -37,7 +39,9 @@ const router = createBrowserRouter([
         path: "/Dashboard",
         Component: DashboardRoot,
         children: [
-            { index: true, Component: Dashboard }
+            { index: true, Component: DashHome },
+            { path: 'dashboard', Component: Dashboard },
+            { path: 'all-users', Component: AllUsers },
         ]
     },
     {
