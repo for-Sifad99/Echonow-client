@@ -6,34 +6,36 @@ import MenuItem from '@mui/material/MenuItem';
 import { MdOutlineShowChart } from "react-icons/md";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
+import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
 
 const fetchDashboardStats = async (axiosSecure) => {
-    const [userRes, articleRes] = await Promise.all([
+    const [userRes, articleRes, publisherRes ] = await Promise.all([
         axiosSecure.get('/all-users'),
-        axiosSecure.get('/articles-count'),
+        axiosSecure.get('/all-articles'),
+        axiosSecure.get('/publisher'),
     ]);
 
     return {
         totalUsers: userRes.data.totalUsers,
         premiumUsers: userRes.data.premiumUsers,
         articleCount: articleRes.data.total,
+        publisherCount: publisherRes.data.count,
     };
 };
 
 const DashCard = () => {
-    const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
 
     const { data, isLoading } = useQuery({
         queryKey: ['dashboardStats'],
-        queryFn: () => fetchDashboardStats(axiosSecure),
+        queryFn: () => fetchDashboardStats(axiosPublic),
     });
 
     const cardData = [
         { title: 'Total Users', total: data?.totalUsers || 0, icon: <FaUsers className="text-4xl" /> },
         { title: 'Premium Users', total: data?.premiumUsers || 0, icon: <FaCrown className="text-4xl" /> },
         { title: 'Total Articles', total: data?.articleCount || 0, icon: <FaNewspaper className="text-4xl" /> },
-        { title: 'Total Publishers', total: 10, icon: <FaUserTie className="text-4xl" /> }, // Still static
+        { title: 'Total Publishers', total: data?.publisherCount || 0, icon: <FaUserTie className="text-4xl" /> }, // Still static
     ];
 
     const options = [

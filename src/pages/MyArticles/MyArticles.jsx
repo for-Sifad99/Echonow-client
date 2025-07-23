@@ -24,7 +24,7 @@ const MyArticles = () => {
             return res.data;
         },
         enabled: !!user?.email,
-    });
+    }); 
 
     const handleDelete = async (id) => {
         const result = await Swal.fire({

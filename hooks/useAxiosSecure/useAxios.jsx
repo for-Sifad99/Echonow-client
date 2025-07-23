@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 import useAuth from '../useAuth/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000'
+    baseURL: 'http://localhost:3000',
 });
+
 const useAxiosSecure = () => {
     const { signOutUser } = useAuth();
+    const navigate = useNavigate();
+    const shouldNavigateRef = useRef(false);
+
+    useEffect(() => {
+        if (shouldNavigateRef.current) {
+            shouldNavigateRef.current = false;
+            navigate('/auth/login');
+        }
+    }, [navigate]);
 
     // request interceptor
     axiosInstance.interceptors.request.use(config => {
@@ -17,21 +28,21 @@ const useAxiosSecure = () => {
         return config;
     });
 
-    // response interceptor 
-    axiosInstance.interceptors.response.use(response => {
-        return response;
-    }, error => {
-        if (error.status === 401) {
-            signOutUser()
-                .then(() => {
-                    console.log('Sign out user for 401 status code!');
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+    // response interceptor
+    axiosInstance.interceptors.response.use(
+        response => response,
+        error => {
+            if (error.response?.status === 401) {
+                signOutUser()
+                    .then(() => {
+                        console.log('Signed out user due to 401 Unauthorized');
+                        shouldNavigateRef.current = true; 
+                    })
+                    .catch(err => console.log(err));
+            }
+            return Promise.reject(error);
         }
-        return Promise.reject(error);
-    });
+    );
 
     return axiosInstance;
 };

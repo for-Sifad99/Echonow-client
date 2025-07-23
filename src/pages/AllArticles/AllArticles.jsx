@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
 import useAuth from '../../../hooks/useAuth/useAuth';
 import Pagination from "../../pages/shared/Pagination/Pagination";
 import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
@@ -15,13 +14,12 @@ const AllArticles = () => {
     const [selectedPublisher, setSelectedPublisher] = useState("");
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();
 
     const { data, isPending } = useQuery({
         queryKey: ["articles", { search, tags: selectedTags, publisher: selectedPublisher, page }],
         queryFn: async () => {
-            const res = await axiosSecure.get("/articles", {
+            const res = await axiosPublic.get("/articles", {
                 params: {
                     search,
                     tags: selectedTags.join(","),
@@ -63,7 +61,6 @@ const AllArticles = () => {
         else if (article.isPremium && !dbUser?.isPremium) {
             toast.error('Please get subscription first!')
         }
-
     }
 
     return (
@@ -149,7 +146,7 @@ const AllArticles = () => {
                     {isPending ? (
                         <p className="text-gray-500 col-span-full text-center text-2xl font-oxygen">LOADING...</p>
                     ) : articles.length === 0 ? (
-                        <p className="text-xl text-gray-600 col-span-full text-center font-libreBas">No premium articles found.</p>
+                        <p className="text-xl text-gray-600 col-span-full text-center font-libreBas">No articles found.</p>
                     ) : (
                         articles.map((article) => (
                             <div

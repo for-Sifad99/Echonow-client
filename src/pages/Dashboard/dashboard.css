@@ -27,3 +27,17 @@
 .sidebar:hover::-webkit-scrollbar-thumb {
   background-color: #f22d3a; 
 }
+
+
+/* ----------------- */
+
+
+/* Firefox support */
+.dark .custom-scrollbar {
+  scrollbar-color: #f3f4f6 #292831; 
+}
+
+/* Chrome, Edge, Safari support */
+.dark .sidebar::-webkit-scrollbar-thumb {
+  background-color: #f22d3a; 
+}

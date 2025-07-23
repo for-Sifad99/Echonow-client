@@ -13,7 +13,7 @@ import { FiSearch, FiMoon } from "react-icons/fi";
 const DashboardRoot = () => {
     const { theme, toggleTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    
     const toggleSidebar = () => {
         setIsSidebarOpen(prev => !prev);
     };
@@ -69,9 +69,9 @@ const DashboardRoot = () => {
                 </div>
 
                 <div className='hidden md:flex items-center gap-2.5 lg:gap-3.5'>
-                    <div className='font-oxygen flex items-center justify-between text-sm pl-4 pr-1 w-[240px] h-10 dark:bg-[var(--white)] bg-[var(--white)] rounded-xl shadow-[2px_2px_16px] dark:shadow-none shadow-[#fcf1f2] z-50' >
+                    <div className='font-oxygen flex items-center justify-between text-sm pl-4 pr-1 w-[240px] h-10 dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--accent)] rounded-xl shadow-[2px_2px_16px] dark:shadow-none shadow-[#fcf1f2] z-50' >
                         <input type="text" placeholder='Search Here...' className='ml-2 bg-transparent border-none outline-none' />
-                        <FiSearch className="stroke-[var(--primary)] dark:stroke-[var(--dark)] bg-[var(--secondary)] dark:bg-[var(--accent-white)] p-[12px] h-[34px] w-[34px] rounded-xl cursor-pointer" />
+                        <FiSearch className=" stroke-[var(--primary)] dark:stroke-[var(--dark)] bg-[var(--secondary)] text-[var(--dark)] dark:bg-[var(--accent-white)] p-[12px] h-[34px] w-[34px] rounded-xl cursor-pointer" />
                     </div>
 
                     <label className="swap swap-rotate md:-mr-1.5 cursor-pointer text-[var(--dark)]">
@@ -103,7 +103,7 @@ const DashboardRoot = () => {
 
                     {/* Main Content */}
                     <div
-                        className={`${isSidebarOpen ? 'w-full lg:w-[calc(100% - 288px)] p-8 ' : 'w-full p-8 sm:px-4 md:px-8 lg:px-12 xl:px-24' } mt-15 flex-1 transition-all duration-400 ease-in-out z-10`}
+                        className={`${isSidebarOpen ? 'w-full lg:w-[calc(100% - 288px)]' : 'w-full md:px-8 lg:px-12 xl:px-24' } py-8 px-2 sm:px-4 mt-15 flex-1 transition-all duration-400 ease-in-out z-10`}
                     >
                         <Outlet isSidebarOpen={isSidebarOpen} />
                     </div>

@@ -61,6 +61,7 @@ const AddArticle = () => {
                 authorName: user?.displayName,
                 authorEmail: user?.email,
                 status: "pending",
+                declineReason : null,
                 postedDate: new Date(),
                 type: data.type.value,
                 isPremium: false,
