@@ -8,7 +8,7 @@ const Pagination = ({ page, totalPages, setPage }) => {
             <button
                 disabled={page <= 1}
                 onClick={() => setPage((prev) => prev - 1)}
-                className="p-2 rounded-full hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 hover:text-white bg-gray-200 disabled:opacity-50 transition duration-700 cursor-pointer"
+                className="p-2 rounded-full hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-red-400 hover:text-white bg-gray-200 disabled:opacity-70 transition duration-700 cursor-pointer"
             >
                 <FaChevronLeft />
             </button>
@@ -18,7 +18,7 @@ const Pagination = ({ page, totalPages, setPage }) => {
                     <button
                         key={p}
                         onClick={() => setPage(p)}
-                        className={`px-3 py-1 rounded-md transition duration-300 cursor-pointer ${page === p ? " bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white" : "bg-gray-100"
+                        className={`px-3 py-1 rounded-md font-semibold transition duration-500 cursor-pointer ${page === p ? "bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white" : "text-red-500 bg-gray-100 hover:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400"
                             }`}
                     >
                         {p}
@@ -27,7 +27,7 @@ const Pagination = ({ page, totalPages, setPage }) => {
             <button
                 disabled={page >= totalPages}
                 onClick={() => setPage((prev) => prev + 1)}
-                className="p-2 rounded-full hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 hover:text-white bg-gray-200 disabled:opacity-50 transition duration-700 cursor-pointer"
+                className="p-2 rounded-full hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-red-400 hover:text-white bg-gray-200 disabled:opacity-70 transition duration-700 cursor-pointer"
             >
                 <FaChevronRight />
             </button>

@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 const MUIButton = ({
     icon = null,
-    size = '54px',
+    size = '50px',
     onClick = () => { },
 }) => {
     return (
@@ -12,7 +12,7 @@ const MUIButton = ({
             sx={{
                 minWidth: size,
                 width: size,
-                height: '50px',
+                height: '46px',
                 '&:hover': {
                     backgroundColor: 'transparent',
                 }

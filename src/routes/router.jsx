@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router";
 import Root from "../Layouts/Root";
 import Home from '../pages/home/Home/Home';
-import PrivetRoute from '../routes/PrivetRoute'
+import PrivetRoute from '../routes/PrivetRoute';
+import AdminRoute from './AdminRoute';
 import AllArticles from "../pages/AllArticles/AllArticles";
 import AuthRoot from "../Layouts/AuthRoot";
 import Register from "../pages/Authentication/Register";
@@ -19,6 +20,7 @@ import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import DashHome from "../pages/Dashboard/DashHome/DashHome";
 import DashAllArticles from "../pages/Dashboard/DashAllArticles/DashAllArticles";
 import AddPublisher from "../pages/Dashboard/AddPublisher/AddPublisher";
+import Forbidden from "../pages/shared/Forbidden/Forbidden";
 
 
 const router = createBrowserRouter([
@@ -39,13 +41,13 @@ const router = createBrowserRouter([
     },
     {
         path: "/Dashboard",
-        Component: DashboardRoot,
+        element: <AdminRoute><PrivetRoute><DashboardRoot /></PrivetRoute></AdminRoute>,
         children: [
-            { index: true, Component: DashHome },
-            { path: 'dashboard', Component: Dashboard },
-            { path: 'all-users', Component: AllUsers },
-            { path: 'all-articles', Component: DashAllArticles },
-            { path: 'add-publisher', Component: AddPublisher },
+            { index: true, element: <AdminRoute><PrivetRoute><DashHome /></PrivetRoute></AdminRoute> },
+            { path: 'dashboard', element: <AdminRoute><PrivetRoute><Dashboard /></PrivetRoute></AdminRoute> },
+            { path: 'all-users', element: <AdminRoute><PrivetRoute><AllUsers /></PrivetRoute></AdminRoute> },
+            { path: 'all-articles', element: <AdminRoute><PrivetRoute><DashAllArticles /></PrivetRoute></AdminRoute> },
+            { path: 'add-publisher', element: <AdminRoute><PrivetRoute><AddPublisher /></PrivetRoute></AdminRoute> },
         ]
     },
     {
@@ -56,6 +58,10 @@ const router = createBrowserRouter([
             { path: 'login', Component: Login },
         ],
     },
+    {
+        path: "/status/forbidden",
+        Component: Forbidden,
+    }
 ]);
 
 export default router;

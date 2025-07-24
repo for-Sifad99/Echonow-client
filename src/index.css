@@ -34,5 +34,29 @@
   --dark-bg: #3a3944;
 }
 
+/* Sub loader styles */
+@layer utilities {
+  .loader-text {
+    @apply font-bold uppercase text-transparent relative;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-stroke: 1px black;
+    background:
+      radial-gradient(1.13em at 50% 1.6em, #000 99%, transparent 101%) calc(50% - 1.6em) 0/3.2em 100% text,
+      radial-gradient(1.13em at 50% -0.8em, transparent 99%, #000 101%) 50% 0.8em/3.2em 100% repeat-x text;
+    animation: loader-wave 2s linear infinite;
+  }
 
+  .dark .loader-text {
+    -webkit-text-stroke: 1px white;
+    background:
+      radial-gradient(1.13em at 50% 1.6em, #fff 99%, transparent 101%) calc(50% - 1.6em) 0/3.2em 100% text,
+      radial-gradient(1.13em at 50% -0.8em, transparent 99%, #fff 101%) 50% 0.8em/3.2em 100% repeat-x text;
+  }
+}
 
+@keyframes loader-wave {
+  to {
+    background-position: calc(50% + 1.6em) 0, calc(50% + 3.2em) 0.8em;
+  }
+}

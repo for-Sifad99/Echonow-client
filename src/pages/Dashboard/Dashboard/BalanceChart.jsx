@@ -40,7 +40,7 @@ const BalanceChart = () => {
             textStyle: { fontSize: 10, color: "#9f97a4" },
         },
         colors: [ "#8884d8"],
-        backgroundColor: "transparent", // keeps the bg clear behind chart
+        backgroundColor: "transparent",
     };
 
     return (

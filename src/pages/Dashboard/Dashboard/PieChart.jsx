@@ -1,5 +1,7 @@
 import React from 'react';
 import { IoPaperPlaneOutline } from "react-icons/io5";
+import { useQuery } from '@tanstack/react-query';
+import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
 import {
     PieChart,
     Pie,
@@ -7,8 +9,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts';
-import { useQuery } from '@tanstack/react-query';
-import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
+
 
 const COLORS = ['#00C49F', '#8884d8', '#FFBB28', '#FF8042', '#0088FE'];
 
@@ -16,9 +17,9 @@ const DynamicPublicationPieChart = () => {
     const axiosPublic = useAxiosPublic();
 
     const { data: publications = [], isLoading } = useQuery({
-        queryKey: ['publication-stats'],
+        queryKey: ['publishers-stats'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/publication-stats');
+            const res = await axiosPublic.get('/publishers-stats');
             return res.data;
         },
     });
@@ -36,7 +37,7 @@ const DynamicPublicationPieChart = () => {
             {/* Title */}
             <div className="w-full flex justify-between">
                 <h3 className="px-1 flex flex-col text-[13px] sm:text-[11px] font-semibold text-[var(--dark)] dark:text-[var(--white)] mb-2">
-                    <p className='-mb-1'>Publication Articles</p>
+                    <p className='-mb-1'>Publishers Articles</p>
                     <p>Distribution</p>
                 </h3>
                 <span className='flex items-center justify-center text-xs bg-[#ffeabc] text-[#f09c00] hover:bg-[#FFBB28] hover:text-[var(--white)] w-8 h-8 rounded-full transition duration-500 cursor-pointer'>

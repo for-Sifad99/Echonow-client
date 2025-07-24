@@ -1,4 +1,5 @@
 import React from 'react';
+import SubLoader from '../shared/Loader/SubLoader';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GrHomeOption } from "react-icons/gr";
@@ -15,8 +16,12 @@ const DashSideArticle = () => {
         }
     });
 
-    if (isPending) return <p className="text-center text-[var(--dark)] dark:text-[var(--white)]">LOADING...</p>;
-    if (isError) return <p className="text-[var(--primary)] dark:text-[var(--secondary)] text-center">Error loading articles.</p>;
+    if (isPending) {
+        return <div className="flex items-center justify-center mx-auto my-6">
+                <SubLoader size="text-base" />
+        </div>
+    };
+    if (isError) return console.log('Error loading articles!');
 
     return (
         <div className="pb-6">

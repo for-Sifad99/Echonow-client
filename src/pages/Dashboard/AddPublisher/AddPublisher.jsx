@@ -1,20 +1,21 @@
 import React from 'react';
+import SubLoader from '../../shared/Loader/SubLoader';
 import TypeWriterEffect from 'react-typewriter-effect';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
 
 const AddPublisher = () => {
     const { register, handleSubmit, reset } = useForm();
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     // Fetch publishers using TanStack Query
     const { data: publishers = [], refetch, isPending } = useQuery({
         queryKey: ['publishers'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/publisher');
+            const res = await axiosSecure.get('/publisher');
             return res.data.recent;
         },
     });
@@ -34,7 +35,7 @@ const AddPublisher = () => {
                 postedDate: new Date(),
             };
 
-            await axiosPublic.post('/publisher', publisher);
+            await axiosSecure.post('/publisher', publisher);
             toast.success('Publisher added!');
             reset();
             refetch();
@@ -59,7 +60,7 @@ const AddPublisher = () => {
                 {/* Form Section */}
                 <div className="w-full rounded-xl text-[var(--dark)] dark:text-[var(--white)]">
                     <h3 className="font-oxygen text-xl sm:text-2xl font-semibold mb-4 ">Create New Publisher</h3>
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 sm:gap-3 md:gap-[13.7px]">
                         <div className='flex flex-col mb-2'>
                             <label className="font-oxygen font-medium]">Publisher Name</label>
                             <input
@@ -106,7 +107,17 @@ const AddPublisher = () => {
                     </h3>
 
                     {isPending ?
-                        <p className="text-[var(--accent)] dark:text-[var(--accent-white)] text-center text-sm sm:text-base font-oxygen">LOADING...</p> :
+                    <div className="flex items-center justify-center mx-auto my-6">
+                                        <div className="md:hidden">
+                                            <SubLoader size="text-base" />
+                                        </div>
+                                        <div className="hidden md:block xl:hidden">
+                                            <SubLoader size="text-lg" />
+                                        </div>
+                                        <div className="hidden xl:block">
+                                            <SubLoader size="text-xl" />
+                                        </div>
+                                    </div> :
                         <div className="space-y-2">
                             {recentPublishers.map((pub) => (
                                 <div key={pub._id} className="group flex items-center gap-4  bg-[var(--white)] dark:bg-[var(--accent)] hover:bg-[#ffeabc] dark:hover:bg-[#e7e6ff] p-3 rounded-lg shadow-sm transition duration-400">

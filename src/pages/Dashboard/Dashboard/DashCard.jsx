@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { MdOutlineShowChart } from "react-icons/md";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useQuery } from '@tanstack/react-query';
-import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
 
 const fetchDashboardStats = async (axiosSecure) => {
     const [userRes, articleRes, publisherRes ] = await Promise.all([
@@ -24,11 +24,11 @@ const fetchDashboardStats = async (axiosSecure) => {
 };
 
 const DashCard = () => {
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     const { data, isLoading } = useQuery({
         queryKey: ['dashboardStats'],
-        queryFn: () => fetchDashboardStats(axiosPublic),
+        queryFn: () => fetchDashboardStats(axiosSecure),
     });
 
     const cardData = [
@@ -69,7 +69,7 @@ const DashCard = () => {
             {cardData.map((card, index) => (
                 <div
                     key={index}
-                    className=" relative group flex flex-col items-center justify-center md:justify-between mx-auto bg-linear-to-tr from-[var(--secondary)] to-[var(--white)] hover:from-[#fff0f0] hover:to-[var(--secondary)] dark:from-[var(--color-bg)] dark:to-[#464553] dark:hover:from-[#27272e] dark:hover:to-[#4d4c5c] shadow-md rounded-xl w-full max-w-[440px] h-[150px] xl:max-w-[340px] p-5 transition duration-600"
+                    className="relative group flex flex-col items-center justify-center md:justify-between mx-auto bg-linear-to-tr from-[var(--secondary)] to-[var(--white)] hover:from-[#fff0f0] hover:to-[var(--secondary)] dark:from-[var(--color-bg)] dark:to-[#464553] dark:hover:from-[#27272e] dark:hover:to-[#4d4c5c] shadow-md rounded-xl w-full max-w-[440px] h-[150px] xl:max-w-[340px] 2xl:h-[180px] 2xl:max-w-full p-5 transition duration-600"
                 >
                     <div className='dark:text-[var(--white)] text-[var(--dark)] font-oxygen w-full flex items-start justify-center'>
                         <div className='mr-auto'>
@@ -84,7 +84,7 @@ const DashCard = () => {
                     </div>
 
                     <div className='absolute top-9 left-14 sm:top-6 sm:left-18 md:top-4 md:left-16 lg:top-9 lg:left-6 xl:left-12'>
-                        <MdOutlineShowChart className='text-gray-400 opacity-[0.1] group-hover:opacity-[0.2] text-[80px] sm:text-[100px] md:text-[120px] lg:text-[90px] xl:text-[90px] transition duration-600' />
+                        <MdOutlineShowChart className='text-gray-400 opacity-[0.1] group-hover:opacity-[0.2] text-[80px] sm:text-[100px] md:text-[120px] lg:text-[90px] xl:text-[90px] 2xl:text-[120px] transition duration-600' />
                     </div>
 
                     <div className='relative flex justify-between items-center w-full -mb-2'>

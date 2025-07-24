@@ -1,22 +1,24 @@
 import React, { useState } from "react";
+import SubLoader from '../../shared/Loader/SubLoader';
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
+import useAxiosSecure from "../../../../hooks/useAxiosSecure/useAxios";
 import { FaUserShield } from "react-icons/fa";
 import { FiSearch, FiX } from "react-icons/fi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import '../dashboard.css'
+import '../dashboard.css';
+
 
 const AllUsers = () => {
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
     const [filters, setFilters] = useState({ name: "", email: "", role: "" });
     const [selectedUser, setSelectedUser] = useState(null);
 
     const { data: users = [], refetch, isPending } = useQuery({
         queryKey: ["users"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/all-users");
+            const res = await axiosSecure.get("/all-users");
             return res.data.allUsers;
         },
     });
@@ -34,7 +36,7 @@ const AllUsers = () => {
                 cancelButtonText: 'Cancel'
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await axiosPublic.patch(`/users/${email}`, {
+                    const res = await axiosSecure.patch(`/users/admin/${email}`, {
                         role: "admin",
                     });
 
@@ -92,81 +94,91 @@ const AllUsers = () => {
             </div>
 
             {isPending ? (
-                <p className="text-[var(--accent)] dark:text-[var(--accent-white)] text-center text-base sm:text-xl font-oxygen">LOADING...</p>
+                <div className="flex items-center justify-center mx-auto my-10">
+                    <div className="md:hidden">
+                        <SubLoader size="text-xl" />
+                    </div>
+                    <div className="hidden md:block xl:hidden">
+                        <SubLoader size="text-2xl" />
+                    </div>
+                    <div className="hidden xl:block">
+                        <SubLoader size="text-3xl" />
+                    </div>
+                </div>
             ) : users.length === 0 ? (
                 <p className="text-xl text-gray-600 col-span-full text-center font-libreBas">No users found.</p>
             ) : <>
-                        {/* Table */}
-                        <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)]">
-                            <table className="table w-full">
-                                <thead>
-                                    <tr className="font-oxygen bg-[var(--accent-white)] (--dark-secondary)] dark:text-[var(--white)] dark:bg-gray-700">
-                                        <th>Index</th>
-                                        <th>Profile</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th className="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="font-jost">
-                                    {filteredUsers.map((user, index) => (
-                                        <tr
-                                            key={user._id}
-                                            className="hover:bg-slate-50 dark:hover:bg-[#33333d]"
-                                        >
-                                            <td>{index + 1}</td>
-                                            <td>
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
-                                                        <img src={user.photo} alt="user" />
-                                                    </div>
+                {/* Table */}
+                <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)]">
+                    <table className="table w-full">
+                        <thead>
+                            <tr className="font-oxygen bg-[var(--accent-white)] (--dark-secondary)] dark:text-[var(--white)] dark:bg-gray-700">
+                                <th>Index</th>
+                                <th>Profile</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th className="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="font-jost">
+                            {filteredUsers.map((user, index) => (
+                                <tr
+                                    key={user._id}
+                                    className="hover:bg-slate-50 dark:hover:bg-[#33333d]"
+                                >
+                                    <td>{index + 1}</td>
+                                    <td>
+                                        <div className="avatar">
+                                            <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
+                                                <img src={user.photo} alt="user" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="text-xs md:text-sm">{user.name || "Unnamed"}</td>
+                                    <td className="text-xs md:text-sm text-gray-600 dark:text-gray-200 font-semibold">
+                                        <p className="md:hidden">{user.email.slice(0, 12)}...</p>
+                                        <p className="hidden md:block">{user.email}</p>
+                                    </td>
+                                    <td className="uppercase">
+                                        {user.role || "user"}</td>
+                                    <td className="flex justify-center items-center gap-1">
+                                        {user.role === "admin" ? (
+                                            <span className="text-base md:text-lg text-[var(--primary)] dark:text-[#a5a1fa] font-semibold rounded-md ">Admin</span>
+                                        ) : (
+                                            <>
+                                                <div className="tooltip" data-tip="Make Admin" >
+                                                    <button
+                                                        onClick={() => handleMakeAdmin(user.email)}
+                                                        className="btn btn-xs md:btn-sm bg-[#8884d8] text-[var(--white)] hover:hover:bg-[#ebe9e9]  hover:text-[#8884d8] rounded-lg transition duration-500 border-none shadow-none"
+                                                    >
+                                                        <FaUserShield />
+                                                    </button>
                                                 </div>
-                                            </td>
-                                            <td className="text-xs md:text-sm">{user.name || "Unnamed"}</td>
-                                            <td className="text-xs md:text-sm text-gray-600 dark:text-gray-200 font-semibold">
-                                                <p className="md:hidden">{user.email.slice(0, 12)}...</p>
-                                                <p className="hidden md:block">{user.email}</p>
-                                            </td>
-                                            <td className="uppercase">
-                                                {user.role || "user"}</td>
-                                            <td className="flex justify-center items-center gap-1 ">
-                                                {user.role === "admin" ? (
-                                                    <span className="text-base md:text-lg text-[var(--primary)] dark:text-[#a5a1fa] font-semibold">Admin</span>
-                                                ) : (
-                                                    <>
-                                                        <div className="tooltip" data-tip="Make Admin">
-                                                            <button
-                                                                onClick={() => handleMakeAdmin(user.email)}
-                                                                className="btn btn-xs md:btn-sm bg-[#8884d8] text-[var(--white)] hover:hover:bg-[#ebe9e9]  hover:text-[#8884d8] rounded-lg transition duration-500 border-none shadow-none"
-                                                            >
-                                                                <FaUserShield />
-                                                            </button>
-                                                        </div>
-                                                        <div className="tooltip" data-tip="View Details">
-                                                            <button
-                                                                onClick={() => setSelectedUser(user)}
-                                                                className="btn btn-xs md:btn-sm bg-[var(--primary)] text-[var(--white)] hover:hover:bg-[#ebe9e9] hover:text-[var(--primary)] dark:bg-[var(--accent-white)] dark:text-[var(--dark)] rounded-lg transition duration-500 border-none shadow-none"
-                                                            >
-                                                                <AiOutlineInfoCircle />
-                                                            </button>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {filteredUsers.length === 0 && (
-                                        <tr>
-                                            <td colSpan="6" className="text-center py-3 text-lg">
-                                                No users found with that search info.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </>}
+                                                <div className="tooltip" data-tip="View Details">
+                                                    <button
+                                                        onClick={() => setSelectedUser(user)}
+                                                        className="btn btn-xs md:btn-sm bg-[var(--primary)] text-[var(--white)] hover:hover:bg-[#ebe9e9] hover:text-[var(--primary)] dark:bg-[var(--accent-white)] dark:text-[var(--dark)] rounded-lg transition duration-500 border-none shadow-none"
+                                                    >
+                                                        <AiOutlineInfoCircle />
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredUsers.length === 0 && (
+                                <tr className="rounded-md">
+                                    <td colSpan="6" className="text-center py-3 text-lg">
+                                        No users found with that search info.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </>}
             {/* Modal */}
             {
                 selectedUser && (

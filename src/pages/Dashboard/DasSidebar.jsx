@@ -11,14 +11,16 @@ import { MdArticle, MdLogout } from "react-icons/md";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FaFeatherPointed } from "react-icons/fa6";
 import useAuth from '../../../hooks/useAuth/useAuth';
-import useTheme from '../../../hooks/themeContext';
+import useTheme from '../../../hooks/themeContext/themeContext';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import DashSideArticle from './DashSideArticle';
+import useRole from '../../../hooks/useUserRole/useRole';
 
 
 const DasSidebar = ({ isSidebarOpen }) => {
     const { signOutUser, user } = useAuth();
+    const { role, loading } = useRole();
     const { theme, toggleTheme } = useTheme();
     const [openStg, setOpenStg] = useState(false);
     const [openPro, setOpenPro] = useState(false);
@@ -54,70 +56,75 @@ const DasSidebar = ({ isSidebarOpen }) => {
                 <FiSearch className="stroke-[var(--primary)] dark:stroke-[var(--dark)] bg-[var(--secondary)] text-[var(--dark)] dark:bg-[var(--white)] p-[12px] h-[34px] w-[34px] rounded-xl cursor-pointer" />
             </div>
             <ul className='flex flex-col gap-1 font-jost mt-6 md:mt-8' >
-                <li>
-                    <NavLink
-                        className='flex justify-center items-center'
-                        to="/dashboard/dashboard"
-                    >
-                        {({ isActive }) => (
-                            <MUILink
-                                size={'90%'}
-                                text={'Dashboard'}
-                                icon1={<RiDashboardFill />}
-                                icon2={<IoIosArrowForward />}
-                                active={isActive} 
-                            />
-                        )}
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        className='flex justify-center items-center'
-                        to="/dashboard/all-users"
-                    >
-                        {({ isActive }) => (
-                            <MUILink
-                                size={'90%'}
-                                text={'All Users'}
-                                icon1={<HiUsers />}
-                                icon2={<IoIosArrowForward />}
-                                active={isActive} // Pass isActive to MUILink
-                            />
-                        )}
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        className='flex justify-center items-center'
-                        to="/dashboard/all-articles"
-                    >
-                        {({ isActive }) => (
-                            <MUILink
-                                size={'90%'}
-                                text={'All Articles'}
-                                icon1={<MdArticle />}
-                                icon2={<IoIosArrowForward />}
-                                active={isActive} // Pass isActive to MUILink
-                            />
-                        )}
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        className='flex justify-center items-center'
-                        to="/dashboard/add-publisher"
-                    >
-                        {({ isActive }) => (
-                            <MUILink
-                                size={'90%'}
-                                text={'Add Publisher'}
-                                icon1={<RiStickyNoteAddFill />}
-                                icon2={<IoIosArrowForward />}
-                                active={isActive} // Pass isActive to MUILink
-                            />
-                        )}
-                    </NavLink>
-                </li>
+                {
+                    !loading && role === 'admin' &&
+                    <>
+                        <li>
+                            <NavLink
+                                className='flex justify-center items-center'
+                                to="/dashboard/dashboard"
+                            >
+                                {({ isActive }) => (
+                                    <MUILink
+                                        size={'90%'}
+                                        text={'Dashboard'}
+                                        icon1={<RiDashboardFill />}
+                                        icon2={<IoIosArrowForward />}
+                                        active={isActive}
+                                    />
+                                )}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                className='flex justify-center items-center'
+                                to="/dashboard/all-users"
+                            >
+                                {({ isActive }) => (
+                                    <MUILink
+                                        size={'90%'}
+                                        text={'All Users'}
+                                        icon1={<HiUsers />}
+                                        icon2={<IoIosArrowForward />}
+                                        active={isActive} // Pass isActive to MUILink
+                                    />
+                                )}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                className='flex justify-center items-center'
+                                to="/dashboard/all-articles"
+                            >
+                                {({ isActive }) => (
+                                    <MUILink
+                                        size={'90%'}
+                                        text={'All Articles'}
+                                        icon1={<MdArticle />}
+                                        icon2={<IoIosArrowForward />}
+                                        active={isActive} // Pass isActive to MUILink
+                                    />
+                                )}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                className='flex justify-center items-center'
+                                to="/dashboard/add-publisher"
+                            >
+                                {({ isActive }) => (
+                                    <MUILink
+                                        size={'90%'}
+                                        text={'Add Publisher'}
+                                        icon1={<RiStickyNoteAddFill />}
+                                        icon2={<IoIosArrowForward />}
+                                        active={isActive} // Pass isActive to MUILink
+                                    />
+                                )}
+                            </NavLink>
+                        </li>
+                    </>
+                }
                 <li className='md:hidden'>
                     <div onClick={() => setOpenStg(!openStg)} className="w-full flex flex-col justify-center items-center">
                         <MUILink

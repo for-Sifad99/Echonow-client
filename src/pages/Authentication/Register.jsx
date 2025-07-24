@@ -8,7 +8,7 @@ import useAuth from "../../../hooks/useAuth/useAuth";
 import Swal from "sweetalert2";
 import axios from "axios";
 import toast from 'react-hot-toast';
-import useAxiosInstance from "../../../hooks/useAxiosSecure/useAxios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
 
 
 const Register = () => {
@@ -20,7 +20,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
 
-    const axiosInstance = useAxiosInstance();
+    const axiosSecure = useAxiosSecure();
 
     const onSubmit = data => {
         const { name, email, password } = data;
@@ -35,7 +35,7 @@ const Register = () => {
                     role: "user",
                     premiumTaken: null,
                 };
-                await axiosInstance.post('/users', userProfile);
+                await axiosSecure.post('/users', userProfile);
 
                 // Update user profile in firebase:
                 updateUserProfile({ displayName: name, photoURL: photo })

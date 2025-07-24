@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useAxiosPublic from '../../../hooks/useAxiosPublic/useAxios';
+import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useAuth from '../../../hooks/useAuth/useAuth';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -8,12 +9,13 @@ import { useNavigate } from 'react-router-dom';
 
 const MyProfile = () => {
     const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
     const { user, signOutUser, updateUserProfile } = useAuth();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         name: '',
-        photo: '', // will hold URL after upload
+        photo: '',
     });
     const [uploading, setUploading] = useState(false);
     const [updating, setUpdating] = useState(false);
@@ -72,29 +74,15 @@ const MyProfile = () => {
     const updateUserProfileHandler = async (updatedUser) => {
         setUpdating(true);
         try {
-            await axiosPublic.patch(`/users/${user.email}`, updatedUser);
+            await axiosSecure.patch(`/users/${user.email}`, updatedUser);
             try {
                 await updateUserProfile({
                     displayName: updatedUser.name,
                     photoURL: updatedUser.photo,
                 });
 
-                // Sweet Alert
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 4000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Your profile has been updated."
-                });
+                toast.success('Your profile has been updated!');
+        
                 // Refetch user data after update
                 const res = await axiosPublic.get(`/users/${user.email}`);
                 setDbUser(res.data);

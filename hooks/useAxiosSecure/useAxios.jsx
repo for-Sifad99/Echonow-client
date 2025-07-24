@@ -32,13 +32,17 @@ const useAxiosSecure = () => {
     axiosInstance.interceptors.response.use(
         response => response,
         error => {
-            if (error.response?.status === 401) {
+            const status = error.response?.status;
+            if (status === 401) {
                 signOutUser()
                     .then(() => {
-                        console.log('Signed out user due to 401 Unauthorized');
+                        console.log(`Signed out user due to 401 Unauthorized!`);
                         shouldNavigateRef.current = true; 
                     })
                     .catch(err => console.log(err));
+            } else if (status === 403){
+                console.log(`403 Unauthorized Access!`);
+                navigate('/status/forbidden')
             }
             return Promise.reject(error);
         }

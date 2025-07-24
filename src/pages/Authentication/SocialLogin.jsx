@@ -3,13 +3,13 @@ import useAuth from '../../../hooks/useAuth/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaGoogle } from "react-icons/fa";
 import Swal from 'sweetalert2';
-import useAxiosPublic from '../../../hooks/useAxiosPublic/useAxios';
+import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 
 const SocialLogin = () => {
     const { googleSignIn } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     const handleSubmit = () => {
         googleSignIn()
@@ -25,7 +25,7 @@ const SocialLogin = () => {
                     premiumTaken: null,
                 };
 
-                await axiosPublic.post('/users', userProfile);
+                await axiosSecure.post('/users', userProfile);
 
                 Swal.fire({
                     toast: true,

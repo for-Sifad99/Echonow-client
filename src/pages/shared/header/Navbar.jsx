@@ -18,11 +18,13 @@ import logo from '/logo.png';
 import EchoLogo from "../EchoLogo/EchoLogo";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from '../../../../hooks/useAuth/useAuth';
-import useTheme from '../../../../hooks/themeContext';
+import useTheme from '../../../../hooks/themeContext/themeContext';
 import AccountAuthor from '../../MyProfile/AccountAuthor';
+import useRole from '../../../../hooks/useUserRole/useRole';
 
 const Navbar = () => {
     const { user } = useAuth();
+    const { role, loading } = useRole();
     const { theme, toggleTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef();
@@ -93,14 +95,17 @@ const Navbar = () => {
                             </span>
                         )}
                     </NavLink>
-                    <NavLink to="/dashboard" className={mainNavLinkClass}>
-                        {({ isActive }) => (
-                            <span className='flex gap-1 items-center'>
-                                Dashboard
-                                {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
-                            </span>
-                        )}
-                    </NavLink>
+                    {
+                        !loading && role === 'admin' &&
+                        <NavLink to="/dashboard" className={mainNavLinkClass}>
+                            {({ isActive }) => (
+                                <span className='flex gap-1 items-center'>
+                                    Dashboard
+                                    {isActive ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                </span>
+                            )}
+                        </NavLink>
+                    }
                     <NavLink to="/my-articles" className={mainNavLinkClass}>
                         {({ isActive }) => (
                             <span className='flex gap-1 items-center'>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SubLoader from '../../shared/Loader/SubLoader';
 import { useQuery } from '@tanstack/react-query';
 import { FaCheck, FaCrown, FaTrashAlt, FaTimes } from 'react-icons/fa';
 import { FiSearch, FiX } from "react-icons/fi";
@@ -171,7 +172,17 @@ const DashAllArticles = () => {
             </div>
 
             {isLoading ? (
-                <p className="text-[var(--accent)] dark:text-[var(--accent-white)] text-center text-base sm:text-xl font-oxygen">LOADING...</p>
+                <div className="flex items-center justify-center mx-auto my-10">
+                    <div className="md:hidden">
+                        <SubLoader size="text-xl" />
+                    </div>
+                    <div className="hidden md:block xl:hidden">
+                        <SubLoader size="text-2xl" />
+                    </div>
+                    <div className="hidden xl:block">
+                        <SubLoader size="text-3xl" />
+                    </div>
+                </div>
             ) : (
                 <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)]">
                     <table className="table w-full">
@@ -189,8 +200,8 @@ const DashAllArticles = () => {
                         </thead>
                         <tbody className='font-jost'>
                             {filteredArticles.map(article => (
-                                <tr key={article._id} className="hover:bg-slate-50 dark:hover:bg-[#33333d]">
-                                    <td>
+                                <tr key={article._id} className="hover:bg-slate-50 dark:hover:bg-[#33333d] rounded-md">
+                                    <td className='rounded-md'>
                                         <div className="avatar">
                                             <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
                                                 <img src={article.authorPhoto} alt="articles" />
@@ -210,7 +221,7 @@ const DashAllArticles = () => {
                                     <td className='text-xs'>{new Date(article.postedDate).toLocaleDateString()}</td>
                                     <td className='text-[#009264]  dark:text-[#00bf83] font-bold'>{article.status}</td>
                                     <td>{article.publisher}</td>
-                                    <td>
+                                    <td className='rounded-md'>
                                         {
                                             article.status === 'approved' ?
                                                 <div className="flex justify-center items-center gap-1">

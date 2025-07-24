@@ -6,7 +6,7 @@ import logo from "/logo.png";
 import useAuth from "../../../hooks/useAuth/useAuth";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import useAxiosInstance from '../../../hooks/useAxiosSecure/useAxios';
+import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 
 const Login = () => {
     const { signInUser, forgotPassword } = useAuth();
@@ -16,7 +16,7 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const email = watch("email");
 
-    const axiosInstance = useAxiosInstance();
+    const axiosSecure = useAxiosSecure();
     const onSubmit = (data) => {
         const { email, password } = data;
 
@@ -35,7 +35,7 @@ const Login = () => {
                 };
 
                 // Send user profile data to the server:
-                await axiosInstance.post('/users', userProfile);
+                await axiosSecure.post('/users', userProfile);
 
                 // Sweet Alert
                 const Toast = Swal.mixin({
