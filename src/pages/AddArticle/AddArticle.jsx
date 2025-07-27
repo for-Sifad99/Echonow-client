@@ -23,23 +23,23 @@ const AddArticle = () => {
 
     useEffect(() => {
         setPublishers([
-            { label: "The Daily Planet", value: "daily-planet" },
-            { label: "The Bugle", value: "bugle" },
-            { label: "Global Times", value: "global-times" },
+            { label: "Prothom Alo", value: "prothom alo" },
+            { label: "Routers", value: "routers" },
+            { label: "Verge", value: "verge" },
         ]);
 
         setTypes([
             { label: "Normal", value: "normal" },
             { label: "Tending", value: "tending" },
+            { label: "Hot", value: "hot" },
         ])
     }, []);
 
     const tagOptions = [
-        { value: "politics", label: "Politics" },
-        { value: "tech", label: "Tech" },
-        { value: "health", label: "Health" },
-        { value: "sports", label: "Sports" },
-        { value: "entertainment", label: "Entertainment" },
+        { value: "beauty", label: "Beauty" },
+        { value: "guides", label: "Guides" },
+        { value: "celebrity", label: "Celebrity" },
+        { value: "style", label: "Style" },
         { value: "fashion", label: "Fashion" },
     ];
 

@@ -6,7 +6,7 @@ const DashHome = () => {
   const { role, loading } = useRole();
   if (loading && role !== 'admin') {
     return <Navigate to='/dashboard/dashboard' />
-  }
+  };
 
   return <Navigate to='/dashboard/dashboard' />
 };

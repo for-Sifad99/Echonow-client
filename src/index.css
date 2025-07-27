@@ -28,13 +28,16 @@
   --dark-secondary: #34343e;
   --accent: #5e5d72;
   --accent-white: #f3f4f6;
-  --dark: #000;
+  --dark: #000000;
   --white: #fff;
   --base-100:#C4C4C8;
   --dark-bg: #3a3944;
+  --dark2-bg: #292831;
 }
 
 /* Sub loader styles */
+/* ----------------------- */
+
 @layer utilities {
   .loader-text {
     @apply font-bold uppercase text-transparent relative;
@@ -60,3 +63,51 @@
     background-position: calc(50% + 1.6em) 0, calc(50% + 3.2em) 0.8em;
   }
 }
+
+/* Scrollbar styles */
+/* ----------------- */
+
+/* Firefox support */
+.sidebar {
+  scrollbar-color: #f57f8e #ffe6e7; 
+  scrollbar-width: thin;
+}
+
+.sidebar:hover {
+  scrollbar-color: #f22d3a #ffe6e7; 
+}
+
+/* Chrome, Edge, Safari support */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #ffe6e7;
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #f57f8e; 
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: #f22d3a; 
+}
+
+
+/* ----------------- */
+
+
+/* Firefox support */
+.dark .custom-scrollbar {
+  scrollbar-color: #f3f4f6 #292831; 
+}
+
+/* Chrome, Edge, Safari support */
+.dark .sidebar::-webkit-scrollbar-thumb {
+  background-color: #f22d3a; 
+}
+

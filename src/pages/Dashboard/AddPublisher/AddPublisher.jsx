@@ -127,7 +127,7 @@ const AddPublisher = () => {
                                         className="w-9 h-9 rounded-md object-contain"
                                     />
                                     <div className='transition duration-400'>
-                                        <h4 className="text-[var(-dark)] dark:text-[var(--white)] dark:group-hover:text-[var(--dark)] text-lg leading-6 font-semibold">{pub.name}</h4>
+                                        <h4 className="capitalize text-[var(-dark)] dark:text-[var(--white)] dark:group-hover:text-[var(--dark)] text-lg leading-6 font-semibold">{pub.name}</h4>
                                         <p className="text-[var(--accent)] dark:text-[var(--base-100)] dark:group-hover:text-[var(--accent)] text-xs">
                                             {new Date(pub.postedDate).toLocaleDateString()}
                                         </p>

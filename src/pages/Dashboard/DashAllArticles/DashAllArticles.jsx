@@ -38,15 +38,16 @@ const DashAllArticles = () => {
                 cancelButtonText: 'Cancel'
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await axiosSecure.patch(`/articles/${id}`, { isApproved: true, status: 'approved' });
+                    const res = await axiosSecure.patch(`/articles/${id}`, { status: 'approved' });
 
                     if (res.data.result.modifiedCount > 0) {
                         toast.success("Articles successfully approved!");
+                        refetch();
                     }
                 };
             });
 
-            refetch();
+
         } catch (err) {
             console.error(err);
             toast.error("Failed to approved article!");
@@ -91,6 +92,7 @@ const DashAllArticles = () => {
         };
     };
 
+
     const handleDelete = async (id) => {
         try {
             Swal.fire({
@@ -128,7 +130,7 @@ const DashAllArticles = () => {
 
     return (
         <div className="space-y-4">
-            <h1 className='flex justify-center sm:justify-start text-4xl sm:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-11 mb-6'>All Articles (Admin)</h1>
+            <h1 className='flex justify-center sm:justify-start text-4xl sm:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-11 mb-6'>All Articles</h1>
 
             <div className="w-full max-w-[280px] sm:max-w-4/5 md:max-w-4/7 flex flex-col sm:flex-row gap-1 sm:gap-2">
                 <div
@@ -204,7 +206,7 @@ const DashAllArticles = () => {
                                     <td className='rounded-md'>
                                         <div className="avatar">
                                             <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
-                                                <img src={article.authorPhoto} alt="articles" />
+                                                <img src={article.image} alt="article image" />
                                             </div>
                                         </div>
                                     </td>

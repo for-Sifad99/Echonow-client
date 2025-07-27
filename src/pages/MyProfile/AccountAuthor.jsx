@@ -77,7 +77,7 @@ const AccountAuthor = () => {
                 src={user?.photoURL || "/default-user.png"}
                 alt="User"
                 onClick={handleProfileClick}
-                className="sm:w-[34px] sm:h-[34px] w-[31px] h-[31px] rounded-full cursor-pointer"
+                className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer"
             />
 
             {/* Modal */}

@@ -91,7 +91,7 @@ const DynamicPublicationPieChart = () => {
                                             marginRight: '4px',
                                         }}
                                     ></span>
-                                    <span>{entry.name} ({((entry.value / totalArticles) * 100).toFixed(0)}%)</span>
+                                    <span className='capitalize'>{entry.name} ({((entry.value / totalArticles) * 100).toFixed(0)}%)</span>
                                 </p>
                             ))}
                         </div>

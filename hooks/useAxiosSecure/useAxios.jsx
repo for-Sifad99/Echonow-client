@@ -33,17 +33,22 @@ const useAxiosSecure = () => {
         response => response,
         error => {
             const status = error.response?.status;
+
             if (status === 401) {
                 signOutUser()
                     .then(() => {
                         console.log(`Signed out user due to 401 Unauthorized!`);
-                        shouldNavigateRef.current = true; 
+                        shouldNavigateRef.current = true;
                     })
                     .catch(err => console.log(err));
-            } else if (status === 403){
-                console.log(`403 Unauthorized Access!`);
-                navigate('/status/forbidden')
+            } else if (status === 403) {
+                console.log(`403 Forbidden Access!`);
+                navigate('/status/forbidden');
+            } else if (status === 402) {
+                // Do nothing for 402
+                console.log('402 received, ignoring...');
             }
+
             return Promise.reject(error);
         }
     );

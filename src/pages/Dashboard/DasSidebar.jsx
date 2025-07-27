@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import './Dashboard.css'
 import { MUILink } from '../shared/MUIButton/MUIButton';
+import { GrHomeOption } from "react-icons/gr";
 import { FiSearch, FiMoon } from "react-icons/fi";
 import { IoIosArrowForward } from "react-icons/io";
 import { RiDashboardFill, RiStickyNoteAddFill, RiSettings3Fill } from "react-icons/ri";
@@ -14,7 +14,7 @@ import useAuth from '../../../hooks/useAuth/useAuth';
 import useTheme from '../../../hooks/themeContext/themeContext';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
-import DashSideArticle from './DashSideArticle';
+import SideArticle from '../shared/SideArticles/SideArticle';
 import useRole from '../../../hooks/useUserRole/useRole';
 
 
@@ -48,7 +48,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
         });
     };
     return (
-        <nav className={`sidebar h-[100vh] overflow-x-hidden fixed top-16 left-0 pb-16 sm:pb-18 dark:bg-[var(--dark-bg)] bg-[var(--white)] transition-transform duration-300 ease-in-out w-[288px] z-20 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <nav className={`sidebar h-[100vh] overflow-x-hidden fixed top-16 left-0 pb-16 sm:pb-18 dark:bg-[var(--dark-bg)] bg-[var(--white)] transition-transform duration-300 ease-in-out w-full max-w-[300px] z-20 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <h1 className='w-40 mx-4 mt-1 sm:mt-0 text-xs opacity-50 font-bold dark:text-red-100 text-[var(--primary)] uppercase font-libreBas border-b-2'>main pages</h1>
 
             <div className='mx-auto font-oxygen flex md:hidden items-center bg-[var(--accent-white)] dark:bg-[var(--accent)] justify-between text-sm pl-4 pr-1 w-[250.19px] h-10 rounded-xl z-50 mt-6 sm:mt-8 -mb-5' >
@@ -189,7 +189,14 @@ const DasSidebar = ({ isSidebarOpen }) => {
                 </li>
             </ul>
             <div className='mx-4 mt-6'>
-                <DashSideArticle />
+                <SideArticle />
+            </div>
+            <div className='relative w-full h-30 mb-8 px-4'>
+                <img src="https://i.ibb.co/twng45BL/Screenshot-2025-07-19-025738.png"
+                    className='w-full h-full object-cover rounded-xl' alt="" />
+                <Link to='/' className='flex items-center justify-center mx-auto cursor-pointer '>
+                    <button className='absolute top-[46%] flex items-center gap-1 font-jost w-fit px-3 py-0.5 uppercase font-semibold bg-[var(--primary)] text-[var(--secondary)] rounded'><GrHomeOption className=' fill-[var(--secondary)]' />Back to Home</button>
+                </Link>
             </div>
         </nav>
     );

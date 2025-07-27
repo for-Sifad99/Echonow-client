@@ -7,7 +7,6 @@ import { FiSearch, FiX } from "react-icons/fi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import '../dashboard.css';
 
 
 const AllUsers = () => {

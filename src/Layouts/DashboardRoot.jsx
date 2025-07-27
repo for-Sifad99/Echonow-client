@@ -47,7 +47,7 @@ const DashboardRoot = () => {
                     <div className="mx-auto aspect-1000/600 h-20 w-52 sm:w-96 bg-linear-to-tr from-[var(--primary)] to-[var(--secondary)]" ></div>
                 </div>
 
-                <div className='flex items-center justify-between md:justify-center min-w-full md:min-w-fit md:gap-[37px]'>
+                <div className='flex items-center justify-between md:justify-center min-w-full md:min-w-fit md:gap-[42px]'>
                     <Link to='/'>
                         <div className='flex items-center mr-auto gap-1'>
                             <img className='w-10 sm:w-11' src={logo} alt="Echo website logo" />
@@ -91,11 +91,11 @@ const DashboardRoot = () => {
             </header>
 
             {/* Main */}
-            <main className='bg-[#ebe9e9] dark:bg-[#292831] flex-1'>
+            <main className='bg-[#ebe9e9] dark:bg-[var(--dark2-bg)] flex-1'>
                 <section className='w-full flex items-center  transition-all duration-300 ease-in-out'>
                     {/* Sidebar */}
                     <div
-                        className={`${isSidebarOpen ? 'lg:w-[288px]' : 'w-0 overflow-hidden'} transition-all duration-300 ease-in-out`}
+                        className={`${isSidebarOpen ? 'lg:w-[300px]' : 'w-0 overflow-hidden'} transition-all duration-300 ease-in-out`}
 
                     >
                         <DasSidebar isSidebarOpen={isSidebarOpen} onToggle={toggleSidebar} />
@@ -103,7 +103,7 @@ const DashboardRoot = () => {
 
                     {/* Main Content */}
                     <div
-                        className={`${isSidebarOpen ? 'w-full lg:w-[calc(100% - 288px)]' : 'w-full md:px-8 lg:px-12 xl:px-24'} py-8 px-2 sm:px-4 mt-15 flex-1 transition-all duration-400 ease-in-out z-10`}
+                        className={`${isSidebarOpen ? 'w-full lg:w-[calc(100% - 300px)]' : 'w-full md:px-8 lg:px-12 xl:px-24'} py-8 px-2 sm:px-4 mt-15 flex-1 transition-all duration-400 ease-in-out z-10`}
                     >
                         <Outlet isSidebarOpen={isSidebarOpen} />
                     </div>
