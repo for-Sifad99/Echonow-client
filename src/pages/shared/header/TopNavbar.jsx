@@ -99,10 +99,10 @@ const ScrollNavbar = () => {
     return (
         <>
             <div className={`fixed top-0 left-0 right-0 transition-all duration-500 z-[999]  ${showNavbar ? !isSidebarOpen ? "translate-y-0" : "-translate-y-full" :"-translate-y-full"}`}>
-                <div className="bg-[var(--secondary)] py-3.5 px-5 sm:px-6 xl:px-28 flex items-center justify-between" onClick={() => setIsSidebarOpen(true)}>
+                <div className="bg-[var(--secondary)] py-3.5 px-5 sm:px-6 xl:px-28 flex items-center justify-between">
                     {/* Left: Logo + Menu */}
                     <div className="flex items-center justify-center gap-4">
-                        <VscMenu className="text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" />
+                        <VscMenu onClick={() => setIsSidebarOpen(true)} className="text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" />
                         <div className="flex flex-col justify-center -mt-3">
                             <Link to='/'>
                                 <div className='flex items-center gap-1'>

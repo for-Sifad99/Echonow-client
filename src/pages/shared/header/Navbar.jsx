@@ -175,7 +175,7 @@ const Navbar = () => {
                     </div>
 
 
-                  <div className='ml-1'>
+                  <div className='ml-1 '>
                         {
                             user ? <AccountAuthor /> : <Link to="/auth/login">
                                 <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold />

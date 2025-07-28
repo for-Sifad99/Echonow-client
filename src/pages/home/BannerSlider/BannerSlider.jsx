@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { FaRegShareSquare } from "react-icons/fa";
 import SubLoader from '../../shared/Loader/SubLoader';
 import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -85,8 +86,11 @@ const BannerSlider = () => {
                             <div className="absolute bottom-0 left-0 w-full flex flex-col justify-center items-center gap-2 p-4 bg-gradient-to-t from-[var(--dark)] via-transparent text-[var(--white)]">
                                 <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)]  inline-block">{article.tags}</span>
                                 <h3 className="max-w-xs sm:w-full text-center text-lg md:text-sm xl:text-lg font-bold font-libreBas leading-5 md:leading-3.5 xl:leading-5 group-hover:underline">{article.title}</h3>
-                                <p className="text-xs font-jost mt-1 md:mt-0 lg:mt-0">By {article.authorName} • <spna className='opacity-80'>{new Date(article.postedDate).toDateString()}</spna>
-                                </p>
+                                <div className='flex items-center gap-2'>
+                                    <p className="text-xs font-jost mt-1 md:mt-0 lg:mt-0">By {article.authorName} • <spna className='opacity-80'>{new Date(article.postedDate).toDateString()}</spna>
+                                    </p>
+                                    <span className='text-xs opacity-80'> <FaRegShareSquare /></span>
+                                </div>
                             </div>
                             {article.isPremium &&
                                 <div className='absolute top-7 -right-5 group-hover:-right-4 rotate-90 group-hover:rotate-270 transition duration-500'>
