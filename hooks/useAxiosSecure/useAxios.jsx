@@ -19,39 +19,46 @@ const useAxiosSecure = () => {
         }
     }, [navigate]);
 
-    // request interceptor
-    axiosInstance.interceptors.request.use(config => {
-        const token = localStorage.getItem('access-token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    });
-
-    // response interceptor
-    axiosInstance.interceptors.response.use(
-        response => response,
-        error => {
-            const status = error.response?.status;
-
-            if (status === 401) {
-                signOutUser()
-                    .then(() => {
-                        console.log(`Signed out user due to 401 Unauthorized!`);
-                        shouldNavigateRef.current = true;
-                    })
-                    .catch(err => console.log(err));
-            } else if (status === 403) {
-                console.log(`403 Forbidden Access!`);
-                navigate('/status/forbidden');
-            } else if (status === 402) {
-                // Do nothing for 402
-                console.log('402 received, ignoring...');
+    useEffect(() => {
+        // request interceptor
+        const requestInterceptor = axiosInstance.interceptors.request.use(config => {
+            const token = localStorage.getItem('access-token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
             }
+            return config;
+        });
 
-            return Promise.reject(error);
-        }
-    );
+        // response interceptor
+        const responseInterceptor = axiosInstance.interceptors.response.use(
+            response => response,
+            error => {
+                const status = error.response?.status;
+
+                if (status === 401) {
+                    signOutUser()
+                        .then(() => {
+                            console.warn(`401 on ${error.config?.url}`);
+                            console.log(`Signed out user due to 401 Unauthorized!`);
+                            shouldNavigateRef.current = true;
+                        })
+                        .catch(err => console.log(err));
+                } else if (status === 403) {
+                    console.log(`403 Forbidden Access!`);
+                    navigate('/status/forbidden');
+                } else if (status === 402) {
+                    console.log('402 received, ignoring...');
+                }
+
+                return Promise.reject(error);
+            }
+        );
+
+        return () => {
+            axiosInstance.interceptors.request.eject(requestInterceptor);
+            axiosInstance.interceptors.response.eject(responseInterceptor);
+        };
+    }, [navigate, signOutUser]);
 
     return axiosInstance;
 };

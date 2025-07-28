@@ -117,7 +117,7 @@ const ScrollNavbar = () => {
                                     <h1 className='text-lg sm:text-[22px] md:text-[28px] lg:text-2xl leading-9 font-medium font-oxygen'>EchoNow</h1>
                                 </div>
                             </Link>
-                            <p className="text-[6px] sm:text-[7px] md:text-[8px] leading-0 -mt-1 md:mt-0 lg:-mt-0.5 tracking-widest text-orange-400">SETTING YOU UP FOR SUCCESS</p>
+                            <p className="text-[6px] sm:text-[7px] md:text-[8px] leading-0 -mt-1 md:mt-0 lg:-mt-0.5 tracking-widest text-orange-400 dark:text-orange-300 dark:font-medium">SETTING YOU UP FOR SUCCESS</p>
                         </div>
                     </div>
 
