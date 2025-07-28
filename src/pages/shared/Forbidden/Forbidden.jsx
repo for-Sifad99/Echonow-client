@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import forbiddenImage from '../../../assets/forbidden.png';
 import SubLoader from '../Loader/subLoader';
-import useTheme from '../../../../hooks/themeContext/themeContext';
+import { useTheme } from '../../../../hooks/themeContext/themeContext';
 
 const Forbidden = () => {
     const { theme } = useTheme();

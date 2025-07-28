@@ -7,7 +7,7 @@ import { FiSearch, FiMoon } from "react-icons/fi";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
 import logo from "../../../../public/logo.png";
-import useTheme from "../../../../hooks/themeContext/themeContext";
+import {useTheme} from "../../../../hooks/themeContext/themeContext";
 import SideNavbar from "./SideNavbar";
 
 const ScrollNavbar = () => {
@@ -41,7 +41,7 @@ const ScrollNavbar = () => {
 
     const mainNavLinkClass = useMemo(
         () => ({ isActive }) =>
-            `text-[15px] xl:text-base text-[var(--dark)] relative after:absolute after:bottom-[-17.5px] after:left-0 after:h-[6px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"}`,
+            `text-[15px] xl:text-base text-[var(--dark)] dark:text-[var(--white)] relative after:absolute after:bottom-[-23px] after:left-0 after:h-[6px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"}`,
         []
     );
 
@@ -84,7 +84,14 @@ const ScrollNavbar = () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const scrollY = window.scrollY;
-                    setShowNavbar(scrollY > 300 && scrollY > lastScrollY);
+
+                    if (scrollY > 300 && scrollY < lastScrollY) {
+                        // Show navbar only if scrolled more than 50px and scrolling up
+                        setShowNavbar(true);
+                    } else {
+                        setShowNavbar(false);
+                    }
+
                     setLastScrollY(scrollY);
                     ticking = false;
                 });
@@ -99,7 +106,7 @@ const ScrollNavbar = () => {
     return (
         <>
             <div className={`fixed top-0 left-0 right-0 transition-all duration-500 z-[999]  ${showNavbar ? !isSidebarOpen ? "translate-y-0" : "-translate-y-full" :"-translate-y-full"}`}>
-                <div className="bg-[var(--secondary)] py-3.5 px-5 sm:px-6 xl:px-28 flex items-center justify-between">
+                <div className="bg-[var(--secondary)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] py-[19px] px-5 sm:px-6 xl:px-28 flex items-center justify-between">
                     {/* Left: Logo + Menu */}
                     <div className="flex items-center justify-center gap-4">
                         <VscMenu onClick={() => setIsSidebarOpen(true)} className="text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" />

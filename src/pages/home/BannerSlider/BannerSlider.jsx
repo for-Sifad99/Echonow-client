@@ -87,7 +87,7 @@ const BannerSlider = () => {
                                 <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)]  inline-block">{article.tags}</span>
                                 <h3 className="max-w-xs sm:w-full text-center text-lg md:text-sm xl:text-lg font-bold font-libreBas leading-5 md:leading-3.5 xl:leading-5 group-hover:underline">{article.title}</h3>
                                 <div className='flex items-center gap-2'>
-                                    <p className="text-xs font-jost mt-1 md:mt-0 lg:mt-0">By {article.authorName} • <spna className='opacity-80'>{new Date(article.postedDate).toDateString()}</spna>
+                                    <p className="text-xs font-jost mt-1 md:mt-0 lg:mt-0">By <span className='opacity-90 font-semibold'>{article.authorName}</span> • <span className="opacity-70"> {new Date(article.postedDate).toDateString()}</span>
                                     </p>
                                     <span className='text-xs opacity-80'> <FaRegShareSquare /></span>
                                 </div>

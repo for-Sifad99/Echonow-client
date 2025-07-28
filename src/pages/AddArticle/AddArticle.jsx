@@ -30,7 +30,6 @@ const AddArticle = () => {
 
         setTypes([
             { label: "Normal", value: "normal" },
-            { label: "Tending", value: "tending" },
             { label: "Hot", value: "hot" },
         ])
     }, []);
@@ -61,7 +60,7 @@ const AddArticle = () => {
                 authorName: user?.displayName,
                 authorEmail: user?.email,
                 status: "pending",
-                declineReason : null,
+                declineReason: null,
                 postedDate: new Date(),
                 type: data.type.value,
                 isPremium: false,
@@ -96,7 +95,7 @@ const AddArticle = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-center w-full gap-4">
-                          <div className="w-full">
+                        <div className="w-full">
                             <label className="block font-medium text-gray-700 mb-1">Publisher</label>
                             <Controller
                                 name="publisher"

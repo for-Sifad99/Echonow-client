@@ -11,7 +11,7 @@ import { MdArticle, MdLogout } from "react-icons/md";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FaFeatherPointed } from "react-icons/fa6";
 import useAuth from '../../../hooks/useAuth/useAuth';
-import useTheme from '../../../hooks/themeContext/themeContext';
+import { useTheme } from '../../../hooks/themeContext/themeContext';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import SideArticle from '../shared/SideArticles/SideArticle';
@@ -51,9 +51,9 @@ const DasSidebar = ({ isSidebarOpen }) => {
         <nav className={`sidebar h-[100vh] overflow-x-hidden fixed top-16 left-0 pb-16 sm:pb-18 dark:bg-[var(--dark-bg)] bg-[var(--white)] transition-transform duration-300 ease-in-out w-full max-w-[300px] z-20 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <h1 className='w-40 mx-4 mt-1 sm:mt-0 text-xs opacity-50 font-bold dark:text-red-100 text-[var(--primary)] uppercase font-libreBas border-b-2'>main pages</h1>
 
-            <div className='mx-auto font-oxygen flex md:hidden items-center bg-[var(--accent-white)] dark:bg-[var(--accent)] justify-between text-sm pl-4 pr-1 w-[250.19px] h-10 rounded-xl z-50 mt-6 sm:mt-8 -mb-5' >
+            <div className='mx-auto font-oxygen flex md:hidden items-center bg-[var(--accent-white)] dark:bg-[var(--accent)] justify-between text-sm pl-4 pr-1 w-[261px] h-11 rounded-xl z-50 mt-6 sm:mt-8 -mb-5' >
                 <input type="text" placeholder='Search Here...' className='ml-2 dark:text-[var(--white)] bg-[var(--accent-white)] dark:bg-[var(--accent)] border-none outline-none' />
-                <FiSearch className="stroke-[var(--primary)] dark:stroke-[var(--dark)] bg-[var(--secondary)] text-[var(--dark)] dark:bg-[var(--white)] p-[12px] h-[34px] w-[34px] rounded-xl cursor-pointer" />
+                <FiSearch className="stroke-[var(--primary)] dark:stroke-[var(--dark)] bg-[var(--secondary)] text-[var(--dark)] dark:bg-[var(--white)] p-[11px] h-[37px] w-[37px] rounded-xl cursor-pointer" />
             </div>
             <ul className='flex flex-col gap-1 font-jost mt-6 md:mt-8' >
                 {
@@ -86,7 +86,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                                         text={'All Users'}
                                         icon1={<HiUsers />}
                                         icon2={<IoIosArrowForward />}
-                                        active={isActive} // Pass isActive to MUILink
+                                        active={isActive} 
                                     />
                                 )}
                             </NavLink>
@@ -102,7 +102,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                                         text={'All Articles'}
                                         icon1={<MdArticle />}
                                         icon2={<IoIosArrowForward />}
-                                        active={isActive} // Pass isActive to MUILink
+                                        active={isActive} 
                                     />
                                 )}
                             </NavLink>
@@ -118,7 +118,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                                         text={'Add Publisher'}
                                         icon1={<RiStickyNoteAddFill />}
                                         icon2={<IoIosArrowForward />}
-                                        active={isActive} // Pass isActive to MUILink
+                                        active={isActive} 
                                     />
                                 )}
                             </NavLink>

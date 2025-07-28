@@ -47,7 +47,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                 <><NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
                     {({ isActive }) => (
 
-                    <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                        <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
                             Add Article
                             <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                         </span>
@@ -64,21 +64,21 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                     }
                     <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
-                        <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                            <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
                                 Dashboard
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </span>
                         )}</NavLink>
                     <NavLink to="/my-articles" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
-                        <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                            <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
                                 My Articles
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </span>
                         )}</NavLink>
                     <NavLink to="/premium-articles" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
-                        <div className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                            <div className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
                                 <h3 className='flex items-center gap-2'>
                                     <p>Hot Articles</p> <p className='text-[11.9px] text-[var(--white)]  bg-[#e57c69] px-2 rounded'>fire</p>
                                 </h3>
@@ -97,7 +97,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
     return (
         <aside
             ref={sidebarRef}
-            className={`sidebar fixed top-0 left-0 h-full w-full max-w-[310px] flex flex-col gap-6 bg-[var(--white)] dark:bg-[var(--dark-bg)] text-[var(--dark)] dark:text-[var(--white)] shadow-lg transform transition-transform duration-300 overflow-x-hidden overflow-y-visible ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            className={`sidebar fixed top-0 left-0 h-full w-full max-w-[310px] flex flex-col gap-6 bg-[var(--white)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] shadow-lg transform transition-transform duration-300 overflow-x-hidden overflow-y-visible ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
         >
             {/* Sidebar Header */}
@@ -126,7 +126,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                 <SideArticle />
             </div>
 
-           <div className='px-5 -mb-2'>
+            <div className='px-5 -mb-2'>
                 {user ? (
                     <Link to='/all-articles'>
                         <button
@@ -147,7 +147,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                     </button>
                 </Link>
                 }
-           </div>
+            </div>
 
             {/* Sidebar Footer */}
             <footer className="px-5 pb-4 font-jost">
@@ -161,7 +161,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                 </div>
                 <p className="text-xs">
                     © Copyright {new Date().getFullYear()} EchoNow. All rights reserved<br />
-                    powered by echonow.netlify.app
+                    powered by <span className='text-[var(--primary)] dark:text-red-400'>echonow.netlify.app</span>
                 </p>
             </footer>
         </aside>

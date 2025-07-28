@@ -10,7 +10,7 @@ import { FaFaceGrinWide } from "react-icons/fa6";
 import EchoLogo from "../EchoLogo/EchoLogo";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from '../../../../hooks/useAuth/useAuth';
-import useTheme from '../../../../hooks/themeContext/themeContext';
+import {useTheme} from '../../../../hooks/themeContext/themeContext';
 import AccountAuthor from '../../MyProfile/AccountAuthor';
 import SideNavbar from './SideNavbar';
 
@@ -44,7 +44,7 @@ const Navbar = () => {
     }, []);
 
     const mainNavLinkClass = ({ isActive }) =>
-        `text-[17px] font-medium text-[var(--dark)] relative after:absolute after:bottom-[-16px] after:left-0 after:h-[6px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
+        `text-[17px] font-medium text-[var(--dark)] dark:text-[var(--white)] relative after:absolute after:bottom-[-16px] after:left-0 after:h-[6px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
         }`;
 
     const links = (
@@ -100,7 +100,7 @@ const Navbar = () => {
     );
 
     return (
-        <header className={`overflow-hidden bg-[var(--secondary)] text-[var(--dark)] relative z-[99]`}>
+        <header className={`overflow-hidden bg-[var(--secondary)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] relative z-[99]`}>
             {/* Top Row */}
             <div className="flex justify-between items-center px-2 sm:px-6 py-4 md:py-4.5 lg:py-8">
                 {/* Left: Hamburger + Subscribe */}
@@ -128,7 +128,7 @@ const Navbar = () => {
                     <div className='-mt-2.5'>
                         <EchoLogo />
                     </div>
-                    <p className="text-[6px] sm:text-[8px] md:text-[11px] lg:text-xs text-center  tracking-widest text-orange-400 leading-0 sm:leading-1 lg:leading-4">
+                    <p className="text-[6px] sm:text-[8px] md:text-[11px] lg:text-xs text-center  tracking-widest text-orange-400 dark:font-medium dark:text-orange-300 leading-0 sm:leading-1 lg:leading-4">
                         SETTING YOU UP FOR SUCCESS
                     </p>
                 </div>
@@ -187,7 +187,7 @@ const Navbar = () => {
             </div>
 
             {/* Bottom Nav */}
-            <nav className="hidden lg:flex justify-center gap-6 border-t border-red-200 py-4 font-jost font-semibold">
+            <nav className="hidden lg:flex justify-center gap-6 border-t border-red-200 dark:border-[var(--accent)] py-4 font-jost font-semibold">
                 {links}
             </nav>
 

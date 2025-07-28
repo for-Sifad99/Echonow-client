@@ -3,7 +3,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { MUIButton } from '../pages/shared/MUIButton/MUIButton';
 import DashboardAdmin from '../pages/Dashboard/DashboardAdmin';
 import DasSidebar from '../pages/Dashboard/DasSidebar';
-import useTheme from '../../hooks/themeContext/themeContext';
+import { useTheme } from '../../hooks/themeContext/themeContext';
 import logo from '/logo.png';
 import { RiMenuUnfold2Fill, RiMenuFold2Fill } from "react-icons/ri";
 import { IoSunnyOutline } from "react-icons/io5";

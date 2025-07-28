@@ -1,13 +1,17 @@
 import React from 'react';
 import SubLoader from '../Loader/SubLoader';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
+import useAuth from '../../../../hooks/useAuth/useAuth';
+import toast from 'react-hot-toast';
 
 const SideArticle = () => {
+    const { user } = useAuth();
     const axiosPublic = useAxiosPublic();
+    const navigate = useNavigate();
 
-    const { data: hotArticles = [], isPending, isError } = useQuery({
+    const { data: hotArticles = [], isPending } = useQuery({
         queryKey: ['hotArticles'],
         queryFn: async () => {
             const res = await axiosPublic.get('/articles/special');
@@ -15,21 +19,32 @@ const SideArticle = () => {
         }
     });
 
+    const handleNavigate = (article, id) => {
+        if (article.isPremium && user?.isPremium) {
+            navigate(`/article/${id}`);
+        } else if (!article.isPremium) {
+            navigate(`/article/${id}`);
+        }
+        else if (article.isPremium && !user?.isPremium) {
+            toast.error('Please get subscription first!')
+        }
+    };
+
     if (isPending) {
         return <div className="flex items-center justify-center mx-auto my-6">
             <SubLoader size="text-base" />
         </div>
     };
-    if (isError) return console.log('Error loading articles!');
+ 
 
     return (
         <div className="pb-6">
             <h2 className="text-xl font-libreBas text-[var(--dark] dark:text-[var(--white)] font-semibold mb-3">Trending Articles</h2>
             {hotArticles.slice(0, 1).map(article => (
-                <Link
-                    to={`/article/${article._id}`}
+                <div
+                    onClick={() => handleNavigate(article, article._id)}
                     key={article._id}
-                    className="group flex flex-col gap-2 w-full h-44 transition mb-10 bg-[var(--white)] dark:bg-[var(--dark-bg)]"
+                    className="group relative flex flex-col gap-2 w-full h-44 transition mb-10 bg-[var(--white)] dark:bg-[var(--dark-bg)]"
                 >
                     <img
                         src={article.image}
@@ -40,13 +55,18 @@ const SideArticle = () => {
                         <span className="font-jost h-[20px] -ml-[27.6px] text-[10px] px-3 py-0.5 uppercase font-semibold bg-[var(--primary)] text-[var(--white)]  rotate-270">{article.tags[0]}</span>
                         <h3 className="-ml-4 group-hover:underline text-sm text-[var(--dark)] dark:text-[var(--white)] font-bold font-libreBas leading-4.5">{article.title}...</h3>
                     </div>
-                </Link>
+                    {article.isPremium &&
+                        <div className='absolute top-[27px] -right-[23px] rotate-90 transition duration-500'>
+                            <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">Premium</span>
+                        </div>
+                    }
+                </div>
             ))}
             {hotArticles.slice(1, 4).map(article => (
-                <Link
-                    to={`/article/${article._id}`}
+                <div
+                    onClick={() => handleNavigate(article, article._id)}
                     key={article._id}
-                    className="group flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark-bg)] transition"
+                    className="group relative flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark-bg)] transition"
                 >
 
                     <div className='flex flex-col gap-2'>
@@ -58,7 +78,12 @@ const SideArticle = () => {
                         alt={article.title}
                         className="min-w-[84px] min-h-[80px] max-h-[80px] object-cover rounded"
                     />
-                </Link>
+                    {article.isPremium &&
+                        <div className='absolute top-2 right-1 transition duration-500'>
+                            <span className="font-jost px-1 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">P</span>
+                        </div>
+                    }
+                </div>
             ))}
         </div>
     );
