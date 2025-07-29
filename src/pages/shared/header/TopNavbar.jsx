@@ -106,7 +106,7 @@ const ScrollNavbar = () => {
     return (
         <>
             <div className={`fixed top-0 left-0 right-0 transition-all duration-500 z-[999]  ${showNavbar ? !isSidebarOpen ? "translate-y-0" : "-translate-y-full" :"-translate-y-full"}`}>
-                <div className="bg-[var(--secondary)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] py-[19px] px-5 sm:px-6 xl:px-28 flex items-center justify-between">
+                <div className="bg-[var(--secondary)] dark:bg-[#212227] text-[var(--dark)] dark:text-[var(--white)] py-[19px] px-5 sm:px-6 xl:px-28 flex items-center justify-between">
                     {/* Left: Logo + Menu */}
                     <div className="flex items-center justify-center gap-4">
                         <VscMenu onClick={() => setIsSidebarOpen(true)} className="text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" />

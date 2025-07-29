@@ -120,17 +120,13 @@ const CommonSidebar = () => {
                             <img
                                 src={article.image}
                                 alt={article.title}
-                                className="w-full h-60 object-cover rounded"
+                                className="w-full h-60 object-cover"
                             />
                             <div className="text-[var(--dark)] dark:text-[var(--white)]  md:mt-3 space-y-2 py-3 pr-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">
                                 <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">Featured</span>
-                                <h3 className="text-xl sm:text-base xl:text-xl font-bold font-libreBas leading-6 sm:leading-5 lg:leading-6 group-hover:underline">
-                                    <span className="md:hidden"> ''{article.title.slice(0, 50)}..''</span>
-                                    <span className="hidden lg:block"> ''{article.title.slice(0, 50)}..''</span>
+                                <h3 className="text-xl sm:text-base xl:text-xl font-bold font-libreBas leading-6 sm:leading-5 lg:leading-6 group-hover:underline">''{article.title.slice(0, 50)}..''
                                 </h3>
-                                <h4 className="mt-4 text-xs font-oxygen leading-4 text-[ar(--base-200) opacity-70 dark:opacity-90">
-                                    <span className="md:hidden">{article.description.slice(0, 100)}....</span>
-                                    <span className="hidden lg:block">{article.description.slice(0, 100)}....</span>
+                                <h4 className="mt-4 text-xs font-oxygen leading-4 text-[ar(--base-200) opacity-70 dark:opacity-90">{article.description.slice(0, 100)}....
                                 </h4>
                                 <div className='mt-2 sm:mt-0 xl:mt-2 flex items-center justify-between gap-2 text-xs sm:text-[10px] lg:text-xs font-jost'>
                                     <p>

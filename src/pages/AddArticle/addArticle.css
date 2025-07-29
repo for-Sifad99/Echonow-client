@@ -1,0 +1,83 @@
+:root {
+  --primary-color: #ff5555;
+}
+
+/* Remove all outlines and border radius globally inside form */
+.add-article-form input,
+.add-article-form textarea,
+.add-article-form button,
+.add-article-form .react-select__control,
+.add-article-form .react-select__control--is-focused,
+.add-article-form .react-select__menu,
+.add-article-form .react-select__option,
+.add-article-form .react-select__multi-value,
+.add-article-form .react-select__multi-value__label {
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: 1px solid #ccc !important;
+}
+
+/* Remove outline and shadow on focus for inputs, textarea, buttons */
+.add-article-form input:focus,
+.add-article-form textarea:focus,
+.add-article-form button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .add-article-form input,
+  .add-article-form textarea {
+    background-color: #2a2a2b;
+    border: none !important;
+    color: white;
+  }
+
+  .add-article-form input:focus,
+  .add-article-form textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .add-article-form .react-select__control {
+    background-color: #2a2a2b !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: white;
+  }
+
+  .add-article-form .react-select__control--is-focused {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .add-article-form .react-select__menu {
+    background-color: #2a2a2b !important;
+    color: white;
+    border-radius: 0 !important;
+  }
+
+  .add-article-form .react-select__option--is-focused {
+    background-color: rgba(255, 85, 85, 0.2) !important;
+  }
+
+  .add-article-form .react-select__multi-value {
+    background-color: #555 !important;
+    color: white !important;
+    border-radius: 0 !important;
+  }
+
+  .add-article-form .react-select__multi-value__label {
+    color: white !important;
+  }
+}
+
+/* Utility class if you want to forcibly remove outlines anywhere else */
+.no-outline {
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}

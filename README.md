@@ -1,8 +1,8 @@
 # 📰 EchoNow — Modern News Aggregator
 
-**Live Site:** [https://echonow-client.web.app](https://echonow-client.web.app)  
-**Admin Email:** admin@echonow.com  
-**Admin Password:** Admin@123  
+**Live Site:** [https://echonow.netlify.app/](https://echonow.netlify.app/)  
+**Admin Email:** sifayed99@gmail.com
+**Admin Password:** @Admin1234 
 
 EchoNow is a dynamic and modern newspaper web application that revolutionizes the way users consume news. From trending articles to premium content, subscription models, and admin controls — this full-stack app has everything to serve a real-world news platform experience.
 
@@ -32,12 +32,10 @@ EchoNow is a dynamic and modern newspaper web application that revolutionizes th
 - **React Router DOM**
 - **TanStack Query**
 - **SweetAlert2 / React Hot Toast**
-- **Imgbb / Cloudinary**
+- **Imgbb**
 - **Tailwind CSS**
 - **React Google Charts**
 - **React CountUp**
-- **React Leaflet**
-- **GSAP (for animations)**
 - **React Simple Typewriter**
 
 ---
@@ -75,19 +73,6 @@ EchoNow is a dynamic and modern newspaper web application that revolutionizes th
 - Private routes remain intact even after reload using persistent login
 - Protected admin routes based on user role
 
----
-
-## 🌍 Environment Variables
-
-`.env` file is used to securely hide credentials:  
-```env
-VITE_FIREBASE_API_KEY=your_actual_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_bucket_name
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_id
-VITE_FIREBASE_APP_ID=your_app_id
-VITE_IMGBB_API_KEY=your_imgbb_api_key
 
 ---
 

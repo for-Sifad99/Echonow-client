@@ -5,13 +5,11 @@ import { VscMenu } from "react-icons/vsc";
 import { FiSearch, FiMoon } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import { FaEnvelope } from "react-icons/fa";
-import { PiSignInBold } from "react-icons/pi";
 import { FaFaceGrinWide } from "react-icons/fa6";
 import EchoLogo from "../EchoLogo/EchoLogo";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from '../../../../hooks/useAuth/useAuth';
 import {useTheme} from '../../../../hooks/themeContext/themeContext';
-import AccountAuthor from '../../MyProfile/AccountAuthor';
 import SideNavbar from './SideNavbar';
 
 const Navbar = () => {
@@ -100,7 +98,7 @@ const Navbar = () => {
     );
 
     return (
-        <header className={`overflow-hidden bg-[var(--secondary)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] relative z-[99]`}>
+        <header className={`overflow-hidden bg-[var(--secondary)] dark:bg-[#212227] text-[var(--dark)] dark:text-[var(--white)] relative z-[99]`}>
             {/* Top Row */}
             <div className="flex justify-between items-center px-2 sm:px-6 py-4 md:py-4.5 lg:py-8">
                 {/* Left: Hamburger + Subscribe */}
@@ -174,15 +172,10 @@ const Navbar = () => {
                         </div>
                     </div>
 
-
-                  <div className='ml-1 '>
-                        {
-                            user ? <AccountAuthor /> : <Link to="/auth/login">
-                                <button className="hidden md:flex items-center gap-1.5 py-2 text-[var(--primary)] font-bold font-libreBas rounded-md cursor-pointer">Sign In <PiSignInBold />
-                                </button>
-                            </Link>
-                        }
-                  </div>
+                    {/* User Profile */}
+                    <Link to='/my-profile' className='ml-1'>
+                        <img src={user?.photoURL || 'https://i.ibb.co/qMPZvv6H/8211048.png'} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
+                    </Link>
                 </div>
             </div>
 

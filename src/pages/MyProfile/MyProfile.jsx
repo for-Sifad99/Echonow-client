@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import SubLoader from '../shared/Loader/SubLoader';
 
 const MyProfile = () => {
     const axiosPublic = useAxiosPublic();
@@ -82,7 +83,7 @@ const MyProfile = () => {
                 });
 
                 toast.success('Your profile has been updated!');
-        
+
                 // Refetch user data after update
                 const res = await axiosPublic.get(`/users/${user.email}`);
                 setDbUser(res.data);
@@ -137,30 +138,51 @@ const MyProfile = () => {
         });
     };
 
-    if (loading) return <p className="text-center mt-10">Loading profile...</p>;
-    if (error) return <p className="text-red-500 text-center mt-10">{error.message}</p>;
+    if (loading) {
+        return <div className="flex items-center justify-center mx-auto my-10">
+            <div className="md:hidden">
+                <SubLoader size="text-lg" />
+            </div>
+            <div className="hidden md:block xl:hidden">
+                <SubLoader size="text-xl" />
+            </div>
+            <div className="hidden xl:flex">
+                <SubLoader size="text-2xl" />
+            </div>
+        </div>
+    };
+    if (error) return <p className="text-red-500 dark:text-red-400 text-center mt-10 font-jost">{error.message}</p>;
 
     return (
-        <section className="w-full px-4 py-6 sm:py-10 lg:px-8 bg-white isolate relative">
+        <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-10 text-[ver(--dark)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] isolate relative">
             <div
                 className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden pl-20 sm:px-36 blur-3xl"
                 aria-hidden="true"
             >
-                <div className="mx-auto aspect-1100/650 w-140.75 bg-linear-to-tr from-[#ff0011] to-[#fcbabf] opacity-30"></div>
+                <div className="dark:hidden mx-auto aspect-1100/650 w-140.75 bg-linear-to-tr from-[#ff0011] to-[#fcbabf] opacity-30"></div>
             </div>
-            <h2 className="text-center mb-10 text-base/7 font-semibold text-[var(--primary)] font-oxygen">
-                My Profile
-            </h2>
+            <div className="text-center mb-8">
+                <div className="flex justify-center items-center gap-1.5 sm:gap-3">
+                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    <h2 className="text-2xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
+                        Latest Stories
+                    </h2>
+                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                </div>
+                <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
+                    Let's know about our current modern fashions
+                </p>
+            </div>
 
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 font-jost">
                 <div className="flex flex-col items-center gap-6">
                     <img src={dbUser?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} alt="User" className="w-52 h-52 rounded-full object-cover" />
                     <p className=" -mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
                     <button
                         onClick={handleLogout}
-                        className="text-xl px-6 py-2 font-jost text-[var(--primary)] font-medium rounded-md cursor-pointer"
+                        className="mt-4 px-10 py-2 bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-400 text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
                     >
-                        --------Logout--------
+                        Logout
                     </button>
                 </div>
 
@@ -199,7 +221,7 @@ const MyProfile = () => {
                         <button
                             type="submit"
                             disabled={updating || uploading}
-                            className="px-10 py-2 bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-400 text-white font-semibold rounded-md transition duration-700 cursor-pointer"
+                            className="px-10 py-2 bg-gradient-to-r bg-[#8884d8] hover:text-[var(--dark)] hover:bg-[#ebe9e9] text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
                         >
                             {updating ? <>Editing <span className="loading loading-spinner w-4 text-white"></span></> : 'Edit'}
                         </button>

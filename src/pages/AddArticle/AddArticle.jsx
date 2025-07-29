@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import CommonSidebar from "../shared/CommonSidebar/CommonSidebar";
 import Select from "react-select";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { FiUpload } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
+import "./addArticle.css";
+import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
 
 const AddArticle = () => {
     const { user } = useAuth();
@@ -13,26 +16,35 @@ const AddArticle = () => {
         register,
         handleSubmit,
         control,
-        reset,
         formState: { errors },
     } = useForm();
 
     const [publishers, setPublishers] = useState([]);
     const [types, setTypes] = useState([]);
-    const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
+
+    const { data: allPublishers = [] } = useQuery({
+        queryKey: ["allPublishers"],
+        queryFn: async () => {
+            const res = await axiosPublic.get("/publisher-with-articles");
+            return res.data.publishers;
+        },
+    });
 
     useEffect(() => {
-        setPublishers([
-            { label: "Prothom Alo", value: "prothom alo" },
-            { label: "Routers", value: "routers" },
-            { label: "Verge", value: "verge" },
-        ]);
+        if (allPublishers.length > 0) {
+            const dynamicPublishers = allPublishers.map((pub) => ({
+                label: pub.name.charAt(0).toUpperCase() + pub.name.slice(1),
+                value: pub.name.toLowerCase(),
+            }));
+            setPublishers(dynamicPublishers);
+        }
 
         setTypes([
             { label: "Normal", value: "normal" },
             { label: "Hot", value: "hot" },
-        ])
-    }, []);
+        ]);
+    }, [allPublishers]);
 
     const tagOptions = [
         { value: "beauty", label: "Beauty" },
@@ -41,6 +53,56 @@ const AddArticle = () => {
         { value: "style", label: "Style" },
         { value: "fashion", label: "Fashion" },
     ];
+
+    const customSelectStyles = {
+        control: (base) => ({
+            ...base,
+            backgroundColor: "transparent",
+            border: "1px solid #ccc",
+            boxShadow: "none",
+            minHeight: 42,
+            cursor: "pointer",
+            color: "inherit",
+            borderRadius: 0,
+            outline: "none",
+        }),
+        input: (base) => ({
+            ...base,
+            backgroundColor: "transparent",
+            color: "inherit",
+            margin: 0,
+            padding: 0,
+            outline: "none",
+        }),
+        singleValue: (base) => ({
+            ...base,
+            color: "inherit",
+        }),
+        menu: (base) => ({
+            ...base,
+            backgroundColor: "white",
+            color: "inherit",
+            borderRadius: 0,
+        }),
+        multiValue: (base) => ({
+            ...base,
+            backgroundColor: "#e0e0e0",
+            color: "#000",
+            borderRadius: 0,
+        }),
+        multiValueLabel: (base) => ({
+            ...base,
+            color: "#000",
+        }),
+        option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isFocused ? "rgba(255, 85, 85, 0.2)" : "transparent",
+            color: "inherit",
+            cursor: "pointer",
+            outline: "none",
+        }),
+    };
+
 
     const onSubmit = async (data) => {
         try {
@@ -67,9 +129,8 @@ const AddArticle = () => {
                 viewCount: 0,
             };
 
-            await axiosSecure.post("http://localhost:3000/article", articleData);
+            await axiosSecure.post("/article", articleData);
             toast.success("Article submitted for approval!");
-            // reset();
         } catch (err) {
             console.error(err);
             toast.error("Failed to submit article");
@@ -77,95 +138,159 @@ const AddArticle = () => {
     };
 
     return (
-        <section className="w-full py-4 px-6 md:py-10">
-            <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dark)] mb-4">
-                    Add New Article
-                </h2>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div>
-                        <label className="block font-medium text-gray-700 mb-1">Title</label>
-                        <input
-                            type="text"
-                            {...register("title", { required: "Title is required" })}
-                            className="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)] px-3 py-2"
-                            placeholder="Enter article title"
-                        />
-                        {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
+        <section className="max-w-[1200px] font-jost mx-auto sm:px-4 px-2 py-10 transition-colors duration-500 text-[#1c1d1e]">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6">
+                {/* form content */}
+                <div className="w-full flex-1">
+                    <div className="text-center mb-8">
+                        <div className="flex justify-center items-center gap-1.5 sm:gap-3">
+                            <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                            <h2 className="text-2xl text-[var(--dark)] dark:text-[var(--white)] sm:text-3xl font-libreBas font-bold">
+                                Add Article
+                            </h2>
+                            <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                        </div>
+                        <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
+                            Fill the form to add article
+                        </p>
                     </div>
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="add-article-form space-y-5 px-8 py-14 shadow-lg bg-[var(--accent-white)] dark:bg-[#1c1d1e] dark:text-[var(--white)] "
+                        style={{ borderRadius: 0 }}
+                    >
+                        {/* Title */}
+                        <div>
+                            <label className="block font-medium mb-1 font-oxygen">Title</label>
+                            <input
+                                type="text"
+                                {...register("title", { required: "Title is required" })}
+                                placeholder="Enter article title"
+                                className="w-full px-4 py-2 rounded-none no-outline"
+                                autoComplete="off"
+                            />
+                            {errors.title && (
+                                <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+                            )}
+                        </div>
 
-                    <div className="flex flex-col sm:flex-row items-center w-full gap-4">
-                        <div className="w-full">
-                            <label className="block font-medium text-gray-700 mb-1">Publisher</label>
+
+                        {/* Publisher */}
+                        <div>
+                            <label className="block font-medium mb-1 font-oxygen">Publisher</label>
                             <Controller
                                 name="publisher"
                                 control={control}
+                                defaultValue={null}
                                 rules={{ required: "Publisher is required" }}
                                 render={({ field }) => (
-                                    <Select {...field} options={publishers} placeholder="Select publisher" />
+                                    <Select
+                                        {...field}
+                                        options={publishers}
+                                        placeholder="Select publisher"
+                                        styles={customSelectStyles}
+                                        isClearable
+                                        classNamePrefix="react-select"
+                                        className="no-outline"
+                                    />
                                 )}
                             />
-                            {errors.publisher && <p className="text-red-500 text-sm">{errors.publisher.message}</p>}
+                            {errors.publisher && (
+                                <p className="text-red-500 text-sm mt-1">{errors.publisher.message}</p>
+                            )}
                         </div>
-                        <div className="w-full">
-                            <label className="block font-medium text-gray-700 mb-1">Article Type</label>
+
+                        {/* Type */}
+                        <div>
+                            <label className="block font-medium mb-1 font-oxygen">Article Type</label>
                             <Controller
                                 name="type"
                                 control={control}
-                                rules={{ required: "type is required" }}
+                                defaultValue={null}
+                                rules={{ required: "Type is required" }}
                                 render={({ field }) => (
-                                    <Select {...field} options={types} placeholder="Select type" />
+                                    <Select
+                                        {...field}
+                                        options={types}
+                                        placeholder="Select type"
+                                        styles={customSelectStyles}
+                                        isClearable
+                                        classNamePrefix="react-select"
+                                        className="no-outline"
+                                    />
                                 )}
                             />
-                            {errors.type && <p className="text-red-500 text-sm">{errors.type.message}</p>}
-                        </div>
-                    </div>
-
-
-                    <div>
-                        <label className="block font-medium text-gray-700 mb-1">Tags</label>
-                        <Controller
-                            name="tags"
-                            control={control}
-                            rules={{ required: "Select at least one tag" }}
-                            render={({ field }) => (
-                                <Select {...field} options={tagOptions} isMulti placeholder="Select tags" />
+                            {errors.type && (
+                                <p className="text-red-500 text-sm mt-1">{errors.type.message}</p>
                             )}
-                        />
-                        {errors.tags && <p className="text-red-500 text-sm">{errors.tags.message}</p>}
-                    </div>
+                        </div>
 
+                        {/* Tags */}
+                        <div>
+                            <label className="block font-medium mb-1 font-oxygen">Tags</label>
+                            <Controller
+                                name="tags"
+                                control={control}
+                                defaultValue={[]}
+                                rules={{ required: "Select at least one tag" }}
+                                render={({ field }) => (
+                                    <Select
+                                        {...field}
+                                        options={tagOptions}
+                                        isMulti
+                                        placeholder="Select tags"
+                                        styles={customSelectStyles}
+                                        closeMenuOnSelect={false}
+                                        classNamePrefix="react-select"
+                                        className="no-outline"
+                                    />
+                                )}
+                            />
+                            {errors.tags && (
+                                <p className="text-red-500 text-sm mt-1">{errors.tags.message}</p>
+                            )}
+                        </div>
 
-                    <div>
-                        <label className="block font-medium text-gray-700 mb-1">Description</label>
-                        <textarea
-                            {...register("description", { required: "Description is required" })}
-                            rows="5"
-                            className="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)] px-3 py-2"
-                            placeholder="Write your article description"
-                        ></textarea>
-                        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
-                    </div>
+                        {/* Description */}
+                        <div>
+                            <label className="block font-medium mb-1 font-oxygen">Description</label>
+                            <textarea
+                                {...register("description", { required: "Description is required" })}
+                                rows="5"
+                                placeholder="Write your article description"
+                                className="w-full px-4 py-2 rounded-none no-outline"
+                            ></textarea>
+                            {errors.description && (
+                                <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+                            )}
+                        </div>
 
+                        {/* Upload Image */}
+                        <div>
+                            <label className="block font-medium mb-1 font-oxygen">Upload Image</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                {...register("image", { required: "Image is required" })}
+                                className="w-full px-4 py-2 rounded-none no-outline"
+                            />
+                            {errors.image && (
+                                <p className="text-red-500 text-sm mt-1">{errors.image.message}</p>
+                            )}
+                        </div>
 
-                    <div>
-                        <label className="block font-medium text-gray-700 mb-1">Upload Image</label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            {...register("image", { required: "Image is required" })}
-                            className="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)] px-3 py-2"
-                        />
-                        {errors.image && <p className="text-red-500 text-sm">{errors.image.message}</p>}
-                    </div>
+                        {/* Submit */}
+                        <button
+                            type="submit"
+                            className="w-full sm:w-fit flex items-center justify-center ml-auto gap-2 bg-[#1c1d1e] text-[var(--white)] px-6 py-2 rounded-none transition-all duration-300 no-outline border-none cursor-pointer"
+                        >
+                            <FiUpload /> Submit Article
+                        </button>
+                    </form>
+                </div>
 
-                    <button
-                        type="submit"
-                        className="w-full sm:w-fit flex items-center justify-center sm:ml-auto bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-white px-5 py-2 rounded-md transition duration-700 cursor-pointer"
-                    >
-                        <FiUpload className="inline-block mr-2 mb-0.5" /> Submit Article
-                    </button>
-                </form>
+                {/* side content */}
+                <CommonSidebar />
             </div>
         </section>
     );

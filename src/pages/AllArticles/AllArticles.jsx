@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
+import { FaRegShareSquare } from "react-icons/fa";
 import useAuth from '../../../hooks/useAuth/useAuth';
 import Pagination from "../../pages/shared/Pagination/Pagination";
 import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
 import toast from "react-hot-toast";
+import SubLoader from "../shared/Loader/SubLoader";
 
 const AllArticles = () => {
     const { user: authUser } = useAuth();
@@ -16,7 +18,7 @@ const AllArticles = () => {
     const [page, setPage] = useState(1);
     const axiosPublic = useAxiosPublic();
 
-    const { data, isPending } = useQuery({
+    const { data = [], isPending } = useQuery({
         queryKey: ["articles", { search, tags: selectedTags, publisher: selectedPublisher, page }],
         queryFn: async () => {
             const res = await axiosPublic.get("/articles", {
@@ -52,6 +54,31 @@ const AllArticles = () => {
         enabled: !!authUser?.email,
     });
 
+    const { data: topFashion = [], isLoading } = useQuery({
+        queryKey: ["top-fashion"],
+        queryFn: async () => {
+            const res = await axiosPublic.get("/articles/top-fashion");
+            return res.data;
+        },
+    });
+
+    if (isPending)  {
+        return <div className="flex items-center justify-center mx-auto my-10">
+            <div className="md:hidden">
+                <SubLoader size="text-lg" />
+            </div>
+            <div className="hidden md:block xl:hidden">
+                <SubLoader size="text-xl" />
+            </div>
+            <div className="hidden xl:flex">
+                <SubLoader size="text-2xl" />
+            </div>
+        </div>
+    }
+    if (articles.length === 0)  {
+        return <p className="my-10 text-xl text-[var(--dark)] dark:text-[var(--white)] col-span-full text-center font-libreBas">No articles found.</p>
+    }
+
     const handleNavigate = (article, id) => {
         if (article.isPremium && dbUser?.isPremium) {
             navigate(`/article/${id}`);
@@ -64,142 +91,185 @@ const AllArticles = () => {
     }
 
     return (
-        <div className="w-full py-8 px-4 lg:px-10 grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="w-full flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6 text-[var(--dark)] dark:text-[var(--white)] py-10 px-2 sm:px-4">
             {/* Filter Sidebar */}
-            <aside className="lg:col-span-1 space-y-6">
-                <div>
-                    <label className="font-semibold text-gray-800">Search</label>
-                    <div className="relative mt-1">
-                        <input
-                            type="text"
-                            placeholder="Search by title..."
-                            className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring"
-                            value={search}
-                            onChange={(e) => {
-                                setSearch(e.target.value);
-                                setPage(1);
-                            }}
-                        />
-                        <FiSearch className="absolute top-3 right-3 text-gray-500" />
-                    </div>
-                </div>
-
-                <div>
-                    <h4 className="font-semibold mb-2">Filter by Publisher</h4>
-                    <div className="space-y-1">
-                        {publishers.map((pub) => (
-                            <div key={pub}>
-                                <label className="flex items-center gap-2">
+            {
+                articles.length === 0 ? ' ' :
+                    <aside className="md:-mt-1 w-full md:w-[280px] lg:min-w-[300px] md:sticky md:top-2 h-fit space-y-6">
+                        <div className="w-full max-w-sm">
+                            <label className="font-semibold font-oxygen text-xl">Search</label>
+                            <div className="relative mt-1">
+                                <div className='font-oxygen flex items-center bg-[var(--accent-white)] dark:bg-[var(--accent)] justify-between text-sm pl-4 pr-1 w-full h-11 rounded-xl z-50' >
                                     <input
-                                        type="radio"
-                                        name="publisher"
-                                        value={pub}
-                                        checked={selectedPublisher === pub}
-                                        onChange={() => {
-                                            setSelectedPublisher(pub);
+                                        type="text"
+                                        value={search}
+                                        onChange={(e) => {
+                                            setSearch(e.target.value);
                                             setPage(1);
                                         }}
-                                    />
-                                    {pub}
-                                </label>
+                                        placeholder="Search by title..."
+                                        className='ml-2 dark:text-[var(--white)] bg-[var(--accent-white)] dark:bg-[var(--accent)] border-none outline-none' />
+                                    <FiSearch className="stroke-[var(--primary)] dark:stroke-[var(--dark)] bg-[var(--secondary)] text-[var(--dark)] dark:bg-[var(--white)] p-[11px] h-[37px] w-[37px] rounded-xl cursor-pointer" />
+                                </div>
                             </div>
-                        ))}
-                        <button
-                            onClick={() => {
-                                setSelectedPublisher("");
-                                setPage(1);
-                            }}
-                            className="text-sm text-red-500 underline mt-2"
-                        >
-                            Clear
-                        </button>
-                    </div>
-                </div>
+                        </div>
 
-                <div>
-                    <h4 className="font-semibold mb-2">Filter by Tags</h4>
-                    <div className="flex flex-wrap gap-2">
-                        {tags.map((tag) => (
-                            <button
-                                key={tag}
-                                onClick={() => {
-                                    setSelectedTags((prev) =>
-                                        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-                                    );
-                                    setPage(1);
-                                }}
-                                className={`px-3 py-1 rounded-full border text-sm ${selectedTags.includes(tag)
-                                    ? "bg-[var(--primary)] text-white"
-                                    : "text-gray-600 border-gray-300"
-                                    }`}
-                            >
-                                {tag}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </aside>
+                        <div className="w-full max-w-sm">
+                            <h4 className="font-semibold font-oxygen text-xl mb-2">Filter by Publisher</h4>
+                            <div className="space-y-[1px]">
+                                {publishers.map((pub) => (
+                                    <div key={pub}>
+                                        <label className="flex items-center gap-2 font-jost">
+                                            <input
+                                                type="radio"
+                                                name="publisher"
+                                                value={pub}
+                                                checked={selectedPublisher === pub}
+                                                onChange={() => {
+                                                    setSelectedPublisher(pub);
+                                                    setPage(1);
+                                                }}
+                                            />
+                                            {pub}
+                                        </label>
+                                    </div>
+                                ))}
+                                <button
+                                    onClick={() => {
+                                        setSelectedPublisher("");
+                                        setPage(1);
+                                    }}
+                                    className="text-sm py-1 px-8 w-fit bg-[var(--primary)] dark:bg-red-500 text-[var(--white)] mt-2 cursor-pointer"
+                                >
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
 
-            {/* Articles Section */}
-            <div className="lg:col-span-3 flex flex-col gap-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {isPending ? (
-                        <p className="text-gray-500 col-span-full text-center text-2xl font-oxygen">LOADING...</p>
-                    ) : articles.length === 0 ? (
-                        <p className="text-xl text-gray-600 col-span-full text-center font-libreBas">No articles found.</p>
-                    ) : (
-                        articles.map((article) => (
-                            <div
-                                key={article._id}
-                                className={`bg-white rounded-lg border shadow group overflow-hidden relative transition duration-300 hover:shadow-md ${article.isPremium ? "border-yellow-500" : "border-gray-200"
-                                    }`}
-                            >
-                                <div className="px-4 pt-4 pb-2 space-y-2">
-                                    <h3 className="mt-4 font-jost leading-6 text-lg font-bold text-gray-800 mb-2">
-                                        {article.title.length > 60
-                                            ? article.title.slice(0, 60) + "..."
-                                            : article.title}
-                                    </h3>
+                        <div className="w-full max-w-sm">
+                            <h4 className="font-semibold font-oxygen text-xl mb-2">Filter by Tags</h4>
+                            <div className="flex flex-wrap gap-2">
+                                {tags.map((tag) => (
+                                    <button
+                                        key={tag}
+                                        onClick={() => {
+                                            setSelectedTags((prev) =>
+                                                prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+                                            );
+                                            setPage(1);
+                                        }}
+                                        className={`px-3 py-1 rounded-full font-jost text-sm ${selectedTags.includes(tag)
+                                            ? "bg-[var(--primary)] text-[var(--white)]"
+                                            : "border border-[#e0e0e0] dark:border-[#3f3f3f]"
+                                            }`}
+                                    >
+                                        {tag}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
 
-                                    <div className="w-full h-40 rounded-md overflow-hidden">
+                        {/* Explore More */}
+                        {isLoading ? <div className="flex items-center justify-center mx-auto my-6">
+                            <div className="md:hidden">
+                                <SubLoader size="text-base" />
+                            </div>
+                            <div className="hidden md:block">
+                                <SubLoader size="text-xl" />
+                            </div>
+                        </div> :
+                            <div className="pb-4 rounded-md">
+                                <h3 className="text-lg font-bold font-libreBas mb-3 text-[var-(--dark)] dark:text-[var(--white)]">Explore More</h3>
+
+                                {topFashion.slice(0, 1).map((article, idx) => (
+                                    <div
+                                        onClick={() => handleNavigate(article, article._id)}
+                                        key={idx}
+                                        className="group relative flex flex-col"
+                                    >
                                         <img
                                             src={article.image}
                                             alt={article.title}
-                                            className="w-full h-full object-cover object-center"
+                                            className="w-full max-h-72 sm:max-h-96 md:h-44 object-cover"
                                         />
+                                        <div className="flex flex-col justify-center items-center md:items-start text-[var(--dark)] dark:text-[var(--white)] md:mt-3 space-y-2 py-3 pr-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">
+                                            <span className="mt-4 md:mt-0 font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">Featured</span>
+                                            <h3 className="mt-2 md:mt-0 text-center md:text-start text-xl sm:text-2xl md:text-base xl:text-lg font-bold font-libreBas leading-6 md:leading-5 lg:leading-5.5 group-hover:underline"> ''{article.title.slice(0, 50)}..''
+                                            </h3>
+                                            <h4 className="text-center md:text-start mt-1 text-xs sm:text-sm md:text-xs font-oxygen leading-4 text-[var(--base-200) opacity-70 dark:opacity-90">
+                                                {article.description.slice(0, 90)}....
+
+                                            </h4>
+                                            <div className='mt-2 sm:mt-0 xl:mt-2 flex items-center justify-between gap-2 text-xs sm:text-[10px] lg:text-xs font-jost'>
+                                                <p>
+                                                    <span className="opacity-90 dark:opacity-90">By</span> <span className='opacity-70 dark:opacity-90 font-bold dark:font-semibold'>{article.authorName}</span> • <span className="opacity-70"> {new Date(article.postedDate).toDateString()}</span>
+                                                </p>
+                                                <span className='text-xs sm:text-[8px] md:text-[10px] lg:text-xs opacity-60 dark:opacity-80 cursor-pointer'> <FaRegShareSquare /></span>
+                                            </div>
+                                        </div>
+                                        {article.isPremium &&
+                                            <div className='absolute top-[27px] -left-5.5 rotate-270 transition duration-500'>
+                                                <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">Premium</span>
+                                            </div>
+                                        }
                                     </div>
+                                ))}
+                            </div>
+                        }
+                    </aside>
+            }
 
-                                    <p className="text-sm text-gray-600 mt-2">
-                                        {article.description.length > 80
-                                            ? article.description.slice(0, 80) + "..."
-                                            : article.description}
-                                    </p>
-
-                                    <div className="text-xs text-gray-500 mt-1">
-                                        Publisher: <span className="font-medium">{article.publisher}</span>
+            {/* Articles Section */}
+            <div className="flex flex-col gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-4 ld:gap-5 xl:gap-6">
+                    {
+                        articles.map((article) => (
+                            <div
+                                onClick={() => handleNavigate(article, article._id)}
+                                key={articles._id}
+                                className="group flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]"
+                            >
+                                <div className='relative'>
+                                    <img
+                                        src={article.image}
+                                        alt={article.title}
+                                        className="w-full h-60 md:h-52 lg:h-60 object-cover"
+                                    />
+                                    {article.isPremium &&
+                                        <div className='absolute top-6.5 -left-5.5 rotate-270 transition duration-500'>
+                                            <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">Premium</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div className="flex flex-col justify-center items-center text-[var(--dark)] dark:text-[var(--white)]  md:mt-3 space-y-2 px-2 pt-2 pb-4">
+                                    <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">{article.tags}</span>
+                                    <h3 className="text-center text-xl sm:text-base lg:text-xl font-bold font-libreBas leading-6 sm:leading-5 lg:leading-6 group-hover:underline">
+                                        <span className="md:hidden"> ''{article.title.slice(0, 50)}..''</span>
+                                        <span className="hidden md:block lg:block"> ''{article.title.slice(0, 30)}..''</span>
+                                        <span className="hidden ld:block"> ''{article.title}..''</span>
+                                    </h3>
+                                    <h4 className="text-center mt-0.5 md:mt-0 lg:mt-0.5 text-xs font-oxygen leading-4 text-[var(--base-200) opacity-70 dark:opacity-90">
+                                        <span className="md:hidden">{article.description.slice(0, 100)}....</span>
+                                        <span className="hidden md:block lg:hidden">{article.description.slice(0, 34)}....</span>
+                                        <span className="hidden lg:block">{article.description.slice(0, 100)}....</span>
+                                    </h4>
+                                    <div className='mt-1 md:mt-0 lg:mt-1 flex items-center justify-between gap-2 text-xs sm:text-[10px] lg:text-xs font-jost'>
+                                        <p>
+                                            <span className="opacity-90 dark:opacity-100">By
+                                            </span>
+                                            <span className='opacity-70 dark:opacity-90 font-bold dark:font-semibold'> {article.authorName}</span> • <span className="opacity-70"> {new Date(article.postedDate).toDateString()}
+                                            </span>
+                                        </p>
+                                        <span className='text-xs sm:text-[8px] md:text-[10px] lg:text-xs opacity-50 dark:opacity-80 cursor-pointer'> <FaRegShareSquare /></span>
                                     </div>
-
-                                    <div className="text-xs text-gray-500">Author: {article.authorName}</div>
-
-                                    <button
-                                        onClick={() => handleNavigate(article, article._id)}
-                                        className={`block w-full mt-3 text-center px-4 py-2 rounded-md bg-gradient-to-r text-sm font-semibold cursor-pointer text-white transition duration-700 ${(article.isPremium && !dbUser?.isPremium)
-                                            ? 'from-orange-300 to-orange-400 hover:from-orange-400 hover:to-orange-300'
-                                            : `${article.isPremium && dbUser?.isPremium ? 'from-orange-300 to-orange-400 hover:from-orange-400 hover:to-orange-300' : 'from-red-400 to-red-600 hover:from-red-500 hover:to-red-400'}`
-                                            }`}>Details</button>
-
-                                    {article.isPremium && (
-                                        <span className="absolute top-4 right-4 bg-yellow-400 text-xs font-bold text-black px-3 py-1 rounded shadow">
-                                            Premium
-                                        </span>
-                                    )}
                                 </div>
                             </div>
                         ))
-                    )}
+                    }
                 </div>
 
-                <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+                {articles.length === 0 ? ' ' :
+                    <Pagination page={page} totalPages={totalPages} setPage={setPage} />}
             </div>
         </div>
     );
