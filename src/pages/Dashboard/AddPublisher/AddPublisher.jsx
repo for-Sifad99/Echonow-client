@@ -45,8 +45,10 @@ const AddPublisher = () => {
         }
     };
 
-    // Get 5 most recent publishers (latest first)
-    const recentPublishers = [...publishers].sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate)).slice(0, 5);
+    // ✅ FIXED: Check if publishers is a valid array
+    const recentPublishers = Array.isArray(publishers)
+        ? [...publishers].sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate)).slice(0, 5)
+        : [];
 
     return (
         <div className="space-y-4">
@@ -106,18 +108,19 @@ const AddPublisher = () => {
                         </div>
                     </h3>
 
-                    {isPending ?
-                    <div className="flex items-center justify-center mx-auto my-6">
-                                        <div className="md:hidden">
-                                            <SubLoader size="text-base" />
-                                        </div>
-                                        <div className="hidden md:block xl:hidden">
-                                            <SubLoader size="text-lg" />
-                                        </div>
-                                        <div className="hidden xl:block">
-                                            <SubLoader size="text-xl" />
-                                        </div>
-                                    </div> :
+                    {isPending ? (
+                        <div className="flex items-center justify-center mx-auto my-6">
+                            <div className="md:hidden">
+                                <SubLoader size="text-base" />
+                            </div>
+                            <div className="hidden md:block xl:hidden">
+                                <SubLoader size="text-lg" />
+                            </div>
+                            <div className="hidden xl:block">
+                                <SubLoader size="text-xl" />
+                            </div>
+                        </div>
+                    ) : (
                         <div className="space-y-2">
                             {recentPublishers.map((pub) => (
                                 <div key={pub._id} className="group flex items-center gap-4  bg-[var(--white)] dark:bg-[var(--accent)] hover:bg-[#ffeabc] dark:hover:bg-[#e7e6ff] p-3 rounded-lg shadow-sm transition duration-400">
@@ -138,8 +141,8 @@ const AddPublisher = () => {
                                 <p className="text-base-content/60">No publishers added yet.</p>
                             )}
                         </div>
-                    }
-                </div> 
+                    )}
+                </div>
             </div>
         </div>
     );
