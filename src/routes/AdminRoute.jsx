@@ -2,6 +2,7 @@ import React from 'react';
 import useAuth from '../../hooks/useAuth/useAuth';
 import useRole from '../../hooks/useUserRole/useRole';
 import { Navigate, useLocation } from 'react-router-dom';
+import Loader from '../pages/shared/Loader/Loader';
 
 const PrivetRoute = ({ children }) => {
     const { user, loading } = useAuth();
@@ -10,7 +11,7 @@ const PrivetRoute = ({ children }) => {
 
     // set loading when user and user role Null
     if (loading || roleLoading) {
-        return <div className='min-h-screen flex flex-col justify-center items-center'><span className="text-xl text-center"></span>LOADING...</div>
+        return <Loader />
     };
 
     // navigate user to forbidden page

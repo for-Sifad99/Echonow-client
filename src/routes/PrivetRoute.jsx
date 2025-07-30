@@ -1,6 +1,7 @@
 import React from 'react';
 import useAuth from '../../hooks/useAuth/useAuth';
 import { Navigate, useLocation } from 'react-router-dom';
+import Loader from '../pages/shared/Loader/Loader';
 
 const PrivetRoute = ({children}) => {
     const {user, loading} = useAuth();
@@ -8,7 +9,7 @@ const PrivetRoute = ({children}) => {
 
     // set loading when user Null
     if(loading){
-        return <div className='min-h-screen flex flex-col justify-center items-center'><span className="text-xl text-center"></span>LOADING...</div>
+        return <Loader />
     };
 
     // navigate user where he/she want to go after login
