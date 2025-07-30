@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import forbiddenImage from '../../../assets/forbidden.png';
-import SubLoader from '../Loader/subLoader';
-import { useTheme } from '../../../../hooks/themeContext/themeContext';
+import forbiddenImage from '../../assets/forbidden.png';
+import SubLoader from '../shared/Loader/subLoader';
+import { useTheme } from '../../../hooks/themeContext/themeContext';
 
 const Forbidden = () => {
     const { theme } = useTheme();
@@ -34,7 +34,7 @@ const Forbidden = () => {
                 <p className="font-jost text-base sm:text-lg md:text-base lg:text-xl xl:text-2xl leading-4 text-[var(--accent)] dark:text-[var(--base-100)] mb-4 md:mb-3 lg:mb-4 xl:mb-5">
                     You don’t have permission to access this page.
                 </p>
-                <Link to="/" className="w-fit text-sm sm:text-base xl:text-xl inline-block bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-[var(--white)] px-4 py-1.5 sm:px-5 sm:py-2 xl:px-7 xl:py-2.5 rounded-md transition duration-700 cursor-pointer">
+                <Link to="/" className="w-fit text-sm sm:text-base xl:text-xl inline-block bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-[var(--white)] px-4 py-1.5 sm:px-5 sm:py-2 xl:px-7 xl:py-2.5 transition duration-700 cursor-pointer">
                     Back to Home
                 </Link>
             </div>

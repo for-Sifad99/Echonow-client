@@ -20,7 +20,8 @@ import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import DashHome from "../pages/Dashboard/DashHome/DashHome";
 import DashAllArticles from "../pages/Dashboard/DashAllArticles/DashAllArticles";
 import AddPublisher from "../pages/Dashboard/AddPublisher/AddPublisher";
-import Forbidden from "../pages/shared/Forbidden/Forbidden";
+import Forbidden from "../pages/Forbidden/Forbidden";
+import Error from "../pages/Error/Error";
 
 
 const router = createBrowserRouter([
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
     {
         path: "/status/forbidden",
         Component: Forbidden,
+    },
+    {
+        path: "/*",
+        Component: Error,
     }
 ]);
 

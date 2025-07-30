@@ -5,7 +5,7 @@ import Fashion from "../Fashion/Fashion";
 import AllPublishers from "../AllPublishers/AllPublishers";
 import PlanSection from "../PlanSection/PlanSection";
 import UserSummaryCards  from '../UserSummaryCards/UserSummaryCards';
-import SubscribeModal from "../../shared/SubscribeModal/SubscribeModal";
+import SubscribeModal from "../SubscribeModal/SubscribeModal";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

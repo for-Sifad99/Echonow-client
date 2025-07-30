@@ -82,8 +82,8 @@ const PlanSection = () => {
                         </p>
                         <p className="my-6 text-base/7 sm:text-lg md:text-base/7  text-gray-600 dark:text-gray-200 font-jost font-semibold leading-3.5">{plan.title}</p>
                         <ul className="space-y-2 text-sm/6 text-gray-800 dark:text-gray-300 font-medium font-jost">
-                            {plan.features.map(f => (
-                                <li className="flex gap-x-3 leading-4">✅ {f}</li>
+                            {plan.features.map((f, i) => (
+                                <li key={i} className="flex gap-x-3 leading-4">✅ {f}</li>
                             ))}
                         </ul>
                         <button
