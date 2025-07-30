@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect, useRef, useState } from "react";
+import { LuLogOut } from "react-icons/lu";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
 import { FiSearch, FiMoon } from "react-icons/fi";
@@ -9,7 +10,7 @@ import { FaFaceGrinWide } from "react-icons/fa6";
 import EchoLogo from "../EchoLogo/EchoLogo";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from '../../../../hooks/useAuth/useAuth';
-import {useTheme} from '../../../../hooks/themeContext/themeContext';
+import { useTheme } from '../../../../hooks/themeContext/themeContext';
 import SideNavbar from './SideNavbar';
 
 const Navbar = () => {
@@ -173,9 +174,14 @@ const Navbar = () => {
                     </div>
 
                     {/* User Profile */}
-                    <Link to='/my-profile' className='ml-1'>
-                        <img src={user?.photoURL || 'https://i.ibb.co/qMPZvv6H/8211048.png'} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
-                    </Link>
+                    {user ?
+                        <Link to='/my-profile' className='ml-1'>
+                            <img src={user?.photoURL || 'https://i.ibb.co/qMPZvv6H/8211048.png'} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
+                        </Link> :
+                        <Link to='/auth/login'>
+                            <button className='flex justify-center items-center gap-2 font-libreBas text-[var(--primary)] dark:text-red-300'>Sign In <LuLogOut /></button>
+                        </Link>
+                    }
                 </div>
             </div>
 

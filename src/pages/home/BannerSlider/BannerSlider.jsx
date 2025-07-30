@@ -22,25 +22,16 @@ const BannerSlider = () => {
         }
     });
 
-    // Fetch logged-in user's info (for isPremium)
-    const {
-        data: dbUser,
-    } = useQuery({
-        queryKey: ['user-info', user?.email],
-        queryFn: async () => {
-            const res = await axiosPublic.get(`/users/${user?.email}`);
-            return res.data;
-        },
-        enabled: !!user?.email,
-    });
-
     const handleNavigate = (article, id) => {
-        if (article.isPremium && dbUser?.isPremium) {
+        if (!user) {
+            return toast.error('Please get login first!')
+        }
+        if (article.isPremium && user?.isPremium) {
             navigate(`/article/${id}`);
         } else if (!article.isPremium) {
             navigate(`/article/${id}`);
         }
-        else if (article.isPremium && !dbUser?.isPremium) {
+        else if (article.isPremium && !user?.isPremium) {
             toast.error('Please get subscription first!')
         }
     }
@@ -60,7 +51,7 @@ const BannerSlider = () => {
     }
 
     return (
-        <div className="px-2 sm:mx-3 py-3 xl:max-w-[1366px] 2xl:max-w-[1728px] xl:mx-auto">
+      <div className="relative z-10 px-2 sm:mx-3 py-3 xl:max-w-[1366px] 2xl:max-w-[1728px] xl:mx-auto">
             <Swiper
                 modules={[Autoplay]}
                 spaceBetween={10}

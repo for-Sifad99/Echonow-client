@@ -20,6 +20,9 @@ const FashionMain = () => {
     });
 
     const handleNavigate = (article, id) => {
+        if (!user) {
+            return toast.error('Please get login first!')
+        }
         if (article.isPremium && user?.isPremium) {
             navigate(`/article/${id}`);
         } else if (!article.isPremium) {

@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import SubLoader from '../shared/Loader/SubLoader';
 import { BiLogoFacebook } from "react-icons/bi";
 import { RiTwitterLine } from "react-icons/ri";
-import { IoLogoInstagram,  } from "react-icons/io";
+import { IoLogoInstagram, } from "react-icons/io";
 import { SlSocialPintarest } from "react-icons/sl";
 import { TfiAlarmClock } from "react-icons/tfi";
 import { FaRegShareSquare } from "react-icons/fa";
@@ -50,18 +50,18 @@ const ArticleDetails = () => {
     }, [id, axiosSecure, refetch]);
 
     if (isPending) {
-            return <div className="flex items-center justify-center mx-auto my-10">
-                <div className="md:hidden">
-                    <SubLoader size="text-lg" />
-                </div>
-                <div className="hidden md:block xl:hidden">
-                    <SubLoader size="text-xl" />
-                </div>
-                <div className="hidden xl:flex">
-                    <SubLoader size="text-2xl" />
-                </div>
+        return <div className="flex items-center justify-center mx-auto my-10">
+            <div className="md:hidden">
+                <SubLoader size="text-lg" />
             </div>
-        };
+            <div className="hidden md:block xl:hidden">
+                <SubLoader size="text-xl" />
+            </div>
+            <div className="hidden xl:flex">
+                <SubLoader size="text-2xl" />
+            </div>
+        </div>
+    };
 
     if (isError) {
         return (
@@ -72,8 +72,8 @@ const ArticleDetails = () => {
     }
 
     return (
-        <section className="flex flex-col lg:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6 w-full max-auto px-4 sm:px-4 py-10 text-[var(--dark)] dark:text-[var(--white)] ">
-           <div className="flex-1">
+        <section className="flex flex-col lg:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6 w-full max-w-[1366px] mx-auto px-4 sm:px-4 py-10 text-[var(--dark)] dark:text-[var(--white)] ">
+            <div className="flex-1">
                 <div className="flex flex-col justify-center gap-2 sm:gap-3">
                     <div className="flex flex-col sm:flex-row text-[10px] sm:text-xs text-gray-500 dark:text-[var(--white)] font-oxygen">
                         <div className="flex items-center">
@@ -138,9 +138,9 @@ const ArticleDetails = () => {
                         )}
                     </div>
                 </div>
-           </div>
+            </div>
 
-           <CommonSidebar />
+            <CommonSidebar />
         </section>
     );
 };

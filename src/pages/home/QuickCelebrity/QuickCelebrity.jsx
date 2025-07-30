@@ -18,17 +18,20 @@ const QuickCelebrity = () => {
             return res.data.celebrity;
         },
     });
-
-    const handleNavigate = (article, id) => {
-        if (article.isPremium && user?.isPremium) {
-            navigate(`/article/${id}`);
-        } else if (!article.isPremium) {
-            navigate(`/article/${id}`);
+    
+     const handleNavigate = (article, id) => {
+            if (!user) {
+                return toast.error('Please get login first!')
+            }
+            if (article.isPremium && user?.isPremium) {
+                navigate(`/article/${id}`);
+            } else if (!article.isPremium) {
+                navigate(`/article/${id}`);
+            }
+            else if (article.isPremium && !user?.isPremium) {
+                toast.error('Please get subscription first!')
+            }
         }
-        else if (article.isPremium && !user?.isPremium) {
-            toast.error('Please get subscription first!')
-        }
-    }
 
     if (isPending) {
         return <div className="flex items-center justify-center mx-auto my-10">
@@ -48,11 +51,11 @@ const QuickCelebrity = () => {
         <div className="max-w-[1200px] text-[var(--dark)] dark:text-[var(--white)] mx-auto sm:px-4 px-2 py-10">
             <div className="text-center mb-8">
                 <div className="flex justify-center items-center gap-1.5 sm:gap-3">
-                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                    <h2 className="text-2xl sm:text-3xl font-libreBas font-bold">
+                    <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    <h2 className="text-xl sm:text-3xl font-libreBas font-bold">
                         Quick News
                     </h2>
-                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
                 </div>
                 <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
                     Let's know our celebrities current situation

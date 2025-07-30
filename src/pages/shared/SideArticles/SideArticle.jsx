@@ -20,6 +20,9 @@ const SideArticle = () => {
     });
 
     const handleNavigate = (article, id) => {
+        if (!user) {
+            return toast.error('Please get login first!')
+        }
         if (article.isPremium && user?.isPremium) {
             navigate(`/article/${id}`);
         } else if (!article.isPremium) {
@@ -28,7 +31,7 @@ const SideArticle = () => {
         else if (article.isPremium && !user?.isPremium) {
             toast.error('Please get subscription first!')
         }
-    };
+    }
 
     if (isPending) {
         return <div className="flex items-center justify-center mx-auto my-6">
@@ -44,7 +47,7 @@ const SideArticle = () => {
                 <div
                     onClick={() => handleNavigate(article, article._id)}
                     key={article._id}
-                    className="group relative flex flex-col gap-2 w-full h-44 transition mb-10 bg-[var(--white)] dark:bg-[var(--dark-bg)]"
+                    className="group relative flex flex-col gap-2 w-full h-44 transition mb-10 bg-[var(--white)] dark:bg-[var(--dark2-bg)]"
                 >
                     <img
                         src={article.image}
@@ -66,7 +69,7 @@ const SideArticle = () => {
                 <div
                     onClick={() => handleNavigate(article, article._id)}
                     key={article._id}
-                    className="group relative flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark-bg)] transition"
+                    className="group relative flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] transition"
                 >
 
                     <div className='flex flex-col gap-2'>

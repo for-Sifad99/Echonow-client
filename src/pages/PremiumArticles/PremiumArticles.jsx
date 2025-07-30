@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaRegShareSquare } from "react-icons/fa";
 import SubLoader from '../shared/Loader/SubLoader';
 import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
-import useAuth from '../../../hooks/useAuth/useAuth'; 
+import useAuth from '../../../hooks/useAuth/useAuth';
 import Pagination from '../../pages/shared/Pagination/Pagination';
 import useAxiosPublic from '../../../hooks/useAxiosPublic/useAxios';
 import toast from 'react-hot-toast';
@@ -63,7 +63,7 @@ const PremiumArticles = () => {
             <div className='flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6'>
 
                 {/* Left Content */}
-              <div className='flex-1'>
+                <div className='flex-1'>
                     <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-6">
                         {isPending || userLoading ? (
                             <div className="flex items-center justify-center mx-auto my-10">
@@ -117,10 +117,12 @@ const PremiumArticles = () => {
                             })
                         )}
                     </div>
-              </div>
+                </div>
 
                 {/* Right sidebar */}
+                {articles.length === 0 ? ' ' : 
                 <CommonSidebar />
+                }
             </div>
 
 

@@ -60,11 +60,11 @@ const PlanSection = () => {
         <section className="max-w-[1200px] mx-auto px-2 px:px-4 py-10">
             <div className="text-center mb-8">
                 <div className="flex justify-center items-center gap-1.5 sm:gap-3">
-                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                    <h2 className="text-2xl text-[var(--dark)] dark:text-[var(--white)] sm:text-3xl font-libreBas font-bold">
-                        Choose Your Plan
+                    <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    <h2 className="text-xl text-[var(--dark)] dark:text-[var(--white)] sm:text-3xl font-libreBas font-bold">
+                        Choose Plan
                     </h2>
-                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
                 </div>
                 <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
                     Pick the one that fits your news journey best!

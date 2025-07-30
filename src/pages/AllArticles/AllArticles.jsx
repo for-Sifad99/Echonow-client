@@ -80,6 +80,9 @@ const AllArticles = () => {
     }
 
     const handleNavigate = (article, id) => {
+        if (!dbUser) {
+            return toast.error('Please get login first!')
+        }
         if (article.isPremium && dbUser?.isPremium) {
             navigate(`/article/${id}`);
         } else if (!article.isPremium) {

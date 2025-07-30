@@ -109,84 +109,88 @@ const MyArticles = () => {
         <section className="max-w-[1200px] text-[var(--dark)] dark:text-[var(--white)] mx-auto sm:px-4 px-2 py-10 flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6 font-jost">
 
             {/* left content */}
-            <div className="flex-1 overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)]">
+            {articles.length === 0 ? <p className="flex items-center justify-center mx-auto my-10 text-xl text-[var(--dark)] dark:text-[var(--white)] col-span-full text-center font-libreBas">No articles found.</p> :
+                <div className="flex-1 overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)]">
 
-                <div className="text-center mb-8">
-                    <div className="flex justify-center items-center gap-1.5 sm:gap-3">
-                        <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                        <h2 className="text-2xl sm:text-3xl font-libreBas font-bold">
-                            My Articles
-                        </h2>
-                        <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    <div className="text-center mb-8">
+                        <div className="flex justify-center items-center gap-1.5 sm:gap-3">
+                            <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                            <h2 className="text-2xl sm:text-3xl font-libreBas font-bold">
+                                My Articles
+                            </h2>
+                            <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                        </div>
+                        <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
+                            Let's know our celebrities current situation
+                        </p>
                     </div>
-                    <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
-                        Let's know our celebrities current situation
-                    </p>
-                </div>
 
-                <table className="table w-full">
-                    <thead>
-                        <tr className="font-oxygen bg-[var(--accent-white)] (--dark-secondary)] dark:text-[var(--white)] dark:bg-gray-700">
-                            <th>#</th>
-                            <th>Photo</th>
-                            <th>Title</th>
-                            <th>Details</th>
-                            <th>Status</th>
-                            <th>isPrem.</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody className='font-jost'>
-                        {articles.map((article, index) => (
-                            <tr key={index} className="hover:bg-slate-50 dark:hover:bg-[#33333d] rounded-md">
-                                <td className='rounded-md font-libreBas font-semibold font-lg'>
-                                    {index + 1}
-                                </td>
-                                <td>
-                                    <div className="avatar">
-                                        <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
-                                            <img src={article.image} alt="article image" />
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="text-xs md:text-sm lg:text-xs xl:text-sm">
-                                    <p className="lg:hidden leading-3">{article.title.slice(0, 10)} ...</p>
-                                    <p className="hidden lg:block xl:hidden leading-3">{article.title.slice(0, 12)}...</p>
-                                    <p className="hidden xl:block 2xl:hidden leading-3">{article.title.slice(0, 30)}...</p>
-                                    <p className="hidden 2xl:block">{article.title}</p>
-                                </td>
-                                <td data-tip="Approve" className="tooltip py-5">
-                                    <Link to={`/article/${article._id}`} className="text-blue-500 hover:underline">
-                                        <button className="btn btn-xs px-4 text-sm  bg-[#00bf83]  text-[var(--dark)] dark:text-[var(--white)] hover:bg-[#ebe9e9] transition duration-500 border-none shadow-none rounded-none">View</button></Link>
-                                </td>
-                                <td className='text-[#009264]  dark:text-[#00bf83] font-bold'>{article.status === 'approved' && <span className="text-green-600 font-medium">Approved</span>}
-                                    {article.status === 'pending' && <span className="text-yellow-500 font-medium">Pending</span>}
-                                    {article.status === 'declined' && (
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-red-600 dark:text-red-400 font-semibold">Declined</span>
-                                            <button onClick={() => openReasonModal(article.declineReason)} className="text-xs text-red-500 dark:text-red-400 underline cursor-pointer">See Reason</button>
-                                        </div>
-                                    )}
-                                </td>
-                                <td className='font-bold font-oxygen'>{article.isPremium ? 'Yes' : 'No'}</td>
-                                <td>
-                                    <div data-tip="Edit" className="tooltip">
-                                        <button onClick={() => openEditModal(article)} className="btn btn-xs px-4 text-sm bg-[#8884d8]  text-[var(--dark)] dark:text-[var(--white)] hover:bg-[#ebe9e9] transition duration-500 border-none shadow-none rounded-none">Edit</button>
-                                    </div>
-                                </td>
-                                <td data-tip="Delete" className="tooltip py-5">
-                                    <button
-                                        onClick={() => handleDelete(article._id)} className="btn btn-xs px-4 text-sm  bg-red-500  text-[var(--dark)] dark:text-[var(--white)] hover:bg-[#ebe9e9] transition duration-500 border-none shadow-none rounded-none">Delete</button>
-                                </td>
+                    <table className="table w-full">
+                        <thead>
+                            <tr className="font-oxygen bg-[var(--accent-white)] (--dark-secondary)] dark:text-[var(--white)] dark:bg-gray-700">
+                                <th>#</th>
+                                <th>Photo</th>
+                                <th>Title</th>
+                                <th>Details</th>
+                                <th>Status</th>
+                                <th>isPrem.</th>
+                                <th>Update</th>
+                                <th>Delete</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody className='font-jost'>
+                            {articles.map((article, index) => (
+                                <tr key={index} className="hover:bg-slate-50 dark:hover:bg-[#33333d] rounded-md">
+                                    <td className='rounded-md font-libreBas font-semibold font-lg'>
+                                        {index + 1}
+                                    </td>
+                                    <td>
+                                        <div className="avatar">
+                                            <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
+                                                <img src={article.image} alt="article image" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="text-xs md:text-sm lg:text-xs xl:text-sm">
+                                        <p className="lg:hidden leading-3">{article.title.slice(0, 10)} ...</p>
+                                        <p className="hidden lg:block xl:hidden leading-3">{article.title.slice(0, 12)}...</p>
+                                        <p className="hidden xl:block 2xl:hidden leading-3">{article.title.slice(0, 30)}...</p>
+                                        <p className="hidden 2xl:block">{article.title}</p>
+                                    </td>
+                                    <td data-tip="Approve" className="tooltip py-5">
+                                        <Link to={`/article/${article._id}`} className="text-blue-500 hover:underline">
+                                            <button className="btn btn-xs px-4 text-sm  bg-[#00bf83]  text-[var(--dark)] dark:text-[var(--white)] hover:bg-[#ebe9e9] transition duration-500 border-none shadow-none rounded-none">View</button></Link>
+                                    </td>
+                                    <td className='text-[#009264]  dark:text-[#00bf83] font-bold'>{article.status === 'approved' && <span className="text-green-600 font-medium">Approved</span>}
+                                        {article.status === 'pending' && <span className="text-yellow-500 font-medium">Pending</span>}
+                                        {article.status === 'declined' && (
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-red-600 dark:text-red-400 font-semibold">Declined</span>
+                                                <button onClick={() => openReasonModal(article.declineReason)} className="text-xs text-red-500 dark:text-red-400 underline cursor-pointer">See Reason</button>
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td className='font-bold font-oxygen'>{article.isPremium ? 'Yes' : 'No'}</td>
+                                    <td>
+                                        <div data-tip="Edit" className="tooltip">
+                                            <button onClick={() => openEditModal(article)} className="btn btn-xs px-4 text-sm bg-[#8884d8]  text-[var(--dark)] dark:text-[var(--white)] hover:bg-[#ebe9e9] transition duration-500 border-none shadow-none rounded-none">Edit</button>
+                                        </div>
+                                    </td>
+                                    <td data-tip="Delete" className="tooltip py-5">
+                                        <button
+                                            onClick={() => handleDelete(article._id)} className="btn btn-xs px-4 text-sm  bg-red-500  text-[var(--dark)] dark:text-[var(--white)] hover:bg-[#ebe9e9] transition duration-500 border-none shadow-none rounded-none">Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            }
 
             {/* right content */}
-            <CommonSidebar />
+            {articles.length === 0 ? ' ' :
+                <CommonSidebar />
+            }
 
             {/* Decline Reason Modal */}
             {showModal && (
