@@ -122,7 +122,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                 {sidebarLinks}
             </nav>
 
-            <div className='px-5'>
+            <div className='px-5 dark:bg-[var(--dark2-bg)] '>
                 <SideArticle />
             </div>
 
@@ -152,9 +152,9 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
             {/* Sidebar Footer */}
             <footer className="px-5 pb-4 font-jost">
                 <div className="flex items-center -ml-1 gap-3 text-xl mb-2">
-                    <a href="#" className=" hover:text-blue-600"><BiLogoFacebook /></a>
-                    <a href="#" className="hover:text-blue-400"><RiTwitterLine /></a>
-                    <a href="#" className="hover:text-pink-500"><IoLogoInstagram /></a>
+                    <a href="#" className=" hover:text-blue-500"><BiLogoFacebook /></a>
+                    <a href="#" className="hover:text-pink-500"><RiTwitterLine /></a>
+                    <a href="#" className="hover:text-violet-900"><IoLogoInstagram /></a>
                     <a href="#" className="hover:text-[var(--primary)]"><AiOutlineYoutube /></a>
                     <a href="#" className="text-base hover:text-[var(--primary)]"><SlSocialPintarest /></a>
                     <a href="#" className="hover:text-gray-700 dark:hover:text-gray-400"><LiaGithub /></a>

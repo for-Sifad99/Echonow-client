@@ -38,7 +38,7 @@ const SideArticle = () => {
             <SubLoader size="text-base" />
         </div>
     };
- 
+
 
     return (
         <div className="pb-6">
@@ -47,7 +47,7 @@ const SideArticle = () => {
                 <div
                     onClick={() => handleNavigate(article, article._id)}
                     key={article._id}
-                    className="group relative flex flex-col gap-2 w-full h-44 transition mb-10 bg-[var(--white)] dark:bg-[var(--dark2-bg)]"
+                    className="group relative flex flex-col gap-2 w-full h-44 transition mb-10"
                 >
                     <img
                         src={article.image}
@@ -69,7 +69,7 @@ const SideArticle = () => {
                 <div
                     onClick={() => handleNavigate(article, article._id)}
                     key={article._id}
-                    className="group relative flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] transition"
+                    className="group relative flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] transition"
                 >
 
                     <div className='flex flex-col gap-2'>

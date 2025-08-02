@@ -46,7 +46,7 @@ const CommonSidebar = () => {
                 <div className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-1 text-base text-[var(--white)] font-jost">
                     <div className="flex items-center justify-between border border-[#e0e0e0] dark:border-[#3f3f3f] py-2 px-3">
                         <div className="flex items-center gap-2">
-                            <p className="h-7 w-7 rounded-full flex items-center justify-center bg-blue-600">
+                            <p className="h-7 w-7 rounded-full flex items-center justify-center bg-blue-500">
                                 <a href="#"><BiLogoFacebook /></a></p>
                             <h3 className="text-xs text-[var(--dark)] dark:text-[var(--white)]">Facebook</h3>
                         </div>
@@ -54,7 +54,7 @@ const CommonSidebar = () => {
                     </div>
                     <div className="flex items-center justify-between border border-[#e0e0e0] dark:border-[#3f3f3f] py-2 px-3">
                         <div className="flex items-center gap-2">
-                            <p className="h-7 w-7 rounded-full flex items-center justify-center bg-blue-400">
+                            <p className="h-7 w-7 rounded-full flex items-center justify-center bg-pink-500">
                                 <a href="#"><RiTwitterLine /></a>
                             </p>
                             <h3 className="text-xs text-[var(--dark)] dark:text-[var(--white)]">Twitter</h3>
@@ -63,7 +63,7 @@ const CommonSidebar = () => {
                     </div>
                     <div className="flex items-center justify-between border border-[#e0e0e0] dark:border-[#3f3f3f] py-2 px-3">
                         <div className="flex items-center gap-2">
-                            <p className="h-7 w-7 rounded-full flex items-center justify-center bg-pink-500">
+                            <p className="h-7 w-7 rounded-full flex items-center justify-center bg-violet-900">
                                 <a href="#"><IoLogoInstagram /></a>
                             </p>
                             <h3 className="text-xs text-[var(--dark)] dark:text-[var(--white)]">Instagram</h3>

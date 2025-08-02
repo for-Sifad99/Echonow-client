@@ -18,20 +18,20 @@ const QuickCelebrity = () => {
             return res.data.celebrity;
         },
     });
-    
-     const handleNavigate = (article, id) => {
-            if (!user) {
-                return toast.error('Please get login first!')
-            }
-            if (article.isPremium && user?.isPremium) {
-                navigate(`/article/${id}`);
-            } else if (!article.isPremium) {
-                navigate(`/article/${id}`);
-            }
-            else if (article.isPremium && !user?.isPremium) {
-                toast.error('Please get subscription first!')
-            }
+
+    const handleNavigate = (article, id) => {
+        if (!user) {
+            return toast.error('Please get login first!')
         }
+        if (article.isPremium && user?.isPremium) {
+            navigate(`/article/${id}`);
+        } else if (!article.isPremium) {
+            navigate(`/article/${id}`);
+        }
+        else if (article.isPremium && !user?.isPremium) {
+            toast.error('Please get subscription first!')
+        }
+    }
 
     if (isPending) {
         return <div className="flex items-center justify-center mx-auto my-10">

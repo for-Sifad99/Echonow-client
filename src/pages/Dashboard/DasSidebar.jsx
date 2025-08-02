@@ -188,7 +188,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                     </div>
                 </li>
             </ul>
-            <div className='mx-4 mt-6'>
+            <div className='mx-4 mt-6 dark:bg-[var(--dark-bg)]'>
                 <SideArticle />
             </div>
             <div className='relative w-full h-30 mb-8 px-4'>
