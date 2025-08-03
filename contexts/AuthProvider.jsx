@@ -14,7 +14,7 @@ import { auth } from '../firebase/firebase.config'
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); // ✅ should default to true
+    const [loading, setLoading] = useState(true); 
 
     // Create User
     const createUser = (email, password) => {

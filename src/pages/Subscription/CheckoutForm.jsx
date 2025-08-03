@@ -7,8 +7,6 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const CheckoutForm = ({ duration, cost }) => {
     const { user } = useAuth();
     const stripe = useStripe();
@@ -29,6 +27,7 @@ const CheckoutForm = ({ duration, cost }) => {
         if (!card) return;
 
         try {
+            console.log(cost)
             // Create payment intent via axiosSecure
             const res = await axiosSecure.post('/create-payment-intent', { cost });
             const clientSecret = res.data.clientSecret;

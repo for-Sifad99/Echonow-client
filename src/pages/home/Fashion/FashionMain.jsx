@@ -1,15 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import React from 'react';
 import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
-import useAuth from "../../../../hooks/useAuth/useAuth";
-import { FaRegShareSquare } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import useHandle from '../../../../hooks/useHandle/useHandle';
 import SubLoader from "../../shared/Loader/SubLoader";
+import { useQuery } from "@tanstack/react-query";
+import { FaRegShareSquare } from "react-icons/fa";
 
 const FashionMain = () => {
-    const { user } = useAuth();
     const axiosPublic = useAxiosPublic();
-    const navigate = useNavigate();
+    const handleNavigate = useHandle();
 
     const { data: fashionArticles = [], isLoading } = useQuery({
         queryKey: ["fashionArticles"],
@@ -18,20 +16,6 @@ const FashionMain = () => {
             return res.data.fashion;
         },
     });
-
-    const handleNavigate = (article, id) => {
-        if (!user) {
-            return toast.error('Please get login first!')
-        }
-        if (article.isPremium && user?.isPremium) {
-            navigate(`/article/${id}`);
-        } else if (!article.isPremium) {
-            navigate(`/article/${id}`);
-        }
-        else if (article.isPremium && !user?.isPremium) {
-            toast.error('Please get subscription first!')
-        }
-    }
 
     if (isLoading) {
         return <div className="flex items-center justify-center mx-auto my-10">

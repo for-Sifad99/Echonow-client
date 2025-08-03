@@ -1,18 +1,16 @@
+import React from 'react';
+import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
+import useHandle from '../../../../hooks/useHandle/useHandle';
+import SubLoader from '../../shared/Loader/SubLoader';
 import { useQuery } from '@tanstack/react-query';
 import { FaRegShareSquare } from "react-icons/fa";
-import SubLoader from '../../shared/Loader/SubLoader';
-import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import useAuth from '../../../../hooks/useAuth/useAuth';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 
 const BannerSlider = () => {
     const axiosPublic = useAxiosPublic(); 0
-    const { user } = useAuth();
-    const navigate = useNavigate();
+    const handleNavigate = useHandle();
 
     const { data: trendingArticles = [], isLoading } = useQuery({
         queryKey: ['trendingArticles'],
@@ -21,20 +19,6 @@ const BannerSlider = () => {
             return res.data?.trending || [];
         }
     });
-
-    const handleNavigate = (article, id) => {
-        if (!user) {
-            return toast.error('Please get login first!')
-        }
-        if (article.isPremium && user?.isPremium) {
-            navigate(`/article/${id}`);
-        } else if (!article.isPremium) {
-            navigate(`/article/${id}`);
-        }
-        else if (article.isPremium && !user?.isPremium) {
-            toast.error('Please get subscription first!')
-        }
-    }
 
     if (isLoading) {
         return <div className="flex items-center justify-center mx-auto my-10">
@@ -51,7 +35,7 @@ const BannerSlider = () => {
     }
 
     return (
-      <div className="relative z-10 px-2 sm:mx-3 py-3 xl:max-w-[1366px] 2xl:max-w-[1728px] xl:mx-auto">
+        <div className="relative z-10 px-2 sm:mx-3 py-3 xl:max-w-[1366px] 2xl:max-w-[1728px] xl:mx-auto">
             <Swiper
                 modules={[Autoplay]}
                 spaceBetween={10}

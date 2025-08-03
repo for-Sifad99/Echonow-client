@@ -1,15 +1,12 @@
 import React from 'react';
-import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
+import useHandle from '../../../../hooks/useHandle/useHandle';
 import SubLoader from '../../shared/Loader/SubLoader';
-import useAuth from '../../../../hooks/useAuth/useAuth';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useQuery } from "@tanstack/react-query";
 
 const AllPublishers = () => {
-    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const navigate = useNavigate();
+    const handleNavigate = useHandle();
 
     // Fetch publishers using TanStack Query
     const { data = {}, isPending } = useQuery({
@@ -36,21 +33,6 @@ const AllPublishers = () => {
             </div>
         </div>
     };
-
-    const handleNavigate = (article, id) => {
-        if(!user){
-            return toast.error('Please get login first!')
-        }
-        if (article.isPremium && user?.isPremium) {
-            navigate(`/article/${id}`);
-        } else if (!article.isPremium) {
-            navigate(`/article/${id}`);
-        }
-        else if (article.isPremium && !user?.isPremium) {
-            toast.error('Please get subscription first!')
-        }
-    }
-
 
     return (
         <section className='max-w-[1200px] mx-auto px-2 sm:px-4 py-10'>

@@ -4,7 +4,7 @@ import { MdLogout } from "react-icons/md";
 import { FaCaretDown } from "react-icons/fa";
 import { FaCaretUp } from "react-icons/fa";
 import Swal from "sweetalert2";
-import useAuth from '../../../hooks/useAuth/useAuth';
+import useAuth from '../../../../hooks/useAuth/useAuth';
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 

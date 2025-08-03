@@ -1,9 +1,10 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
-import { FaUsers, FaUserCheck, FaUserShield } from "react-icons/fa";
 import SubLoader from "../../shared/Loader/SubLoader";
+import { useQuery } from "@tanstack/react-query";
+import { FaUsers, FaUserCheck, FaUserShield } from "react-icons/fa";
 import CountUp from "react-countup";
+
 
 const StatCard = ({ title, icon, count, color }) => {
     return (
@@ -16,7 +17,8 @@ const StatCard = ({ title, icon, count, color }) => {
                     <CountUp end={count} duration={2} />
                 </p>
             </div>
-            <h3 className="text-[28px] sm:text-xl md:text-2xl font-semibold text-[var(--dark)] dark:text-[var(--white)] font-jost">{title}</h3>
+            <h3 
+            className="text-[28px] sm:text-xl md:text-2xl font-semibold text-[var(--dark)] dark:text-[var(--white)] font-jost">{title}</h3>
         </div>
     );
 };

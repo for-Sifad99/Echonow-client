@@ -1,14 +1,14 @@
-import React from 'react';
-import logo from '/logo.png';
-import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
-import { useState } from "react";
-import useAuth from "../../../hooks/useAuth/useAuth";
-import Swal from "sweetalert2";
-import axios from "axios";
-import toast from 'react-hot-toast';
+import PageHelmet from '../shared/PageTitle/PageHelmet';
 import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
+import useAuth from "../../../hooks/useAuth/useAuth";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
+import toast from 'react-hot-toast';
+import Swal from "sweetalert2";
+import logo from '/logo.png';
 
 
 const Register = () => {
@@ -89,151 +89,160 @@ const Register = () => {
     };
 
     return (
-        <div className="font-jost">
-            <div className="flex justify-baseline items-center md:mb-2">
-                <Link to='/'>
-                    <div className='flex items-center justify-center gap-1'>
-                        <img className='w-10 lg:w-15' src={logo} alt="Echo website logo" />
-                        <h1 className='text-4xl lg:text-5xl font-light font-oxygen'>EchoNow</h1>
-                    </div>
-                </Link>
-            </div>
-            <h2 className="text-2xl font-bold text-[var(--dark)] -mb-1">Register</h2>
-            <p className="mb-4 sm:mb-6 text-sm text-[var(--accent)]">Create your account below</p>
+        <>
+            {/* Page Title */}
+            <PageHelmet
+                title="Register"
+                description="Join EchoNow today and become a part of the modern news revolution. Get news your way."
+            />
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 lg:space-y-3">
-                {/* Name */}
-                <div>
-                    <label className="text-sm font-medium text-gray-700">Your Name</label>
-                    <input
-                        type="text"
-                        {...register("name", {
-                            required: "Name is required",
-                            minLength: {
-                                value: 2,
-                                message: "Name must be at least 2 characters"
-                            },
-                            maxLength: {
-                                value: 50,
-                                message: "Name can’t be more than 50 characters"
-                            },
-                            pattern: {
-                                value: /^[a-zA-Z\s'-]+$/, // only letters, spaces, ' and -
-                                message: "Only letters and spaces are allowed"
-                            }
-                        })}
-                        placeholder="Enter your full name"
-                        className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                    />
-                    {errors.name && (
-                        <p className="text-sm text-red-500 leading-6 -mb-1">
-                            {errors.name.message}
-                        </p>
-                    )}
+            {/* Content */}
+            <div className="font-jost">
+                <div className="flex justify-baseline items-center md:mb-2">
+                    <Link to='/'>
+                        <div className='flex items-center justify-center gap-1'>
+                            <img className='w-10 lg:w-15' src={logo} alt="Echo website logo" />
+                            <h1 className='text-4xl lg:text-5xl font-light font-oxygen'>EchoNow</h1>
+                        </div>
+                    </Link>
                 </div>
+                <h2 className="text-2xl font-bold text-[var(--dark)] -mb-1">Register</h2>
+                <p className="mb-4 sm:mb-6 text-sm text-[var(--accent)]">Create your account below</p>
 
-
-                {/* Email */}
-                <div>
-                    <label className="text-sm font-medium text-gray-700">Email Address</label>
-                    <input
-                        type="email"
-                        {...register("email", { required: "Email is required" })}
-                        placeholder="Email address"
-                        className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                    />
-                    {errors.email && <p className="text-sm text-red-500 leading-6 -mb-1">{errors.email.message}</p>}
-                </div>
-
-                {/* Password */}
-                <div>
-                    <label className="text-sm font-medium text-gray-700">Password</label>
-                    <div className="relative">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 lg:space-y-3">
+                    {/* Name */}
+                    <div>
+                        <label className="text-sm font-medium text-gray-700">Your Name</label>
                         <input
-                            type={showPassword ? "text" : "password"}
-                            {...register("password", {
-                                required: "Password is required",
+                            type="text"
+                            {...register("name", {
+                                required: "Name is required",
                                 minLength: {
-                                    value: 6,
-                                    message: "Password must be at least 6 characters",
+                                    value: 2,
+                                    message: "Name must be at least 2 characters"
                                 },
-                                validate: {
-                                    hasCapital: (value) =>
-                                        /[A-Z]/.test(value) || "Must contain at least one capital letter",
-                                    hasSpecial: (value) =>
-                                        /[!@#$%^&*(),.?":{}|<>]/.test(value) || "Must contain a special character",
-                                    hasNumber: (value) =>
-                                        /\d/.test(value) || "Must contain a numeric character",
+                                maxLength: {
+                                    value: 50,
+                                    message: "Name can’t be more than 50 characters"
                                 },
+                                pattern: {
+                                    value: /^[a-zA-Z\s'-]+$/, // only letters, spaces, ' and -
+                                    message: "Only letters and spaces are allowed"
+                                }
                             })}
-                            placeholder="Password"
-                            className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                            placeholder="Enter your full name"
+                            className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                         />
-                        {showPassword ? (
-                            <FiEyeOff
-                                onClick={() => setShowPassword(false)}
-                                className="absolute right-3 top-4 text-gray-500 cursor-pointer"
-                            />
-                        ) : (
-                            <FiEye
-                                onClick={() => setShowPassword(true)}
-                                className="absolute right-3 top-4 text-gray-500 cursor-pointer"
-                            />
+                        {errors.name && (
+                            <p className="text-sm text-red-500 leading-6 -mb-1">
+                                {errors.name.message}
+                            </p>
                         )}
                     </div>
 
-                    {/* Error message */}
-                    {errors.password && (
-                        <p className="text-sm text-red-500 leading-6 -mb-1">{errors.password.message}</p>
-                    )}
-                </div>
 
-                {/* Photo (file input) */}
-                <div>
-                    <label className="relative text-sm font-medium text-gray-700 flex items-center gap-1">
-                        Profile Photo
-                        {uploadSuccess && (
-                            <FiCheckCircle className="text-[var(--primary)] text-sm sm:text-base" />
+                    {/* Email */}
+                    <div>
+                        <label className="text-sm font-medium text-gray-700">Email Address</label>
+                        <input
+                            type="email"
+                            {...register("email", { required: "Email is required" })}
+                            placeholder="Email address"
+                            className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                        />
+                        {errors.email && <p className="text-sm text-red-500 leading-6 -mb-1">{errors.email.message}</p>}
+                    </div>
+
+                    {/* Password */}
+                    <div>
+                        <label className="text-sm font-medium text-gray-700">Password</label>
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                {...register("password", {
+                                    required: "Password is required",
+                                    minLength: {
+                                        value: 6,
+                                        message: "Password must be at least 6 characters",
+                                    },
+                                    validate: {
+                                        hasCapital: (value) =>
+                                            /[A-Z]/.test(value) || "Must contain at least one capital letter",
+                                        hasSpecial: (value) =>
+                                            /[!@#$%^&*(),.?":{}|<>]/.test(value) || "Must contain a special character",
+                                        hasNumber: (value) =>
+                                            /\d/.test(value) || "Must contain a numeric character",
+                                    },
+                                })}
+                                placeholder="Password"
+                                className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                            />
+                            {showPassword ? (
+                                <FiEyeOff
+                                    onClick={() => setShowPassword(false)}
+                                    className="absolute right-3 top-4 text-gray-500 cursor-pointer"
+                                />
+                            ) : (
+                                <FiEye
+                                    onClick={() => setShowPassword(true)}
+                                    className="absolute right-3 top-4 text-gray-500 cursor-pointer"
+                                />
+                            )}
+                        </div>
+
+                        {/* Error message */}
+                        {errors.password && (
+                            <p className="text-sm text-red-500 leading-6 -mb-1">{errors.password.message}</p>
                         )}
-                    </label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        name="photo"
-                        onChange={handleImgUpload}
-                        className="sm:mt-0.5 w-full px-3 py-1.5 border border-gray-300 rounded-md"
-                    />
-                </div>
+                    </div>
 
-                {/* Terms & Conditions Checkbox */}
-                <div className="flex items-center justify-start gap-2">
-                    <input
-                        type="checkbox"
-                        {...register("terms", { required: "You must accept the terms & conditions" })}
-                    />
-                    <label className={`text-sm ${errors.terms ? "text-red-600 font-semibold" : "text-gray-700"}`}>
-                        I accept the terms & conditions
-                    </label>
-                </div>
+                    {/* Photo (file input) */}
+                    <div>
+                        <label className="relative text-sm font-medium text-gray-700 flex items-center gap-1">
+                            Profile Photo
+                            {uploadSuccess && (
+                                <FiCheckCircle className="text-[var(--primary)] text-sm sm:text-base" />
+                            )}
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            name="photo"
+                            onChange={handleImgUpload}
+                            className="sm:mt-0.5 w-full px-3 py-1.5 border border-gray-300 rounded-md"
+                        />
+                    </div>
+
+                    {/* Terms & Conditions Checkbox */}
+                    <div className="flex items-center justify-start gap-2">
+                        <input
+                            type="checkbox"
+                            {...register("terms", { required: "You must accept the terms & conditions" })}
+                        />
+                        <label className={`text-sm ${errors.terms ? "text-red-600 font-semibold" : "text-gray-700"}`}>
+                            I accept the terms & conditions
+                        </label>
+                    </div>
 
 
-                {/* Submit */}
-                <button
-                    type="submit"
-                    className="-mt-2.5 w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500  hover:to-red-400 text-white font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
-                >
-                    Register
-                </button>
+                    {/* Submit */}
+                    <button
+                        type="submit"
+                        className="-mt-2.5 w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500  hover:to-red-400 text-white font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
+                    >
+                        Register
+                    </button>
 
-                {/* Footer */}
-                <div className="flex justify-between text-sm mt-1.5 sm:mt-3">
-                    <span>
-                        Already have an account?{" "}
-                        <Link to="/auth/login" className="text-blue-600 hover:underline">Login</Link>
-                    </span>
-                </div>
-            </form>
-        </div>
+                    {/* Footer */}
+                    <div className="flex justify-between text-sm mt-1.5 sm:mt-3">
+                        <span>
+                            Already have an account?{" "}
+                            <Link to="/auth/login" className="text-blue-600 hover:underline">Login</Link>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </>
     );
 };
 

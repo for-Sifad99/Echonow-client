@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PageHelmet from '../../shared/PageTitle/PageHelmet';
 import BannerSlider from "../BannerSlider/BannerSlider";
 import QuickCelebrity from "../QuickCelebrity/QuickCelebrity";
 import Fashion from "../Fashion/Fashion";
@@ -24,7 +25,14 @@ const Home = () => {
   }, []);
 
   return (
-    <section>
+    <>
+    {/* Page Title */}
+      <PageHelmet
+        title="Best Articles For You"
+        description="EchoNow – Your trusted digital hub for breaking news, trending topics, and real stories from around the world."
+      />
+
+    {/* Content */}
       <BannerSlider />
       <QuickCelebrity />
       <Fashion />
@@ -37,7 +45,7 @@ const Home = () => {
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
       />
-    </section>
+    </>
   );
 };
 

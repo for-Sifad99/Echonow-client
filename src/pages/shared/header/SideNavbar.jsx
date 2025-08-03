@@ -88,7 +88,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                     <NavLink to="/my-profile" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
                             <span className='py-[9px] flex justify-between items-center'>
-                                User Profile
+                                My Profile
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </span>
                         )}</NavLink></>}
@@ -123,7 +123,9 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
             </nav>
 
             <div className='px-5 dark:bg-[var(--dark2-bg)] '>
-                <SideArticle />
+                <SideArticle
+                    closeSidebar={closeSidebar}
+                 />
             </div>
 
             <div className='px-5 -mb-2'>

@@ -21,7 +21,7 @@ const Footer = () => {
     });
 
     const images = articles.slice(0, 16).map((article) => article.image);
-console.log(images)
+
     return (
         <footer className="bg-[#212227] text-[var(--white)] px-2 sm:px-4 pt-11 sm:pt-13 md:pt-16 mt-8">
             <section className="w-full mx-auto">
@@ -69,7 +69,9 @@ console.log(images)
                 </div>
 
                 {/* Instagram-like Image Grid */}
-                <div className="grid grid-cols-4 sm:grid-cols-8 max-w-[1200px] mx-auto justify-center items-center relative overflow-hidden md:bg-transparent">
+                <div 
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} 
+                className="grid grid-cols-4 sm:grid-cols-8 max-w-[1200px] mx-auto justify-center items-center relative overflow-hidden md:bg-transparent cursor-pointer">
                     {images.map((img, idx) => (
                         <div className="w-full h-16 sm:h-full" key={idx}>
                             <img
@@ -81,7 +83,8 @@ console.log(images)
                     ))}
 
                     {/* Center Facebook Label */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-jost uppercase bg-[var(--white)] text-gray-700 px-4 py-1 rounded-full font-medium shadow-md text-sm flex items-center gap-2">
+                    <div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-jost uppercase bg-[var(--white)] text-gray-700 px-4 py-1 rounded-full font-medium shadow-md text-sm flex items-center gap-2">
                         <FaFacebookF />
                         Facebook
                     </div>

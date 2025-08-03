@@ -1,15 +1,13 @@
 import React from 'react';
-import SubLoader from '../Loader/SubLoader';
-import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
-import useAuth from '../../../../hooks/useAuth/useAuth';
-import toast from 'react-hot-toast';
+import useHandle from '../../../../hooks/useHandle/useHandle';
+import SubLoader from '../Loader/SubLoader';
+import { useQuery } from '@tanstack/react-query';
 
-const SideArticle = () => {
-    const { user } = useAuth();
+
+const SideArticle = ({ closeSidebar }) => {
     const axiosPublic = useAxiosPublic();
-    const navigate = useNavigate();
+    const handleNavigate = useHandle();
 
     const { data: hotArticles = [], isPending } = useQuery({
         queryKey: ['hotArticles'],
@@ -18,20 +16,6 @@ const SideArticle = () => {
             return res.data.hot
         }
     });
-
-    const handleNavigate = (article, id) => {
-        if (!user) {
-            return toast.error('Please get login first!')
-        }
-        if (article.isPremium && user?.isPremium) {
-            navigate(`/article/${id}`);
-        } else if (!article.isPremium) {
-            navigate(`/article/${id}`);
-        }
-        else if (article.isPremium && !user?.isPremium) {
-            toast.error('Please get subscription first!')
-        }
-    }
 
     if (isPending) {
         return <div className="flex items-center justify-center mx-auto my-6">
@@ -45,7 +29,7 @@ const SideArticle = () => {
             <h2 className="text-xl font-libreBas text-[var(--dark] dark:text-[var(--white)] font-semibold mb-3">Trending Articles</h2>
             {hotArticles.slice(0, 1).map(article => (
                 <div
-                    onClick={() => handleNavigate(article, article._id)}
+                    onClick={() => { handleNavigate(article, article._id), closeSidebar() }}
                     key={article._id}
                     className="group relative flex flex-col gap-2 w-full h-44 transition mb-10"
                 >
@@ -67,7 +51,7 @@ const SideArticle = () => {
             ))}
             {hotArticles.slice(1, 4).map(article => (
                 <div
-                    onClick={() => handleNavigate(article, article._id)}
+                    onClick={() => { handleNavigate(article, article._id), closeSidebar() }}
                     key={article._id}
                     className="group relative flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] transition"
                 >

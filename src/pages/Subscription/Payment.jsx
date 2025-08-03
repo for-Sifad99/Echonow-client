@@ -27,6 +27,7 @@ const Payment = () => {
                     Have a  good day? You're subscribing for ${cost}.
                 </p>
             </div>
+            
             {/* Stripe Form */}
             <div className="max-w-5xl mx-auto pb-10">
                 <Elements stripe={stripePromise}>

@@ -1,6 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import React from 'react';
 import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
+import useHandle from "../../../../hooks/useHandle/useHandle";
 import SubLoader from '../Loader/SubLoader';
+import { useQuery } from "@tanstack/react-query";
 import { BiLogoFacebook } from "react-icons/bi";
 import { RiTwitterLine } from "react-icons/ri";
 import { LiaGithub } from "react-icons/lia";
@@ -8,14 +10,10 @@ import { IoLogoInstagram } from "react-icons/io";
 import { AiOutlineYoutube } from "react-icons/ai";
 import { SlSocialPintarest } from "react-icons/sl";
 import { FaRegShareSquare } from "react-icons/fa";
-import useAuth from "../../../../hooks/useAuth/useAuth";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 
 const CommonSidebar = () => {
-    const { user } = useAuth();
     const axiosPublic = useAxiosPublic();
-    const navigate = useNavigate();
+    const handleNavigate = useHandle();
 
     const { data: topFashion = [], isLoading } = useQuery({
         queryKey: ["top-fashion"],
@@ -24,20 +22,6 @@ const CommonSidebar = () => {
             return res.data;
         },
     });
-
-    const handleNavigate = (article, id) => {
-        if (!user) {
-            return toast.error('Please get login first!')
-        }
-        if (article.isPremium && user?.isPremium) {
-            navigate(`/article/${id}`);
-        } else if (!article.isPremium) {
-            navigate(`/article/${id}`);
-        }
-        else if (article.isPremium && !user?.isPremium) {
-            toast.error('Please get subscription first!')
-        }
-    }
 
     return (
         <aside className="w-full md:w-[260px] lg:w-[350px] xl:w-sm md:sticky top-4 h-fit">

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import PageHelmet from '../shared/PageTitle/PageHelmet';
 import useAxiosPublic from '../../../hooks/useAxiosPublic/useAxios';
 import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useAuth from '../../../hooks/useAuth/useAuth';
+import SubLoader from '../shared/Loader/SubLoader';
+import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-import SubLoader from '../shared/Loader/SubLoader';
 
 const MyProfile = () => {
     const axiosPublic = useAxiosPublic();
@@ -154,81 +155,90 @@ const MyProfile = () => {
     if (error) return <p className="text-red-500 dark:text-red-400 text-center mt-10 font-jost">{error.message}</p>;
 
     return (
-        <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-10 text-[ver(--dark)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] isolate relative">
-            <div
-                className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden pl-20 sm:px-36 blur-3xl"
-                aria-hidden="true"
-            >
-                <div className="dark:hidden mx-auto aspect-1100/650 w-140.75 bg-linear-to-tr from-[#ff0011] to-[#fcbabf] opacity-30"></div>
-            </div>
-            <div className="text-center mb-8">
-                <div className="flex justify-center items-center gap-1.5 sm:gap-3">
-                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                    <h2 className="text-2xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
-                        Latest Stories
-                    </h2>
-                    <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                </div>
-                <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
-                    Let's know about our current modern fashions
-                </p>
-            </div>
+        <>
+            {/* Page Title */}
+            <PageHelmet
+                title="My Profile"
+                description="View and edit your EchoNow profile, subscriptions, and preferences."
+            />
 
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 font-jost">
-                <div className="flex flex-col items-center gap-6">
-                    <img src={dbUser?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} alt="User" className="w-52 h-52 rounded-full object-cover" />
-                    <p className=" -mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
-                    <button
-                        onClick={handleLogout}
-                        className="mt-4 px-10 py-2 bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-400 text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
-                    >
-                        Logout
-                    </button>
+            {/* Content */}
+            <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-10 text-[ver(--dark)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] isolate relative">
+                <div
+                    className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden pl-20 sm:px-36 blur-3xl"
+                    aria-hidden="true"
+                >
+                    <div className="dark:hidden mx-auto aspect-1100/650 w-140.75 bg-linear-to-tr from-[#ff0011] to-[#fcbabf] opacity-30"></div>
+                </div>
+                <div className="text-center mb-8">
+                    <div className="flex justify-center items-center gap-1.5 sm:gap-3">
+                        <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                        <h2 className="text-2xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
+                            Latest Stories
+                        </h2>
+                        <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    </div>
+                    <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
+                        Let's know about our current modern fashions
+                    </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-3 sm:space-y-5">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="w-full border px-3 py-2 rounded"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">
-                            Photo{' '}
-                            {uploading && (
-                                <span className="text-gray-600">
-                                    Uploading <span className="loading loading-dots loading-sm"></span>
-                                </span>
-                            )}
-                        </label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className="w-full border p-2 rounded-md"
-                            disabled={uploading}
-                        />
-                    </div>
-
-                    <div className="flex justify-end sm:pt-4">
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 font-jost">
+                    <div className="flex flex-col items-center gap-6">
+                        <img src={dbUser?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} alt="User" className="w-52 h-52 rounded-full object-cover" />
+                        <p className=" -mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
                         <button
-                            type="submit"
-                            disabled={updating || uploading}
-                            className="px-10 py-2 bg-gradient-to-r bg-[#8884d8] hover:text-[var(--dark)] hover:bg-[#ebe9e9] text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
+                            onClick={handleLogout}
+                            className="mt-4 px-10 py-2 bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-400 text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
                         >
-                            {updating ? <>Editing <span className="loading loading-spinner w-4 text-white"></span></> : 'Edit'}
+                            Logout
                         </button>
                     </div>
-                </form>
-            </div>
-        </section>
+
+                    <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-3 sm:space-y-5">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className="w-full border px-3 py-2 rounded"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1">
+                                Photo{' '}
+                                {uploading && (
+                                    <span className="text-gray-600">
+                                        Uploading <span className="loading loading-dots loading-sm"></span>
+                                    </span>
+                                )}
+                            </label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                className="w-full border p-2 rounded-md"
+                                disabled={uploading}
+                            />
+                        </div>
+
+                        <div className="flex justify-end sm:pt-4">
+                            <button
+                                type="submit"
+                                disabled={updating || uploading}
+                                className="px-10 py-2 bg-gradient-to-r bg-[#8884d8] hover:text-[var(--dark)] hover:bg-[#ebe9e9] text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
+                            >
+                                {updating ? <>Editing <span className="loading loading-spinner w-4 text-white"></span></> : 'Edit'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </>
     );
 };
 
