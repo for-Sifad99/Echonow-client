@@ -46,8 +46,9 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                         <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                     </span>
                 )}</NavLink>
-            {user &&
-                <><NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
+            {user ?
+                <>
+                <NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
                     {({ isActive }) => (
 
                         <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
@@ -97,7 +98,16 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                                 My Profile
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </span>
-                        )}</NavLink></>}
+                        )}</NavLink>
+                        </> :
+                    <NavLink to="/our-blogs" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
+                            <span className='py-[9px] flex justify-between items-center'>
+                                Our Blogs
+                                <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
+                            </span>
+                        )}</NavLink>
+                    }
         </>
     );
 
