@@ -46,20 +46,20 @@ const Blogs = () => {
             </Helmet>
 
             {/* Content */}
-            <section className="max-w-[1200px] font-jost mx-auto flex flex-col md:flex-row sm:px-4 px-2 pt-1 pb-4 sm:py-4">
+            <section className="max-w-[1200px] font-jost mx-auto flex flex-col md:flex-row gap-2 sm:gap-3 md:gap-4 xl:gap-6 p-4">
 
-                <div className="grid gap-3 px-4 sm:px-6">
+                <div className="flex flex-col gap-3 md:gap-4 lg:gap-5 xl:gap-6">
                     {blogPosts.map((post) => (
                         <div
                             key={post.id}
-                            className="flex pl-5 items-center rounded-lg border border-[#e0e0e0] dark:border-[#3f3f3f] overflow-hidden transition-shadow"
+                            className="flex flex-col sm:flex-row items-center border border-[#e0e0e0] dark:border-[#3f3f3f] overflow-hidden transition-shadow"
                         >
                             <img
                                 src={post.image}
                                 alt={post.title}
-                                className="h-60 w-90 object-cover"
+                                className="h-50 w-full sm:h-60 sm:w-60 md:h-full lg:h-60 md:w-50 lg:w-80 xl:w-90 object-cover"
                             />
-                            <div className="p-5 text-left">
+                            <div className="p-4 md:p-3 lg:p-5 text-left">
                                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white hover:text-orange-500 dark:hover:text-orange-300 transition-colors">
                                     {post.title}
                                 </h3>
@@ -78,7 +78,9 @@ const Blogs = () => {
                 </div>
 
                 {/* side content */}
+                   <div className='flex-1'>
                     <CommonSidebar />
+                   </div>
             </section>
         </>
     );
