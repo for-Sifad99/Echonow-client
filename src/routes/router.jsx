@@ -14,6 +14,7 @@ import Payment from "../pages/Subscription/Payment";
 import PremiumArticles from "../pages/PremiumArticles/PremiumArticles";
 import MyArticles from "../pages/MyArticles/MyArticles";
 import MyProfile from "../pages/MyProfile/MyProfile";
+import Blogs from '../pages/Blogs/Blogs';
 import DashboardRoot from "../Layouts/DashboardRoot";
 import Dashboard from "../pages/Dashboard/Dashboard/Dashboard";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
                 element: <PrivetRoute>
                     <MyProfile />
                 </PrivetRoute>
+            },
+            {
+                path: '/our-blogs',
+                element: <Blogs />
             },
         ],
     },
