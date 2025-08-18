@@ -65,7 +65,7 @@ const Navbar = () => {
                     </span>
                 )}
             </NavLink>
-            {user &&
+            {user ?
                 <>
                     <NavLink to="/add-article" className={mainNavLinkClass}>
                         {({ isActive }) => (
@@ -93,7 +93,16 @@ const Navbar = () => {
                             </div>
                         )}
                     </NavLink>
-                </>
+                </> :
+                <NavLink to="/our-blogs" className={mainNavLinkClass}>
+                    {({ isActive }) => (
+                        <span className='flex gap-1 items-center'>
+                            Our Blogs
+                            <IoIosArrowUp className={`${isActive ? 'rotate-180' : ' '}`} />
+                        </span>
+                    )}
+                </NavLink>
+
             }
         </>
     );
