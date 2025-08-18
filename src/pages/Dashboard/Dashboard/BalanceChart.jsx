@@ -39,7 +39,7 @@ const BalanceChart = () => {
         hAxis: {
             textStyle: { fontSize: 10, color: "#9f97a4" },
         },
-        colors: [ "#8884d8"],
+        colors: ["#8884d8"],
         backgroundColor: "transparent",
     };
 

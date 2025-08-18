@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
 
 const fetchDashboardStats = async (axiosSecure) => {
-    const [userRes, articleRes, publisherRes ] = await Promise.all([
+    const [userRes, articleRes, publisherRes] = await Promise.all([
         axiosSecure.get('/all-users'),
         axiosSecure.get('/all-articles'),
         axiosSecure.get('/publisher'),
@@ -73,7 +73,9 @@ const DashCard = () => {
                 >
                     <div className='dark:text-[var(--white)] text-[var(--dark)] font-oxygen w-full flex items-start justify-center'>
                         <div className='mr-auto'>
-                            <p className="text-base lg:text-[13px] xl:text-base text-[var(--accent)] dark:text-[var(--accent-white)] font-medium">{card.title}</p>
+                            <p className="text-base lg:text-[13px] xl:text-base text-[var(--accent)] dark:text-[var(--accent-white)] font-medium">
+                                {card.title}
+                            </p>
                             <h2 className="text-3xl lg:text-2xl xl:text-3xl font-bold font-libreBas">
                                 {card.total < 10 ? '0' : ' '}{isLoading ? '...' : card.total}
                             </h2>
@@ -91,6 +93,7 @@ const DashCard = () => {
                         <p className="dark:text-[var(--accent-white)] text-[var(--accent)] font-jost dark:font-normal font-semibold opacity-65">
                             {selectedOptions[index]}
                         </p>
+
                         <div>
                             <IconButton
                                 aria-label="more"
@@ -98,7 +101,7 @@ const DashCard = () => {
                                 aria-haspopup="true"
                                 onClick={(e) => handleClick(e, index)}
                                 className='dark:stroke-[#f3f4f6]'
-                    >
+                            >
                                 <MoreVertIcon />
                             </IconButton>
                         </div>

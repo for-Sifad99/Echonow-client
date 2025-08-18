@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import PageHelmet from '../shared/PageTitle/PageHelmet';
 import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
 import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
 import useAuth from "../../../hooks/useAuth/useAuth";
 import CommonSidebar from "../shared/CommonSidebar/CommonSidebar";
 import { useForm, Controller } from "react-hook-form";
-import Select from "react-select";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import toast from "react-hot-toast";
+import Select from "react-select";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
+import toast from "react-hot-toast";
+import axios from "axios";
 import "./addArticle.css";
+
 
 const AddArticle = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+
     const {
         register,
         handleSubmit,
@@ -26,6 +30,7 @@ const AddArticle = () => {
     const [types, setTypes] = useState([]);
     const axiosPublic = useAxiosPublic();
 
+    // Fetching Publishers Info
     const { data: allPublishers = [] } = useQuery({
         queryKey: ["allPublishers"],
         queryFn: async () => {
@@ -34,6 +39,7 @@ const AddArticle = () => {
         },
     });
 
+    // Set publishers and types in select option
     useEffect(() => {
         if (allPublishers.length > 0) {
             const dynamicPublishers = allPublishers.map((pub) => ({
@@ -49,6 +55,7 @@ const AddArticle = () => {
         ]);
     }, [allPublishers]);
 
+    // All options data
     const tagOptions = [
         { value: "beauty", label: "Beauty" },
         { value: "guides", label: "Guides" },
@@ -57,6 +64,7 @@ const AddArticle = () => {
         { value: "fashion", label: "Fashion" },
     ];
 
+    // Select custom styles
     const customSelectStyles = {
         control: (base) => ({
             ...base,
@@ -106,8 +114,10 @@ const AddArticle = () => {
         }),
     };
 
+    // OnSubmit handler here
     const onSubmit = async (data) => {
         try {
+            // Image uploading in imgbb
             const formData = new FormData();
             formData.append("image", data.image[0]);
 
@@ -115,6 +125,7 @@ const AddArticle = () => {
             const imgRes = await axios.post(imageUploadUrl, formData);
             const imageUrl = imgRes.data.data.url;
 
+            // Article data which is gonna be post
             const articleData = {
                 title: data.title,
                 publisher: data.publisher.value,
@@ -131,39 +142,60 @@ const AddArticle = () => {
                 viewCount: 0,
             };
 
-            await axiosSecure.post("/article", articleData);
-            toast.success("Article submitted for approval!");
+            const res = await axiosSecure.post("/article", articleData);
+            if (res.data.insertedId) {
+                toast.success("Article submitted for approval!");
+            }
         } catch (err) {
             console.error(err);
-            toast.error("Failed to submit article");
+            if (err.response && err.response.status === 409) {
+                toast.error("You can't post more than one!");
+            } else {
+                toast.error("Failed to submit article");
+            }
         }
     };
 
     return (
-       <>
-       {/* Page Title */}
+        <>
+            {/* Page Title */}
             <PageHelmet
                 title="Add New Post"
                 description="Publish your next story to EchoNow – let your voice be heard through engaging articles and headlines."
             />
 
-       {/* Content */}
-            <section className="max-w-[1200px] font-jost mx-auto sm:px-4 px-2 py-10 transition-colors duration-500 text-[#1c1d1e]">
-                <div className="flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6">
+            {/* Content */}
+            <section className="max-w-[1200px] font-jost mx-auto sm:px-4 px-2 pt-1 pb-4 sm:py-4 transition-colors duration-500 text-[#1c1d1e]">
+                <div className="flex flex-col lg:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6">
                     {/* form content */}
                     <div className="w-full flex-1">
-                        <div className="text-center mb-8">
-                            <div className="flex justify-center items-center gap-1.5 sm:gap-3">
-                                <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                        {/* Top header */}
+                        <div className="flex justify-between items-center mb-4 md:mb-9">
+                            <div className="text-xs sm:text-sm text-gray-800 dark:text-[var(--accent-white)] font-oxygen flex items-center">
+                                <Link to='/'>Home </Link>
+                                <MdOutlineKeyboardArrowRight />
+                                <span className="opacity-80">Add Article</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <img src={user?.photoURL} className="w-3.5 sm:w-5 rounded-full" alt="" />
+                                <h2 className="text-gray-700 dark:text-[var(--white)]  font-semibold">{user?.displayName}</h2>
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className="text-start mb-2 md:mb-6">
+                            <div className="flex items-center justify-start gap-1.5 sm:gap-3">
                                 <h2 className="text-2xl text-[var(--dark)] dark:text-[var(--white)] sm:text-3xl font-libreBas font-bold">
                                     Add Article
                                 </h2>
-                                <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                                <div className="w-10 sm:w-30 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
                             </div>
-                            <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
+                            <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm -mt-1 sm:-mt-1.5 ">
                                 Fill the form to add article
                             </p>
                         </div>
+
+                        {/* Form */}
                         <form
                             onSubmit={handleSubmit(onSubmit)}
                             className="add-article-form space-y-5 px-8 py-14 shadow-lg bg-[var(--accent-white)] dark:bg-[#1c1d1e] dark:text-[var(--white)] "
@@ -183,7 +215,6 @@ const AddArticle = () => {
                                     <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
                                 )}
                             </div>
-
 
                             {/* Publisher */}
                             <div>
@@ -300,10 +331,12 @@ const AddArticle = () => {
                     </div>
 
                     {/* side content */}
-                    <CommonSidebar />
+                    <div className="hidden lg:flex">
+                        <CommonSidebar />
+                    </div>
                 </div>
             </section>
-       </>
+        </>
     );
 };
 

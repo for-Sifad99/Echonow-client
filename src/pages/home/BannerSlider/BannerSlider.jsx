@@ -12,6 +12,7 @@ const BannerSlider = () => {
     const axiosPublic = useAxiosPublic(); 0
     const handleNavigate = useHandle();
 
+    // Fetching all tending articles
     const { data: trendingArticles = [], isLoading } = useQuery({
         queryKey: ['trendingArticles'],
         queryFn: async () => {
@@ -20,6 +21,7 @@ const BannerSlider = () => {
         }
     });
 
+    // Loading loader
     if (isLoading) {
         return <div className="flex items-center justify-center mx-auto my-10">
             <div className="md:hidden">
@@ -67,6 +69,8 @@ const BannerSlider = () => {
                                     <span className='text-xs opacity-80'> <FaRegShareSquare /></span>
                                 </div>
                             </div>
+
+                            {/* isPremium logic */}
                             {article.isPremium &&
                                 <div className='absolute top-7 -right-5 group-hover:-right-4 rotate-90 group-hover:rotate-270 transition duration-500'>
                                     <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">Premium</span>

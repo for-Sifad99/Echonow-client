@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx'; // optional but useful for className merging
+import clsx from 'clsx'; 
 
 const SubLoader = ({ text = 'LOADING...', size = 'text-2xl', className = '' }) => {
     return (

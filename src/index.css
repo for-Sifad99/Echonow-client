@@ -36,8 +36,6 @@
 }
 
 /* Sub loader styles */
-/* ----------------------- */
-
 @layer utilities {
   .loader-text {
     @apply font-bold uppercase text-transparent relative;
@@ -65,7 +63,6 @@
 }
 
 /* Scrollbar styles */
-
 /* Firefox support */
 .sidebar {
   scrollbar-color: #f57f8e #ffe6e7; 
@@ -110,5 +107,9 @@
   background-color: #f22d3a; 
 }
 
-
+/* Highlight */
+::selection {
+  background: #f22d3a;
+  color: #ffffff;   
+}
 

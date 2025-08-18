@@ -39,12 +39,12 @@ const PremiumArticles = () => {
             />
 
             {/* Content */}
-            <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-10">
+            <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-4">
                 <div className='flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6'>
 
                     {/* Left Content */}
                     <div className='flex-1'>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
                             {isPending ? (
                                 <div className="flex items-center justify-center mx-auto my-10">
                                     <div className="md:hidden">
@@ -60,41 +60,55 @@ const PremiumArticles = () => {
                             ) : articles.length === 0 ? (
                                 <p className="my-10 text-xl text-[var(--dark)] dark:text-[var(--white)] col-span-full text-center font-libreBas">No articles found.</p>
                             ) : (
-                                articles.map((article, idx) => {
-                                    return (
-                                        <div
-                                            onClick={() => handleNavigate(article, article._id)}
-                                            key={idx}
-                                            className="group relative flex flex-col"
-                                        >
-                                            <img
-                                                src={article.image}
-                                                alt={article.title}
-                                                className="w-full max-h-72 sm:max-h-96 md:h-44 object-cover"
-                                            />
-                                            <div className="flex flex-col justify-center items-center md:items-start text-[var(--dark)] dark:text-[var(--white)] md:mt-3 space-y-2 py-3 pr-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">
-                                                <span className="mt-4 md:mt-0 font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">Featured</span>
-                                                <h3 className="mt-2 md:mt-0 text-center md:text-start text-xl sm:text-2xl md:text-base xl:text-lg font-bold font-libreBas leading-6 md:leading-5 lg:leading-5.5 group-hover:underline"> ''{article.title.slice(0, 50)}..''
-                                                </h3>
-                                                <h4 className="text-center md:text-start mt-1 text-xs sm:text-sm md:text-xs font-oxygen leading-4 text-[var(--base-200) opacity-70 dark:opacity-90">
-                                                    {article.description.slice(0, 90)}....
+                                            articles.map((article) => (
+                                                <div
+                                                    onClick={() => handleNavigate(article, article._id)}
+                                                    key={articles._id}
+                                                    className="group flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]"
+                                                >
+                                                    <div className='relative'>
+                                                        <img
+                                                            src={article.image}
+                                                            alt={article.title}
+                                                            className="w-full h-60 md:h-52 lg:h-60 object-cover"
+                                                        />
 
-                                                </h4>
-                                                <div className='mt-2 sm:mt-0 xl:mt-2 flex items-center justify-between gap-2 text-xs sm:text-[10px] lg:text-xs font-jost'>
-                                                    <p>
-                                                        <span className="opacity-90 dark:opacity-90">By</span> <span className='opacity-70 dark:opacity-90 font-bold dark:font-semibold'>{article.authorName}</span> • <span className="opacity-70"> {new Date(article.postedDate).toDateString()}</span>
-                                                    </p>
-                                                    <span className='text-xs sm:text-[8px] md:text-[10px] lg:text-xs opacity-60 dark:opacity-80 cursor-pointer'> <FaRegShareSquare /></span>
+                                                        {article.isPremium &&
+                                                            <div className='absolute top-6.5 -left-5.5 rotate-270 transition duration-500'>
+                                                                <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">Premium</span>
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                    <div className="flex flex-col justify-center items-center text-[var(--dark)] dark:text-[var(--white)]  md:mt-3 space-y-2 px-2 pt-2 pb-4">
+                                                       
+                                                        <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">{article.tags}
+                                                        </span>
+
+                                                        <h3 className="text-center text-xl sm:text-base lg:text-xl font-bold font-libreBas leading-6 sm:leading-5 lg:leading-6 group-hover:underline">
+                                                            <span className="md:hidden"> ''{article.title.slice(0, 50)}..''</span>
+                                                            <span className="hidden md:block lg:block"> ''{article.title.slice(0, 30)}..''</span>
+                                                            <span className="hidden ld:block"> ''{article.title}..''</span>
+                                                        </h3>
+
+                                                        <h4 className="text-center mt-0.5 md:mt-0 lg:mt-0.5 text-xs font-oxygen leading-4 text-[var(--base-200) opacity-70 dark:opacity-90">
+                                                            <span className="md:hidden">{article.description.slice(0, 100)}....</span>
+                                                            <span className="hidden md:block lg:hidden">{article.description.slice(0, 34)}....</span>
+                                                            <span className="hidden lg:block">{article.description.slice(0, 100)}....</span>
+                                                        </h4>
+
+                                                        <div className='mt-1 md:mt-0 lg:mt-1 flex items-center justify-between gap-2 text-xs sm:text-[10px] lg:text-xs font-jost'>
+                                                            <p>
+                                                                <span className="opacity-90 dark:opacity-100">By
+                                                                </span>
+                                                                <span className='opacity-70 dark:opacity-90 font-bold dark:font-semibold'> {article.authorName}</span> • <span className="opacity-70"> {new Date(article.postedDate).toDateString()}
+                                                                </span>
+                                                            </p>
+                                                            <span className='text-xs sm:text-[8px] md:text-[10px] lg:text-xs opacity-50 dark:opacity-80 cursor-pointer'> <FaRegShareSquare /></span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            {article.isPremium &&
-                                                <div className='absolute top-[27px] -left-5.5 rotate-270 transition duration-500'>
-                                                    <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">Premium</span>
-                                                </div>
-                                            }
-                                        </div>
-                                    );
-                                })
+                                            ))
                             )}
                         </div>
                     </div>
@@ -104,7 +118,6 @@ const PremiumArticles = () => {
                         <CommonSidebar />
                     }
                 </div>
-
 
                 {/* Pagination */}
                 {articles.length === 0 ? ' ' :

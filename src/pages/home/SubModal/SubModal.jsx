@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { FaBell } from "react-icons/fa";
 
-const SubscribeModal = ({ isOpen, onRequestClose }) => {
+const SubModal = ({ isOpen, onRequestClose }) => {
     const navigate = useNavigate();
     const modalRef = useRef();
     const overlayRef = useRef();
@@ -99,4 +99,4 @@ const SubscribeModal = ({ isOpen, onRequestClose }) => {
     );
 };
 
-export default SubscribeModal;
+export default SubModal;

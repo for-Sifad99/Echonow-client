@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import PageHelmet from "../../shared/PageTitle/PageHelmet";
-import SubLoader from '../../shared/Loader/SubLoader';
 import useAxiosSecure from "../../../../hooks/useAxiosSecure/useAxios";
+import SubLoader from '../../shared/Loader/SubLoader';
 import { useQuery } from "@tanstack/react-query";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { FaUserShield } from "react-icons/fa";
 import { FiSearch, FiX } from "react-icons/fi";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
@@ -15,6 +15,7 @@ const AllUsers = () => {
     const [filters, setFilters] = useState({ name: "", email: "", role: "" });
     const [selectedUser, setSelectedUser] = useState(null);
 
+    // Fetching all users info
     const { data: users = [], refetch, isPending } = useQuery({
         queryKey: ["users"],
         queryFn: async () => {
@@ -23,7 +24,9 @@ const AllUsers = () => {
         },
     });
 
+    // Make admin handler
     const handleMakeAdmin = async (email) => {
+
         try {
             Swal.fire({
                 title: 'Are you sure?',
@@ -35,6 +38,7 @@ const AllUsers = () => {
                 confirmButtonText: 'Yes!',
                 cancelButtonText: 'Cancel'
             }).then(async (result) => {
+
                 if (result.isConfirmed) {
                     const res = await axiosSecure.patch(`/users/admin/${email}`, {
                         role: "admin",
@@ -90,6 +94,7 @@ const AllUsers = () => {
                                 onChange={(e) => setFilters({ ...filters, [field]: e.target.value })}
                                 className='ml-2 bg-transparent border-none outline-none w-full'
                             />
+
                             {filters[field] ? (
                                 <FiX
                                     onClick={() => clearFilter(field)}
@@ -113,6 +118,7 @@ const AllUsers = () => {
                             <SubLoader size="text-3xl" />
                         </div>
                     </div>
+
                 ) : users.length === 0 ? (
                     <p className="text-xl text-gray-600 col-span-full text-center font-libreBas">No users found.</p>
                 ) : <>
@@ -129,6 +135,7 @@ const AllUsers = () => {
                                     <th className="text-center">Action</th>
                                 </tr>
                             </thead>
+
                             <tbody className="font-jost">
                                 {filteredUsers.map((user, index) => (
                                     <tr
@@ -136,6 +143,7 @@ const AllUsers = () => {
                                         className="hover:bg-slate-50 dark:hover:bg-[#33333d]"
                                     >
                                         <td>{index + 1}</td>
+
                                         <td>
                                             <div className="avatar">
                                                 <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
@@ -143,13 +151,19 @@ const AllUsers = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="text-xs md:text-sm">{user.name || "Unnamed"}</td>
+
+                                        <td className="text-xs md:text-sm">
+                                            {user.name || "Unnamed"}
+                                        </td>
                                         <td className="text-xs md:text-sm text-gray-600 dark:text-gray-200 font-semibold">
-                                            <p className="md:hidden">{user.email.slice(0, 12)}...</p>
+                                            <p className="md:hidden">
+                                                {user.email.slice(0, 12)}...
+                                            </p>
                                             <p className="hidden md:block">{user.email}</p>
                                         </td>
                                         <td className="uppercase">
-                                            {user.role || "user"}</td>
+                                            {user.role || "user"}
+                                        </td>
                                         <td className="flex justify-center items-center gap-1">
                                             {user.role === "admin" ? (
                                                 <span className="text-base md:text-lg text-[var(--primary)] dark:text-[#a5a1fa] font-semibold rounded-md ">Admin</span>
@@ -163,6 +177,7 @@ const AllUsers = () => {
                                                             <FaUserShield />
                                                         </button>
                                                     </div>
+
                                                     <div className="tooltip" data-tip="View Details">
                                                         <button
                                                             onClick={() => setSelectedUser(user)}
@@ -176,6 +191,7 @@ const AllUsers = () => {
                                         </td>
                                     </tr>
                                 ))}
+
                                 {filteredUsers.length === 0 && (
                                     <tr className="rounded-md">
                                         <td colSpan="6" className="text-center py-3 text-lg">
@@ -193,7 +209,9 @@ const AllUsers = () => {
                         <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-[9999]">
                             <div className="bg-white dark:bg-[var(--dark-secondary)] p-6 rounded-lg shadow w-[95%] max-w-[280px] sm:max-w-sm space-y-4 relative text-[var(--dark)] dark:text-[var(--white)]">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-2xl font-bold font-oxygen">User Details</h2>
+                                    <h2 className="text-2xl font-bold font-oxygen">
+                                        User Details
+                                    </h2>
                                     <button
                                         onClick={() => setSelectedUser(null)}
                                         className="text-lg px-2 bg-[var(--primary)] text-[var(--white)] hover:bg-[#ffe0b3] hover:text-[var(--primary)] rounded-full transition duration-500 border-none shadow-none cursor-pointer"

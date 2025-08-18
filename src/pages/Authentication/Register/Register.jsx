@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import PageHelmet from '../shared/PageTitle/PageHelmet';
-import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
-import useAuth from "../../../hooks/useAuth/useAuth";
+import PageHelmet from '../../shared/PageTitle/PageHelmet';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
+import useAuth from "../../../../hooks/useAuth/useAuth";
+import SocialLogin from '../Social/SocialLogin';
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
-import toast from 'react-hot-toast';
+import logo from '../../../../public/logo.png';
+import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import logo from '/logo.png';
-
 
 const Register = () => {
     const { createUser, updateUserProfile } = useAuth();
+    const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
     const location = useLocation();
     const [photo, setPhoto] = useState(null);
@@ -20,8 +21,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
 
-    const axiosSecure = useAxiosSecure();
-
+    // OnSubmit handler here
     const onSubmit = data => {
         const { name, email, password } = data;
         createUser(email, password)
@@ -71,6 +71,7 @@ const Register = () => {
             });
     };
 
+    // Image upload handler
     const handleImgUpload = async (e) => {
         const file = e.target.files[0];
         const formData = new FormData();
@@ -98,7 +99,8 @@ const Register = () => {
 
             {/* Content */}
             <div className="font-jost">
-                <div className="flex justify-baseline items-center md:mb-2">
+                {/* Logo */}
+                <div className="flex justify-baseline items-center md:hidden">
                     <Link to='/'>
                         <div className='flex items-center justify-center gap-1'>
                             <img className='w-10 lg:w-15' src={logo} alt="Echo website logo" />
@@ -106,13 +108,16 @@ const Register = () => {
                         </div>
                     </Link>
                 </div>
-                <h2 className="text-2xl font-bold text-[var(--dark)] -mb-1">Register</h2>
-                <p className="mb-4 sm:mb-6 text-sm text-[var(--accent)]">Create your account below</p>
 
+                {/* Title */}
+                <h2 className="text-2xl font-bold -mb-1">Register</h2>
+                <p className="mb-4 sm:mb-6 text-sm text-[var(--accent)] dark:text-[var(--accent-white)]">Create your account below</p>
+
+                {/* Form */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 lg:space-y-3">
                     {/* Name */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700">Your Name</label>
+                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Your Name</label>
                         <input
                             type="text"
                             {...register("name", {
@@ -131,31 +136,30 @@ const Register = () => {
                                 }
                             })}
                             placeholder="Enter your full name"
-                            className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                            className="sm:mt-0.5 w-full px-4 py-2 border border-[#e0e0e0] dark:border-[#3f3f3f] focus:outline-none"
                         />
                         {errors.name && (
-                            <p className="text-sm text-red-500 leading-6 -mb-1">
+                            <p className="text-sm text-red-500 dark:text-red-400 leading-6 -mb-1">
                                 {errors.name.message}
                             </p>
                         )}
                     </div>
 
-
                     {/* Email */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700">Email Address</label>
+                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Email Address</label>
                         <input
                             type="email"
                             {...register("email", { required: "Email is required" })}
                             placeholder="Email address"
-                            className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                            className="sm:mt-0.5 w-full px-4 py-2 border border-[#e0e0e0] dark:border-[#3f3f3f] focus:outline-none"
                         />
-                        {errors.email && <p className="text-sm text-red-500 leading-6 -mb-1">{errors.email.message}</p>}
+                        {errors.email && <p className="text-sm text-red-500 dark:text-red-400 leading-6 -mb-1">{errors.email.message}</p>}
                     </div>
 
                     {/* Password */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700">Password</label>
+                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Password</label>
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -175,7 +179,7 @@ const Register = () => {
                                     },
                                 })}
                                 placeholder="Password"
-                                className="sm:mt-0.5 w-full px-4 py-2 border border-gray-300 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                                className="sm:mt-0.5 w-full px-4 py-2 pr-10 border border-[#e0e0e0] dark:border-[#3f3f3f] focus:outline-none"
                             />
                             {showPassword ? (
                                 <FiEyeOff
@@ -192,13 +196,13 @@ const Register = () => {
 
                         {/* Error message */}
                         {errors.password && (
-                            <p className="text-sm text-red-500 leading-6 -mb-1">{errors.password.message}</p>
+                            <p className="text-sm text-red-500 dark:text-red-400 leading-6 -mb-1">{errors.password.message}</p>
                         )}
                     </div>
 
                     {/* Photo (file input) */}
-                    <div>
-                        <label className="relative text-sm font-medium text-gray-700 flex items-center gap-1">
+                    <div className='mt-4'>
+                        <label className="relative text-sm font-medium text-gray-700 dark:text-gray-100 flex items-center gap-1">
                             Profile Photo
                             {uploadSuccess && (
                                 <FiCheckCircle className="text-[var(--primary)] text-sm sm:text-base" />
@@ -209,38 +213,40 @@ const Register = () => {
                             accept="image/*"
                             name="photo"
                             onChange={handleImgUpload}
-                            className="sm:mt-0.5 w-full px-3 py-1.5 border border-gray-300 rounded-md"
+                            className="sm:mt-0.5 w-full px-3 py-1.5 border border-[#e0e0e0] dark:border-[#3f3f3f] focus:outline-none"
                         />
                     </div>
 
                     {/* Terms & Conditions Checkbox */}
-                    <div className="flex items-center justify-start gap-2">
+                    <div className="flex items-center justify-start gap-2 mt-4">
                         <input
                             type="checkbox"
                             {...register("terms", { required: "You must accept the terms & conditions" })}
                         />
-                        <label className={`text-sm ${errors.terms ? "text-red-600 font-semibold" : "text-gray-700"}`}>
+                        <label className={`text-sm ${errors.terms ? "text-red-600 dark:text-red-400 font-semibold" : "text-gray-700 dark:text-gray-200"}`}>
                             I accept the terms & conditions
                         </label>
                     </div>
 
-
                     {/* Submit */}
                     <button
                         type="submit"
-                        className="-mt-2.5 w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500  hover:to-red-400 text-white font-semibold py-2 rounded-md transition duration-700 cursor-pointer"
+                        className="-mt-2.5 w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500  hover:to-red-400 text-[var(--white)] font-semibold py-2 transition duration-700 cursor-pointer"
                     >
                         Register
                     </button>
 
                     {/* Footer */}
-                    <div className="flex justify-between text-sm mt-1.5 sm:mt-3">
-                        <span>
-                            Already have an account?{" "}
-                            <Link to="/auth/login" className="text-blue-600 hover:underline">Login</Link>
-                        </span>
-                    </div>
+                    <span className="text-sm mb-1">
+                        Don’t have an account?{" "}
+                        <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Login</Link>
+                    </span>
                 </form>
+
+                {/* Social login */}
+                <div className="flex justify-start md:hidden">
+                    <SocialLogin />
+                </div>
             </div>
         </>
     );

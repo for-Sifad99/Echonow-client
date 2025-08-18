@@ -1,5 +1,8 @@
-import React from 'react';
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { useTheme } from '../../../../hooks/themeContext/themeContext';
+import useAuth from '../../../../hooks/useAuth/useAuth';
+import EchoLogo from "../EchoLogo/EchoLogo";
 import { LuLogOut } from "react-icons/lu";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
@@ -7,10 +10,6 @@ import { FiSearch, FiMoon } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import { FaEnvelope } from "react-icons/fa";
 import { FaFaceGrinWide } from "react-icons/fa6";
-import EchoLogo from "../EchoLogo/EchoLogo";
-import { Link, NavLink } from "react-router-dom";
-import useAuth from '../../../../hooks/useAuth/useAuth';
-import { useTheme } from '../../../../hooks/themeContext/themeContext';
 import SideNavbar from './SideNavbar';
 
 const Navbar = () => {
@@ -42,10 +41,12 @@ const Navbar = () => {
         };
     }, []);
 
+    // NavLinks styles
     const mainNavLinkClass = ({ isActive }) =>
         `text-[17px] font-medium text-[var(--dark)] dark:text-[var(--white)] relative after:absolute after:bottom-[-16px] after:left-0 after:h-[6px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
         }`;
 
+    // Links data
     const links = (
         <>
             <NavLink to="/" className={mainNavLinkClass}>
@@ -74,7 +75,6 @@ const Navbar = () => {
                             </span>
                         )}
                     </NavLink>
-
                     <NavLink to="/my-articles" className={mainNavLinkClass}>
                         {({ isActive }) => (
                             <span className='flex gap-1 items-center'>
@@ -87,7 +87,7 @@ const Navbar = () => {
                         {({ isActive }) => (
                             <div className='flex gap-1 items-center'>
                                 <h3 className='flex items-center gap-2'>
-                                    <p>Hot Articles</p> <p className='text-[11.9px] text-[var(--white)] bg-[#e57c69] px-2 rounded'>fire</p>
+                                    <p>Premium Articles</p> <p className='text-[11.9px] text-[var(--white)] bg-[#e57c69] px-2 rounded'>fire</p>
                                 </h3>
                                 <IoIosArrowUp className={`${isActive ? 'rotate-180' : ' '}`} />
                             </div>
@@ -105,6 +105,7 @@ const Navbar = () => {
                 {/* Left: Hamburger + Subscribe */}
                 <div className="flex items-center gap-4">
                     <VscMenu className="text-lg sm:text-2xl md:text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" onClick={() => setIsSidebarOpen(true)} />
+
                     <Link to={`${user ? '/subscription' : '/'}`}>
                         <div className="hidden md:flex items-center group relative md:h-[28px] md:w-[104px] lg:h-[30px] lg:w-28 overflow-hidden rounded-full bg-[var(--primary)] text-[var(--white)] text-[13px] lg:text-sm font-semibold font-jost cursor-pointer">
                             <div className="absolute inset-0 flex items-center justify-center gap-2 transform transition-transform duration-500 group-hover:-translate-y-full">
@@ -127,6 +128,8 @@ const Navbar = () => {
                     <div className='-mt-2.5'>
                         <EchoLogo />
                     </div>
+
+                    {/* Title */}
                     <p className="text-[6px] sm:text-[8px] md:text-[11px] lg:text-xs text-center  tracking-widest text-orange-400 dark:font-medium dark:text-orange-300 leading-0 sm:leading-1 lg:leading-4">
                         SETTING YOU UP FOR SUCCESS
                     </p>
@@ -145,6 +148,7 @@ const Navbar = () => {
                         <FiMoon className="swap-off text-[17px] sm:text-[19px] md:text-[21px]" />
                     </label>
 
+                    {/* Search box */}
                     <div className="relative inline-block text-left">
                         {/* Search Icon */}
                         <FiSearch
@@ -152,7 +156,7 @@ const Navbar = () => {
                             onClick={() => setIsSearchOpen(!isSearchOpen)}
                         />
 
-                        {/* Dropdown Input */}
+                        {/* Dropdown input */}
                         <div
                             className={`absolute -right-12 sm:-left-62 top-8 md:-left-68 md:top-10 bg-[var(--white)] text-[var(--dark)] transform transition-all duration-300 ease-in-out shadow-sm ${isSearchOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
                                 }`}

@@ -4,7 +4,7 @@ import useAuth from '../useAuth/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: `http://localhost:5000`
 });
 
 const useAxiosSecure = () => {
@@ -43,9 +43,11 @@ const useAxiosSecure = () => {
                             shouldNavigateRef.current = true;
                         })
                         .catch(err => console.log(err));
+
                 } else if (status === 403) {
                     console.log(`403 Forbidden Access!`);
                     navigate('/status/forbidden');
+                    
                 } else if (status === 402) {
                     console.log('402 received, ignoring...');
                 }

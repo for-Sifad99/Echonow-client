@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import PageHelmet from '../../shared/PageTitle/PageHelmet';
+import SubscribeModal from "../SubModal/SubModal";
 import BannerSlider from "../BannerSlider/BannerSlider";
-import QuickCelebrity from "../QuickCelebrity/QuickCelebrity";
+import QuickCelebrity from "../Celebrity/Celebrity";
+import Sponsored from "../Sponsored/Sponsored";
 import Fashion from "../Fashion/Fashion";
 import AllPublishers from "../AllPublishers/AllPublishers";
-import PlanSection from "../PlanSection/PlanSection";
-import UserSummaryCards  from '../UserSummaryCards/UserSummaryCards';
-import SubscribeModal from "../SubscribeModal/SubscribeModal";
+import PlanSection from "../Plans/Plans";
+import UserSummaryCards from '../InfoCards/InfoCards';
+import Testimonial from '../Testimonial/Testimonial';
+
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Setup modal in useEffect
   useEffect(() => {
     const hasSeenModal = localStorage.getItem("hasSeenSubscribeModal");
 
@@ -35,10 +39,12 @@ const Home = () => {
     {/* Content */}
       <BannerSlider />
       <QuickCelebrity />
+      <Sponsored />
       <Fashion />
       <AllPublishers />
       <PlanSection />
       <UserSummaryCards />
+      <Testimonial />
 
       {/* Subscribe Modal */}
       <SubscribeModal

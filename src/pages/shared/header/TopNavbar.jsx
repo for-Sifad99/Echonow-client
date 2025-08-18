@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useTheme } from "../../../../hooks/themeContext/themeContext";
 import useAuth from "../../../../hooks/useAuth/useAuth";
+import SideNavbar from "./SideNavbar";
 import { FaFaceGrinWide, FaEnvelope } from "react-icons/fa6";
 import { IoIosArrowUp } from "react-icons/io";
 import { FiSearch, FiMoon } from "react-icons/fi";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
 import logo from "../../../../public/logo.png";
-import {useTheme} from "../../../../hooks/themeContext/themeContext";
-import SideNavbar from "./SideNavbar";
 
 const ScrollNavbar = () => {
     const { user } = useAuth();
@@ -16,10 +16,11 @@ const ScrollNavbar = () => {
     const [showNavbar, setShowNavbar] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const sidebarRef = useRef();
 
     const closeSidebar = useCallback(() => setIsSidebarOpen(false), []);
+    const sidebarRef = useRef();
 
+    // Top navbar logic in useEffect
     useEffect(() => {
         const handleInteraction = (e) => {
             if (e.type === "mousedown" && sidebarRef.current && !sidebarRef.current.contains(e.target)) {
@@ -39,12 +40,15 @@ const ScrollNavbar = () => {
         };
     }, [closeSidebar]);
 
+
+    // Navbar links style
     const mainNavLinkClass = useMemo(
         () => ({ isActive }) =>
             `text-[15px] xl:text-base text-[var(--dark)] dark:text-[var(--white)] relative after:absolute after:bottom-[-23px] after:left-0 after:h-[6px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"}`,
         []
     );
 
+    // Nav arrows logic style
     const ArrowNav = ({ to, label, badge }) => (
         <NavLink to={to} className={mainNavLinkClass}>
             {({ isActive }) => (
@@ -63,6 +67,8 @@ const ScrollNavbar = () => {
         </NavLink>
     );
 
+
+    // Links data
     const links = (
         <>
             <ArrowNav to="/" label="Home" />
@@ -77,6 +83,7 @@ const ScrollNavbar = () => {
         </>
     );
 
+    // Top navbar scroll logic in useEffect
     useEffect(() => {
         let ticking = false;
 
@@ -105,11 +112,14 @@ const ScrollNavbar = () => {
 
     return (
         <>
-            <div className={`fixed top-0 left-0 right-0 transition-all duration-500 z-[999]  ${showNavbar ? !isSidebarOpen ? "translate-y-0" : "-translate-y-full" :"-translate-y-full"}`}>
+            <div className={`fixed top-0 left-0 right-0 transition-all duration-500 z-[999]  ${showNavbar ? !isSidebarOpen ? "translate-y-0" : "-translate-y-full" : "-translate-y-full"}`}>
                 <div className="bg-[var(--secondary)] dark:bg-[#212227] text-[var(--dark)] dark:text-[var(--white)] py-[19px] px-5 sm:px-6 xl:px-28 flex items-center justify-between">
                     {/* Left: Logo + Menu */}
                     <div className="flex items-center justify-center gap-4">
+                        {/* Menu open button */}
                         <VscMenu onClick={() => setIsSidebarOpen(true)} className="text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" />
+
+                        {/* Logo */}
                         <div className="flex flex-col justify-center -mt-3">
                             <Link to='/'>
                                 <div className='flex items-center gap-1'>
@@ -117,6 +127,8 @@ const ScrollNavbar = () => {
                                     <h1 className='text-lg sm:text-[22px] md:text-[28px] lg:text-2xl leading-9 font-medium font-oxygen'>EchoNow</h1>
                                 </div>
                             </Link>
+
+                            {/* title */}
                             <p className="text-[6px] sm:text-[7px] md:text-[8px] leading-0 -mt-1 md:mt-0 lg:-mt-0.5 tracking-widest text-orange-400 dark:text-orange-300 dark:font-medium">SETTING YOU UP FOR SUCCESS</p>
                         </div>
                     </div>
@@ -128,14 +140,17 @@ const ScrollNavbar = () => {
 
                     {/* Right: Icons */}
                     <div className="flex items-center gap-2">
+                        {/* Theme */}
                         <label className="swap swap-rotate">
                             <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
                             <TiWeatherSunny className="swap-on text-xl" />
                             <FiMoon className="swap-off text-[19px]" />
                         </label>
 
+                        {/* Search icon */}
                         <FiSearch className="cursor-pointer text-xl" />
 
+                        {/* Subscription button */}
                         <Link to={user ? '/subscription' : '/'}>
                             <div className="hidden sm:flex items-center group relative h-[32px] w-[110px] overflow-hidden rounded-full bg-[var(--primary)] text-[var(--white)] text-[13px] lg:text-sm font-semibold font-jost cursor-pointer">
                                 <div className="absolute inset-0 flex items-center justify-center gap-2 transform transition-transform duration-500 group-hover:-translate-y-full">

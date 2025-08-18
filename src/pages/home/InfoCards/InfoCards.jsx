@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FaUsers, FaUserCheck, FaUserShield } from "react-icons/fa";
 import CountUp from "react-countup";
 
-
+// All stat cards
 const StatCard = ({ title, icon, count, color }) => {
     return (
         <div className="p-6 flex flex-col gap-3 w-full border border-[#e0e0e0] dark:border-[#3f3f3f]">
@@ -17,15 +17,16 @@ const StatCard = ({ title, icon, count, color }) => {
                     <CountUp end={count} duration={2} />
                 </p>
             </div>
-            <h3 
-            className="text-[28px] sm:text-xl md:text-2xl font-semibold text-[var(--dark)] dark:text-[var(--white)] font-jost">{title}</h3>
+            <h3
+                className="text-[28px] sm:text-xl md:text-2xl font-semibold text-[var(--dark)] dark:text-[var(--white)] font-jost">{title}</h3>
         </div>
     );
 };
 
-const UserSummaryCards = () => {
+const InfoCards = () => {
     const axiosPublic = useAxiosPublic();
 
+    // Fetching user count info
     const { data = {}, isLoading } = useQuery({
         queryKey: ["all-users"],
         queryFn: async () => {
@@ -36,6 +37,7 @@ const UserSummaryCards = () => {
 
     const { totalUsers = 0, premiumUsers = 0, normalUsers = 0 } = data;
 
+    // Loading loader
     if (isLoading) {
         return <div className="flex items-center justify-center mx-auto my-10">
             <div className="md:hidden">
@@ -50,10 +52,11 @@ const UserSummaryCards = () => {
         </div>
     };
 
-
     return (
-        <section className="max-w-4xl mx-auto px-2 sm:px-4 py-10">
-            <div className="text-center mb-8">
+        <section className="max-w-4xl mx-auto px-2 sm:px-4 py-7 sm:py-9 md:py-11 lg:py-12">
+
+            {/* Title */}
+            <div className="text-center mb-5 sm:mb-6 md:mb-8">
                 <div className="flex justify-center items-center gap-1.5 sm:gap-3">
                     <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
                     <h2 className="text-xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
@@ -66,7 +69,8 @@ const UserSummaryCards = () => {
                 </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-3 md:gap-5">
+            {/* Cards content */}
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4">
                 <StatCard
                     title="All total users"
                     icon={<FaUsers />}
@@ -90,4 +94,4 @@ const UserSummaryCards = () => {
     );
 };
 
-export default UserSummaryCards;
+export default InfoCards;

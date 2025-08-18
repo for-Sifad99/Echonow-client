@@ -33,7 +33,9 @@ const TotalVisitChart = () => {
         <div className="flex flex-col justify-center items-center dark:bg-[var(--dark-secondary)] bg-[var(--white)] rounded-xl shadow-md mx-auto p-4 w-full max-w-[440px] sm:max-w-full h-full md:h-[270px] lg:h-[267px] xl:h-[270px] overflow-x-hidden">
             <div className="w-full lg:w-[220px] xl:w-[320px] h-full px-2">
                 <div className="w-full flex items-center justify-between">
-                    <h3 className="text-[13px] sm:text-[10px] md:text-[13px] font-semibold text-[var(--dark)] dark:text-[var(--white)] -mt-3">Total Visit</h3>
+                    <h3 className="text-[13px] sm:text-[10px] md:text-[13px] font-semibold text-[var(--dark)] dark:text-[var(--white)] -mt-3">
+                        Total Visit
+                    </h3>
                     <span className='flex items-center justify-center text-xs bg-[var(--secondary)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--white)] w-8 h-8 rounded-full transition duration-500 cursor-pointer'>
                         <IoPaperPlaneOutline className="text-sm" />
                     </span>

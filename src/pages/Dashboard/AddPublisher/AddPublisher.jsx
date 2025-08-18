@@ -1,13 +1,12 @@
 import React from 'react';
 import PageHelmet from '../../shared/PageTitle/PageHelmet';
-import SubLoader from '../../shared/Loader/SubLoader';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
+import SubLoader from '../../shared/Loader/SubLoader';
 import TypeWriterEffect from 'react-typewriter-effect';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-
 
 const AddPublisher = () => {
     const { register, handleSubmit, reset } = useForm();
@@ -22,6 +21,7 @@ const AddPublisher = () => {
         },
     });
 
+    // OnSubmit handler
     const onSubmit = async (data) => {
         try {
             const formData = new FormData();
@@ -62,19 +62,28 @@ const AddPublisher = () => {
 
             {/* Content */}
             <div className="space-y-4">
-                <h1 className='flex justify-center sm:justify-start text-4xl sm:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-11 '>Add Publisher</h1>
+                <h1 className='flex justify-center sm:justify-start text-4xl sm:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-11'>
+                    Add Publisher
+                </h1>
+
                 <p className="flex flex-col gap-6 font-jost text-sm sm:text-lg md:text-xl leading-3.5 sm:leading-5 md:leading-5.5 text-center sm:text-start text-[var(--accent)] dark:text-[var(--accent-white)] w-full max-w-sm sm:max-w-3xl mx-auto sm:mx-0 mb-6 sm:mb-10 -mt-3.5 sm:-mt-2">
                     Publishers help organize books and content in our system. Add top publishers to improve visibility and credibility of your library!
-                    <p className='w-32 border-b-2 pt-1 sm:pt-2 mx-auto sm:mx-0'></p>
+
+                    <p className='w-32 border-b-2 pt-1 sm:pt-2 mx-auto sm:mx-0'> </p>
                 </p>
 
                 <div className="font-jost grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-8 xl:gap-14 w-full max-w-sm sm:max-w-full items-start mx-auto sm:mx-0 ">
                     {/* Form Section */}
                     <div className="w-full rounded-xl text-[var(--dark)] dark:text-[var(--white)]">
-                        <h3 className="font-oxygen text-xl sm:text-2xl font-semibold mb-4 ">Create New Publisher</h3>
+                        <h3 className="font-oxygen text-xl sm:text-2xl font-semibold mb-4 ">
+                            Create New Publisher
+                        </h3>
+
                         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 sm:gap-3 md:gap-[13.7px]">
                             <div className='flex flex-col mb-2'>
-                                <label className="font-oxygen font-medium]">Publisher Name</label>
+                                <label className="font-oxygen font-medium]">
+                                    Publisher Name
+                                </label>
                                 <input
                                     type="text"
                                     placeholder='publisher name'
@@ -84,7 +93,9 @@ const AddPublisher = () => {
                             </div>
 
                             <div className='flex flex-col mb-2'>
-                                <label className="font-oxygen font-medium ">Publisher Logo</label>
+                                <label className="font-oxygen font-medium ">
+                                    Publisher Logo
+                                </label>
                                 <input
                                     type="file"
                                     {...register('logo', { required: true })}
@@ -92,7 +103,9 @@ const AddPublisher = () => {
                                 />
                             </div>
 
-                            <button className="btn shadow-none text-[var(--white)] dark:text-[var(--dark)] bg-[var(--primary)] hover:bg-red-500 dark:bg-[var(--accent-white)] dark:hover:bg-[var(--white)] w-full transition duration-300">Add Publisher</button>
+                            <button className="btn shadow-none text-[var(--white)] dark:text-[var(--dark)] bg-[var(--primary)] hover:bg-red-500 dark:bg-[var(--accent-white)] dark:hover:bg-[var(--white)] w-full transition duration-300">
+                                Add Publisher
+                            </button>
                         </form>
                     </div>
 
@@ -100,6 +113,7 @@ const AddPublisher = () => {
                     <div className="w-full rounded-xl text-[var(--dark)] dark:text-[var(--white)]">
                         <h3 className="border-l-2 flex flex-col font-oxygen text-xl leading-5 sm:text-2xl font-semibold mb-4 pl-2">
                             Recent Added
+
                             <div className="text-base text-[var(--primary)] dark:text-[#cdcbff]">
                                 <TypeWriterEffect
                                     textStyle={{
@@ -130,6 +144,7 @@ const AddPublisher = () => {
                                     <SubLoader size="text-xl" />
                                 </div>
                             </div>
+
                         ) : (
                             <div className="space-y-2">
                                 {recentPublishers.map((pub) => (
@@ -139,16 +154,23 @@ const AddPublisher = () => {
                                             alt={pub.name}
                                             className="w-9 h-9 rounded-md object-contain"
                                         />
+
                                         <div className='transition duration-400'>
-                                            <h4 className="capitalize text-[var(-dark)] dark:text-[var(--white)] dark:group-hover:text-[var(--dark)] text-lg leading-6 font-semibold">{pub.name}</h4>
+                                            <h4 className="capitalize text-[var(-dark)] dark:text-[var(--white)] dark:group-hover:text-[var(--dark)] text-lg leading-6 font-semibold">
+                                                {pub.name}
+                                            </h4>
+
                                             <p className="text-[var(--accent)] dark:text-[var(--base-100)] dark:group-hover:text-[var(--accent)] text-xs">
                                                 {new Date(pub.postedDate).toLocaleDateString()}
                                             </p>
                                         </div>
                                     </div>
                                 ))}
+
                                 {recentPublishers.length === 0 && (
-                                    <p className="text-base-content/60">No publishers added yet.</p>
+                                    <p className="text-base-content/60">
+                                        No publishers added yet.
+                                    </p>
                                 )}
                             </div>
                         )}

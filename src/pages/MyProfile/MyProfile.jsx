@@ -10,20 +10,20 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const MyProfile = () => {
+    const { user, signOutUser, updateUserProfile } = useAuth();
+    const [dbUser, setDbUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
-    const { user, signOutUser, updateUserProfile } = useAuth();
     const navigate = useNavigate();
 
+    const [uploading, setUploading] = useState(false);
+    const [updating, setUpdating] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         photo: '',
     });
-    const [uploading, setUploading] = useState(false);
-    const [updating, setUpdating] = useState(false);
-    const [dbUser, setDbUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     // Fetch user profile using useEffect and axiosPublic
     useEffect(() => {
@@ -72,7 +72,7 @@ const MyProfile = () => {
         }
     };
 
-    // Normal async function to update profile (no useMutation)
+    // Profile update handler
     const updateUserProfileHandler = async (updatedUser) => {
         setUpdating(true);
         try {
@@ -117,6 +117,7 @@ const MyProfile = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    // Logout handler
     const handleLogout = () => {
         Swal.fire({
             title: 'Are you sure?',
@@ -139,6 +140,7 @@ const MyProfile = () => {
         });
     };
 
+    // Loading loader
     if (loading) {
         return <div className="flex items-center justify-center mx-auto my-10">
             <div className="md:hidden">
@@ -152,7 +154,11 @@ const MyProfile = () => {
             </div>
         </div>
     };
-    if (error) return <p className="text-red-500 dark:text-red-400 text-center mt-10 font-jost">{error.message}</p>;
+
+    // Error content
+    if (error) {
+        return <p className="text-red-500 dark:text-red-400 text-center mt-10 font-jost">{error.message}</p>;
+    }
 
     return (
         <>
@@ -163,14 +169,17 @@ const MyProfile = () => {
             />
 
             {/* Content */}
-            <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-10 text-[ver(--dark)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] isolate relative">
+            <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-4 text-[ver(--dark)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] isolate relative">
                 <div
                     className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden pl-20 sm:px-36 blur-3xl"
                     aria-hidden="true"
                 >
-                    <div className="dark:hidden mx-auto aspect-1100/650 w-140.75 bg-linear-to-tr from-[#ff0011] to-[#fcbabf] opacity-30"></div>
+                    <div className="dark:hidden mx-auto aspect-1100/650 w-140.75 bg-linear-to-tr from-[#ff0011] to-[#fcbabf] opacity-30">
+                    </div>
                 </div>
-                <div className="text-center mb-8">
+
+                {/* Title */}
+                <div className="text-center mb-5 sm:mb-6 md:mb-8">
                     <div className="flex justify-center items-center gap-1.5 sm:gap-3">
                         <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
                         <h2 className="text-2xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
@@ -183,6 +192,8 @@ const MyProfile = () => {
                     </p>
                 </div>
 
+
+                {/* main content */}
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 font-jost">
                     <div className="flex flex-col items-center gap-6">
                         <img src={dbUser?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} alt="User" className="w-52 h-52 rounded-full object-cover" />
@@ -195,7 +206,10 @@ const MyProfile = () => {
                         </button>
                     </div>
 
+                    {/* Form */}
                     <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-3 sm:space-y-5">
+
+                        {/* Name */}
                         <div>
                             <label className="block text-sm font-medium mb-1">Name</label>
                             <input
@@ -203,11 +217,12 @@ const MyProfile = () => {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded"
+                                className="w-full border border-gray-400 dark:border-[#3f3f3f] px-3 py-2"
                                 required
                             />
                         </div>
 
+                        {/* Photo */}
                         <div>
                             <label className="block text-sm font-medium mb-1">
                                 Photo{' '}
@@ -221,11 +236,12 @@ const MyProfile = () => {
                                 type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}
-                                className="w-full border p-2 rounded-md"
+                                className="w-full border border-gray-400 dark:border-[#3f3f3f] p-2"
                                 disabled={uploading}
                             />
                         </div>
 
+                        {/* Action */}
                         <div className="flex justify-end sm:pt-4">
                             <button
                                 type="submit"

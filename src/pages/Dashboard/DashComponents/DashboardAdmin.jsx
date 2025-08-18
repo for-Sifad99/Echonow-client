@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from '../../../../hooks/useAuth/useAuth';
 import { FaFeatherPointed } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { FaCaretDown } from "react-icons/fa";
 import { FaCaretUp } from "react-icons/fa";
-import Swal from "sweetalert2";
-import useAuth from '../../../../hooks/useAuth/useAuth';
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const DashboardAdmin = () => {
     const { signOutUser, user } = useAuth();
@@ -17,6 +17,7 @@ const DashboardAdmin = () => {
     const navigate = useNavigate();
 
     const handleSignOut = async () => {
+
         Swal.fire({
             title: 'Are you sure?',
             text: 'You will be logged out!',
@@ -27,6 +28,7 @@ const DashboardAdmin = () => {
             confirmButtonText: 'Yes, logout!',
             cancelButtonText: 'Cancel'
         }).then((result) => {
+
             if (result.isConfirmed) {
                 signOutUser()
                     .then(() => {
@@ -88,8 +90,8 @@ const DashboardAdmin = () => {
                         {
                             isOpen ? <FaCaretDown /> : <FaCaretUp />
                         }
-
                     </h2>
+
                     <h2 className="text-xs dark:text-[var(--accent-white)] text-[var(--dark-bg)]">
                         {user?.email || "User Email"}
                     </h2>

@@ -1,7 +1,8 @@
 import React from 'react';
-import logo from '/logo.png';
+import { Link, NavLink } from 'react-router-dom';
 import useAuth from '../../../../hooks/useAuth/useAuth';
 import useRole from '../../../../hooks/useUserRole/useRole';
+import SideArticle from '../SideArticles/SideArticle';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { BiLogoFacebook } from "react-icons/bi";
 import { RiTwitterLine } from "react-icons/ri";
@@ -10,15 +11,17 @@ import { IoLogoInstagram } from "react-icons/io";
 import { AiOutlineYoutube } from "react-icons/ai";
 import { SlSocialPintarest } from "react-icons/sl";
 import { LiaGithub } from "react-icons/lia";
-import { Link, NavLink } from 'react-router-dom';
-import SideArticle from '../SideArticles/SideArticle';
+import logo from '/logo.png';
 
 const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
     const { user } = useAuth();
     const { role, loading } = useRole();
+
+    // NavLinks styles
     const sideNavLinkClass = () =>
         'block text-base font-medium hover:text-gray-500 dark:hover:text-gray-400 rounded-md transition-all duration-300';
 
+    // Sidebar links data
     const sidebarLinks = (
         <>
             <NavLink
@@ -53,7 +56,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                         </span>
                     )}</NavLink>
                     {
-                        !loading && role === 'admin' &&
+                        !user &&
                         <NavLink to="/subscription" className={sideNavLinkClass} onClick={closeSidebar}>
                             {({ isActive }) => (
                                 <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
@@ -62,6 +65,8 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                                 </span>
                             )}</NavLink>
                     }
+                    {
+                        !loading && role === 'admin' &&
                     <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
                             <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
@@ -69,6 +74,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </span>
                         )}</NavLink>
+                    }
                     <NavLink to="/my-articles" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
                             <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
@@ -80,7 +86,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                         {({ isActive }) => (
                             <div className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
                                 <h3 className='flex items-center gap-2'>
-                                    <p>Hot Articles</p> <p className='text-[11.9px] text-[var(--white)]  bg-[#e57c69] px-2 rounded'>fire</p>
+                                    <p>Premium Articles</p> <p className='text-[11.9px] text-[var(--white)]  bg-[#e57c69] px-2 rounded'>fire</p>
                                 </h3>
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </div>
@@ -94,6 +100,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                         )}</NavLink></>}
         </>
     );
+
     return (
         <aside
             ref={sidebarRef}
@@ -102,15 +109,20 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
         >
             {/* Sidebar Header */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-200 dark:border-gray-500">
+                {/* Logo */}
                 <Link to='/'>
                     <div className='flex items-center justify-center gap-1 -mt-[7px]'>
                         <img className='-ml-8 w-9' src={logo} alt="Echo website logo" />
                         <h1 className='text-[27px] font-normal font-oxygen'>EchoNow</h1>
                     </div>
+
+                    {/* Title */}
                     <p className="text-[11px] tracking-widest text-orange-400 dark:text-orange-300 font-medium -mt-2">
                         SETTING YOU UP FOR SUCCESS
                     </p>
                 </Link>
+
+                {/* Sidebar close button */}
                 <AiOutlineClose
                     className="text-2xl cursor-pointer hover:text-[var(--primary)] hover:rotate-90 transition-transform duration-400"
                     onClick={closeSidebar}
@@ -122,12 +134,14 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                 {sidebarLinks}
             </nav>
 
+            {/* Side articles */}
             <div className='px-5 dark:bg-[var(--dark2-bg)] '>
                 <SideArticle
                     closeSidebar={closeSidebar}
-                 />
+                />
             </div>
 
+            {/* Action buttons */}
             <div className='px-5 -mb-2'>
                 {user ? (
                     <Link to='/all-articles'>

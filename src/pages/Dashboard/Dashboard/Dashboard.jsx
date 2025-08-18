@@ -16,7 +16,9 @@ const Dashboard = () => {
 
             {/* Content */}
             <section>
-                <h1 className='flex justify-center sm:justify-start text-4xl sm:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-11 mb-6'>Dashboard</h1>
+                <h1 className='flex justify-center sm:justify-start text-4xl sm:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-11 mb-6'>
+                    Dashboard
+                </h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:flex justify-center xl:justify-start mx-auto gap-3">
                     <DashCard />
                 </div>

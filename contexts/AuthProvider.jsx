@@ -52,14 +52,13 @@ const AuthProvider = ({ children }) => {
         return signOut(auth);
     };
 
-    // Firebase Auth Observer
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, async currentUser => {
             setUser(currentUser);
             console.log('this form observer:', currentUser);
 
             if (currentUser) {
-                const token = await currentUser.getIdToken();
+                const token = await currentUser.getIdToken(true); // force refresh
                 localStorage.setItem('access-token', token);
             } else {
                 localStorage.removeItem('access-token');
@@ -71,6 +70,7 @@ const AuthProvider = ({ children }) => {
         return () => unSubscribe();
     }, []);
 
+    // All auth info which need to use all over the website
     const authInfo = {
         user,
         loading,

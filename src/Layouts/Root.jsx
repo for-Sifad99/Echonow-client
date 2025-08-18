@@ -6,16 +6,19 @@ import Footer from '../pages/shared/Footer/Footer';
 
 const Root = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-[var(--white)] dark:bg-[var(--dark2-bg)]">
+    <section className="flex flex-col min-h-screen bg-[var(--white)] dark:bg-[var(--dark2-bg)]">
+      {/* Header */}
       <ScrollNavbar /> 
       <Navbar />
 
+      {/* Main content */}
       <main className="flex-1">
-        <Outlet />  {/* Main content */}
+        <Outlet /> 
       </main>
 
+      {/* Footer */}
       <Footer />  
-    </div>
+    </section>
   );
 };
 

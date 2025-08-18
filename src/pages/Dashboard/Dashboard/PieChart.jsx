@@ -10,7 +10,6 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
-
 const COLORS = ['#00C49F', '#8884d8', '#FFBB28', '#FF8042', '#0088FE'];
 
 const DynamicPublicationPieChart = () => {
@@ -50,10 +49,10 @@ const DynamicPublicationPieChart = () => {
                 <p className="mt-4 text-sm text-gray-500">Loading...</p>
             ) : (
                 <div className='w-full h-full'>
-                        <ResponsiveContainer width="100%" height={'100%'} className='relative'>
+                    <ResponsiveContainer width="100%" height={'100%'} className='relative'>
                         <PieChart>
                             <Pie
-                        
+
                                 data={data}
                                 cx="50%"
                                 cy="50%"
