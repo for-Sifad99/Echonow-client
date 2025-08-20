@@ -189,7 +189,7 @@ const Navbar = () => {
                     {/* User Profile */}
                     {user ?
                         <Link to='/my-profile' className='ml-1'>
-                            <img src={user?.photoURL || 'https://i.ibb.co/qMPZvv6H/8211048.png'} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
+                            <img src={user?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
                         </Link> :
                         <Link to='/auth/login'>
                             <button className='flex justify-center items-center gap-2 font-libreBas text-[var(--primary)] dark:text-red-300'>Sign In <LuLogOut /></button>
