@@ -196,7 +196,7 @@ const MyProfile = () => {
                 {/* main content */}
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 font-jost">
                     <div className="flex flex-col items-center gap-6">
-                        <img src={user?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} alt="User" className="w-52 h-52 rounded-full object-cover" />
+                        <img src={dbUser?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} alt="User" className="w-52 h-52 rounded-full object-cover" />
                         <p className=" -mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
                         <button
                             onClick={handleLogout}

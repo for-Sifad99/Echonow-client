@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
 import { useTheme } from '../../../../hooks/themeContext/themeContext';
 import useAuth from '../../../../hooks/useAuth/useAuth';
 import EchoLogo from "../EchoLogo/EchoLogo";
@@ -14,11 +15,25 @@ import SideNavbar from './SideNavbar';
 
 const Navbar = () => {
     const { user } = useAuth();
+    const [dbUser, setDbUser] = useState(null);
     const { theme, toggleTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const closeSidebar = () => setIsSidebarOpen(false);
     const sidebarRef = useRef();
+    const axiosPublic = useAxiosPublic();
+
+    // Fetch user profile using useEffect and axiosPublic
+    useEffect(() => {
+        if (!user?.email) return;
+
+        const fetchUser = async () => {
+            const res = await axiosPublic.get(`/users/${user.email}`);
+            setDbUser(res.data);
+        };
+
+        fetchUser();
+    }, [user?.email, axiosPublic]);
 
     // Close sidebar when clicking outside or pressing Escape
     useEffect(() => {
@@ -189,7 +204,7 @@ const Navbar = () => {
                     {/* User Profile */}
                     {user ?
                         <Link to='/my-profile' className='ml-1'>
-                            <img src={user?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
+                            <img src={dbUser?.photo || user?.photoURL} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
                         </Link> :
                         <Link to='/auth/login'>
                             <button className='flex justify-center items-center gap-2 font-libreBas text-[var(--primary)] dark:text-red-300'>Sign In <LuLogOut /></button>
