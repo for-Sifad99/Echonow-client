@@ -39,7 +39,7 @@ const SideArticle = ({ closeSidebar }) => {
                     <img
                         src={article.image}
                         alt={article.title}
-                        className="w-full min-h-36 max-h-36 object-cover rounded"
+                        className="w-full min-h-36 max-h-36 object-cover"
                     />
                     <div className='flex items-center justify-start w-full'>
                         <span className="font-jost h-[20px] -ml-[27.6px] text-[10px] px-3 py-0.5 uppercase font-semibold bg-[var(--primary)] text-[var(--white)]  rotate-270">
@@ -78,7 +78,7 @@ const SideArticle = ({ closeSidebar }) => {
                     <img
                         src={article.image}
                         alt={article.title}
-                        className="min-w-[84px] min-h-[80px] max-h-[80px] object-cover rounded"
+                        className="min-w-[84px] min-h-[80px] max-h-[80px] object-cover"
                     />
 
                     {/* isPremium logic */}

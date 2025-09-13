@@ -10,6 +10,7 @@ const SocialLogin = () => {
     const { googleSignIn } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const from = location.state?.from?.pathname || "/"; 
     const axiosSecure = useAxiosSecure();
 
     // OnSubmit handler
@@ -17,6 +18,11 @@ const SocialLogin = () => {
         googleSignIn()
             .then(async (result) => {
                 const { displayName, email, photoURL } = result.user;
+
+                // 🔑 Ensure token saved
+                const token = await result.user.getIdToken();
+                localStorage.setItem('access-token', token);
+
                 const userProfile = {
                     name: displayName,
                     email,
@@ -38,13 +44,12 @@ const SocialLogin = () => {
                     timerProgressBar: true,
                 });
                 setTimeout(() => {
-                    navigate(location?.state || '/', { replace: true });
+                    navigate(from, { replace: true });
                 }, 3000);
             })
             .catch(error => {
                 console.error("❌ Google Sign-In Error:", error);
             });
-
     };
 
     return (

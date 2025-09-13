@@ -15,6 +15,7 @@ const Login = () => {
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
     const location = useLocation();
+    const from = location.state?.from?.pathname || "/"; 
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const email = watch("email");
@@ -55,7 +56,7 @@ const Login = () => {
                     title: "Now you can continue..."
                 });
                 setTimeout(() => {
-                    navigate(location?.state || '/');
+                    navigate(from, { replace: true });
                 }, 3000);
             })
             .catch(err => {

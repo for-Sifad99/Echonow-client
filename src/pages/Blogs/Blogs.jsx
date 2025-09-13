@@ -69,7 +69,7 @@ const Blogs = () => {
                                 <p className="mt-3 text-gray-600 dark:text-gray-300 text-sm">
                                     {post.description}
                                 </p>
-                                <button className="mt-4 inline-block text-orange-500 dark:text-orange-300 font-medium hover:underline">
+                                <button className="mt-4 inline-block text-orange-500 dark:text-orange-300 font-medium hover:underline cursor-pointer">
                                     Read More →
                                 </button>
                             </div>

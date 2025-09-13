@@ -46,16 +46,16 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                         <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                     </span>
                 )}</NavLink>
-            {user ?
+            {user &&
                 <>
-                <NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
-                    {({ isActive }) => (
+                    <NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
 
-                        <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
-                            Add Article
-                            <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
-                        </span>
-                    )}</NavLink>
+                            <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                                Add Article
+                                <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
+                            </span>
+                        )}</NavLink>
                     {
                         !user &&
                         <NavLink to="/subscription" className={sideNavLinkClass} onClick={closeSidebar}>
@@ -68,13 +68,13 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                     }
                     {
                         !loading && role === 'admin' &&
-                    <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
-                        {({ isActive }) => (
-                            <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
-                                Dashboard
-                                <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
-                            </span>
-                        )}</NavLink>
+                        <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
+                            {({ isActive }) => (
+                                <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                                    Dashboard
+                                    <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
+                                </span>
+                            )}</NavLink>
                     }
                     <NavLink to="/my-articles" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
@@ -99,15 +99,15 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </span>
                         )}</NavLink>
-                        </> :
-                    <NavLink to="/our-blogs" className={sideNavLinkClass} onClick={closeSidebar}>
-                        {({ isActive }) => (
-                            <span className='py-[9px] flex justify-between items-center'>
-                                Our Blogs
-                                <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
-                            </span>
-                        )}</NavLink>
-                    }
+                </>
+            }
+            <NavLink to="/our-blogs" className={sideNavLinkClass} onClick={closeSidebar}>
+                {({ isActive }) => (
+                    <span className='py-[9px] flex justify-between items-center'>
+                        Our Blogs
+                        <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
+                    </span>
+                )}</NavLink>
         </>
     );
 

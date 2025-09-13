@@ -16,6 +16,7 @@ const Register = () => {
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
     const location = useLocation();
+    const from = location.state?.from?.pathname || "/"; 
     const [photo, setPhoto] = useState(null);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = useState(false);
@@ -64,7 +65,7 @@ const Register = () => {
                 });
 
                 setTimeout(async () => {
-                    navigate(location?.state?.from?.pathname || '/');
+                    navigate(from, { replace: true });
                 }, 3000);
             }).catch(err => {
                 toast.error(err.message === "Firebase: Error (auth/email-already-in-use)." ? "Email already in use" : err.message);

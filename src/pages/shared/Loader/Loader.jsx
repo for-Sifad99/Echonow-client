@@ -31,7 +31,7 @@ const Loader = ({ speed = 2.5 }) => {
     }, []);
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-red-100 dark:bg-[var(--dark2-bg)]">
+        <div className="flex justify-center items-center min-h-screen bg-[var(--white)] dark:bg-[var(--dark2-bg)]">
             <div className='flex flex-col items-center gap-3 sm:gap-2'>
                 <Helix size={size} speed={speed} color={'#f22d3a'} />
                 <h1 className='text-base sm:text-xl lg:text-2xl text-[var(--dark)] dark:text-[var(--white)] font-medium font-oxygen'>EchoNow</h1>

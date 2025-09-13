@@ -1,27 +1,22 @@
 # 📰 EchoNow — Modern News Aggregator
 
-**Live Site:** [https://echonow.netlify.app/](https://echonow.netlify.app/)  
-**Admin Email:** sifayed99@gmail.com
-**Admin Password:** @Admin1234 
+- **Live Site:** [Live Demo!](https://echonow.netlify.app/)  
+- **Admin Email:** sifayed99@gmail.com
+- **Admin Password:** @Admin1234
 
 EchoNow is a dynamic and modern newspaper web application that revolutionizes the way users consume news. From trending articles to premium content, subscription models, and admin controls — this full-stack app has everything to serve a real-world news platform experience.
 
 ## 🔥 Features
 
 ✅ Fully responsive across **Mobile, Tablet, and Desktop**  
-✅ Email/password and Google **authentication**  
-✅ Real-time **JWT protected routes**  
+✅ Real-time **protected routes using Firebase authentication token**  
 ✅ **Role-based dashboard** with different admin/user functionalities  
-✅ Article submission, filtering, searching, approval & premium tagging  
-✅ Premium users get **exclusive features** and **unlimited posting**  
+✅ **Article submission** with filter, search, approval & premium tagging  
+✅ Premium users enjoy **exclusive features** and **unlimited posting**  
 ✅ Uses `react-query` (TanStack) for all **GET** data fetching  
-✅ Environment variables hide **Firebase & MongoDB secrets**  
-✅ Custom **toast notifications** for CRUD/auth actions  
-✅ Sweet UI/UX with conditional rendering and private/public routes  
-✅ **Charts** and visual data analytics for admin using `react-google-charts`  
-✅ Premium modal shown after **10 seconds** on homepage  
-✅ Admin can approve/decline posts and assign **publishers dynamically**  
-✅ **Pagination** support on dashboard (Admin: All Users, All Articles)
+✅ Environment variables secure **Firebase & MongoDB secrets**  
+✅ Smooth UI/UX with **private & public routes** 
+✅ **Pagination** support on `All Articles` page
 
 ---
 
@@ -34,45 +29,56 @@ EchoNow is a dynamic and modern newspaper web application that revolutionizes th
 - **SweetAlert2 / React Hot Toast**
 - **Imgbb**
 - **Tailwind CSS**
-- **React Google Charts**
+- **Material UI (MUI)**
+- **Stripe (Payment Integration)**
+- **Recharts / react-google-charts (Data Visualization)**
+- **GSAP (Animation Library)**
 - **React CountUp**
 - **React Simple Typewriter**
+- **React Icons**
+- **React Hook Form**
+- **React Helmet Async (SEO)**
+- **React Loading Skeleton**
+- **React Select**
+- **LDRS (Loaders)**
+- **Axios (API calls)**
+- **Clsx (Conditional classNames)**
 
 ---
 
-## 📁 Pages & Routes
-
 ### Public Routes:
+
 - `/` - Home page with trending articles (slider), publishers, statistics, subscription plans & more
-- `/login` - Login form with validations
-- `/register` - Register form with complex password validations
+- `/auth/login` - Login form with validations
+- `/auth/register` - Register form with complex password validations
 - `/all-articles` - Searchable and filterable list of approved articles
-- `/article/:id` - View single article (only for logged-in users)
+- `/our-blogs` - Showed some relevant static blogs card
 - `*` - Custom 404 Not Found page
 
 ### Private Routes:
+
+- `/article/:id` - View single article (only for logged-in users)
 - `/add-article` - Post articles (normal users: 1 post max; premium: unlimited)
 - `/my-articles` - User’s own articles (edit/delete/view status)
-- `/profile` - View and update profile info
+- `/my-profile` - View and update profile info
 - `/premium-articles` - Premium-only articles view
 - `/subscription` - Subscription packages & payment flow
 
 ### Admin Routes:
-- `/dashboard` - Role-based sidebar dashboard
-  - `/dashboard/all-users` - Manage users (Make Admin)
+
+- `/dashboard/dashboard` - Role-based sidebar dashboard
+  - `/dashboard/all-users` - Manage users (Make Admin and handle users)
   - `/dashboard/all-articles` - Approve/Decline/Make Premium articles
   - `/dashboard/add-publisher` - Add new publishers
-  - `/dashboard/charts` - Analytics with dynamic Pie, Bar, Line Charts
 
 ---
 
 ## 🔐 Authentication
 
 - Firebase Email/Password + Google Login
-- Secure JWT stored in **localStorage**
+- Secure Firebase authentication token stored in **localStorage**
 - Private routes remain intact even after reload using persistent login
 - Protected admin routes based on user role
-
 
 ---
 
@@ -92,20 +98,17 @@ npm run dev
 
 ---
 
-## 💡 Unique Functionalities
+## 💡 Unique Features
 
-- Toast and SweetAlert feedback for all actions
-- JWT Auth with reload persistence
-- Dynamic publisher stats (Pie Chart)
-- Extra charts (Line, Bar, Area)
-- Trending articles based on view count
-- Filter/Search by title, tags, publisher
-- Homepage modal after 10s for premium upsell
-- Role-based UI rendering with clean dashboard
+✨ Real-time publisher stats shown with **interactive Pie Chart**
+✨ **Advanced analytics** for admins: Line, Bar, and Area charts with live data updates
+✨ Trending articles auto-detected and highlighted based on **view count**
+✨ Smart Premium Modal → auto-triggers after 10s on homepage for **subscription**
+✨ Dynamic publisher assignment → admin can **approve/decline** posts and assign publisher roles
+✨ **Context-aware alerts** → Toast & SweetAlert customized for each action (CRUD/auth)
 
 ---
 
-## 🤝 Contributing
-We’re actively looking for passionate developers who want to make an impact! If you’d like to contribute, submit a pull request or reach out!
+## 🔮 Future Updates
 
-
+This project is just the beginning. In the future, many exciting features and improvements will be added to make the platform more powerful, user-friendly, and engaging. Stay tuned for upcoming updates!
