@@ -67,9 +67,9 @@ EchoNow is a dynamic and modern newspaper web application that revolutionizes th
 ### Admin Routes:
 
 - `/dashboard/dashboard` - Role-based sidebar dashboard
-  - `/dashboard/all-users` - Manage users (Make Admin and handle users)
-  - `/dashboard/all-articles` - Approve/Decline/Make Premium articles
-  - `/dashboard/add-publisher` - Add new publishers
+- `/dashboard/all-users` - Manage users (Make Admin and handle users)
+- `/dashboard/all-articles` - Approve/Decline/Make Premium articles
+- `/dashboard/add-publisher` - Add new publishers
 
 ---
 
@@ -84,28 +84,28 @@ EchoNow is a dynamic and modern newspaper web application that revolutionizes th
 
 ## 🛠 Installation & Setup
 
-# Clone the client repo
-git clone https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-for-Sifad99.git
+1. Clone the client repo
+   - git clone https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-for-Sifad99.git
 
-# Navigate to the project directory
-cd echonow-client
+2. Navigate to the project directory
+   - cd echonow-client
 
-# Install dependencies
-npm install
+3. Install dependencies
+   - npm install
 
-# Start the development server
-npm run dev
+4. Start the development server
+   - npm run dev
 
 ---
 
 ## 💡 Unique Features
 
-✨ Real-time publisher stats shown with **interactive Pie Chart**
-✨ **Advanced analytics** for admins: Line, Bar, and Area charts with live data updates
-✨ Trending articles auto-detected and highlighted based on **view count**
-✨ Smart Premium Modal → auto-triggers after 10s on homepage for **subscription**
-✨ Dynamic publisher assignment → admin can **approve/decline** posts and assign publisher roles
-✨ **Context-aware alerts** → Toast & SweetAlert customized for each action (CRUD/auth)
+1. Real-time publisher stats shown with **interactive Pie Chart**
+2. **Advanced analytics** for admins: Line, Bar, and Area charts with live data updates
+3. Trending articles auto-detected and highlighted based on **view count**
+4. Smart Premium Modal → auto-triggers after 10s on homepage for **subscription**
+5. Dynamic publisher assignment → admin can **approve/decline** posts and assign publisher roles
+6. **Context-aware alerts** → Toast & SweetAlert customized for each action (CRUD/auth)
 
 ---
 
