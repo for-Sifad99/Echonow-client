@@ -55,7 +55,6 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, async currentUser => {
             setUser(currentUser);
-            console.log('this form observer:', currentUser);
 
             if (currentUser) {
                 const token = await currentUser.getIdToken(true); // force refresh

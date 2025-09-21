@@ -16,6 +16,7 @@ const ScrollNavbar = () => {
     const [showNavbar, setShowNavbar] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const closeSidebar = useCallback(() => setIsSidebarOpen(false), []);
     const sidebarRef = useRef();
@@ -148,7 +149,33 @@ const ScrollNavbar = () => {
                         </label>
 
                         {/* Search icon */}
-                        <FiSearch className="cursor-pointer text-xl" />
+                        <div className="relative inline-block text-left md:mr-1">
+                            {/* Search Icon */}
+                            <FiSearch
+                                className="text-xl cursor-pointer"
+                                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                            />
+
+                            {/* Dropdown input */}
+                            <div
+                                className={`absolute -left-64 top-[41px] sm:-left-64 sm:top-[45px] md:-left-69.5 dark:bg-[var(--dark-bg)] bg-[var(--white)] text-[var(--dark)] shadow-sm  ${showNavbar || "hidden"} ${isSearchOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                                    }`}
+                            >
+                                <div className='relative font-jost w-full'>
+                                    <input
+                                        type="text"
+                                        placeholder="Search here..."
+                                        className="w-68 md:w-74 p-4 text-xs bg-[var(--white)] text-[var(--dark)] placeholder-[var(--dark)] dark:placeholder-[var(--white)] dark:bg-[var(--dark-bg)] dark:text-[var(--white)] focus:outline-none"
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="absolute right-2.5 top-2.5 bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-sm text-[var(--white)] px-3 py-1 font-medium transition duration-700 cursor-pointer"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
                         {/* Subscription button */}
                         <Link to={user ? '/subscription' : '/'}>

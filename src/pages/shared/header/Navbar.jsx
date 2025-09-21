@@ -117,7 +117,6 @@ const Navbar = () => {
                         </span>
                     )}
                 </NavLink>
-
             }
         </>
     );
@@ -125,10 +124,10 @@ const Navbar = () => {
     return (
         <header className={`overflow-hidden bg-[var(--secondary)] dark:bg-[#212227] text-[var(--dark)] dark:text-[var(--white)] relative z-[99]`}>
             {/* Top Row */}
-            <div className="flex justify-between items-center px-2 sm:px-6 py-4 md:py-4.5 lg:py-8">
+            <div className="flex justify-between items-center px-2 sm:px-6 py-[19px] lg:py-8">
                 {/* Left: Hamburger + Subscribe */}
                 <div className="flex items-center gap-4">
-                    <VscMenu className="text-lg sm:text-2xl md:text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" onClick={() => setIsSidebarOpen(true)} />
+                    <VscMenu className="text-xl sm:text-2xl md:text-2xl cursor-pointer hover:text-[var(--primary)] transition-transform duration-300" onClick={() => setIsSidebarOpen(true)} />
 
                     <Link to={`${user ? '/subscription' : '/'}`}>
                         <div className="hidden md:flex items-center group relative md:h-[28px] md:w-[104px] lg:h-[30px] lg:w-28 overflow-hidden rounded-full bg-[var(--primary)] text-[var(--white)] text-[13px] lg:text-sm font-semibold font-jost cursor-pointer">
@@ -149,12 +148,12 @@ const Navbar = () => {
 
                 {/* Center: Logo */}
                 <div className="flex flex-col items-center justify-center">
-                    <div className='-mt-2.5'>
+                    <div className='-mt-3'>
                         <EchoLogo />
                     </div>
 
                     {/* Title */}
-                    <p className="text-[6px] sm:text-[8px] md:text-[11px] lg:text-xs text-center  tracking-widest text-orange-400 dark:font-medium dark:text-orange-300 leading-0 sm:leading-1 lg:leading-4">
+                    <p className="text-[8px] md:text-[11px] lg:text-xs text-center  tracking-widest text-orange-400 font-medium dark:text-orange-300 leading-0 sm:leading-1 lg:leading-4">
                         SETTING YOU UP FOR SUCCESS
                     </p>
                 </div>
@@ -166,30 +165,30 @@ const Navbar = () => {
                         <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
 
                         {/* sun icon */}
-                        <TiWeatherSunny className="swap-on text-lg sm:text-xl md:text-[22px]" />
+                        <TiWeatherSunny className="swap-on text-xl md:text-[22px]" />
 
                         {/* moon icon */}
-                        <FiMoon className="swap-off text-[17px] sm:text-[19px] md:text-[21px]" />
+                        <FiMoon className="swap-off text-[19px] md:text-[21px]" />
                     </label>
 
                     {/* Search box */}
                     <div className="relative inline-block text-left">
                         {/* Search Icon */}
                         <FiSearch
-                            className="text-lg md:text-xl cursor-pointer"
+                            className="text-xl cursor-pointer"
                             onClick={() => setIsSearchOpen(!isSearchOpen)}
                         />
 
                         {/* Dropdown input */}
                         <div
-                            className={`absolute -right-12 sm:-left-62 top-8 md:-left-68 md:top-10 bg-[var(--white)] text-[var(--dark)] transform transition-all duration-300 ease-in-out shadow-sm ${isSearchOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                            className={`absolute -left-61.5 sm:-left-68 md:-left-76 -top-3.5 lg:-left-68 lg:top-8.5 dark:bg-[var(--dark-bg)] bg-[var(--white)] text-[var(--dark)] shadow-sm ${isSearchOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
                                 }`}
                         >
                             <div className='relative font-jost w-full'>
                                 <input
                                     type="text"
                                     placeholder="Search here..."
-                                    className="w-64 sm:w-66 md:w-74 p-4 text-xs bg-[var(--white)] text-[var(--dark)] placeholder-[var(--dark)] dark:placeholder-[var(--white)] dark:bg-[var(--dark-bg)] dark:text-[var(--white)] focus:outline-none"
+                                    className="w-60 sm:w-66 md:w-74 p-4 text-xs bg-[var(--white)] text-[var(--dark)] placeholder-[var(--dark)] dark:placeholder-[var(--white)] dark:bg-[var(--dark-bg)] dark:text-[var(--white)] focus:outline-none"
                                 />
                                 <button
                                     type="submit"
@@ -204,7 +203,7 @@ const Navbar = () => {
                     {/* User Profile */}
                     {user ?
                         <Link to='/my-profile' className='ml-1'>
-                            <img src={dbUser?.photo || user?.photoURL} className="w-[24px] h-[24px] sm:w-[25px] sm:h-[h-25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
+                            <img src={dbUser?.photo || user?.photoURL} className="w-[25px] h-[h-25px]w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
                         </Link> :
                         <Link to='/auth/login'>
                             <button className='flex justify-center items-center gap-2 font-libreBas text-[var(--primary)] dark:text-red-300'>Sign In <LuLogOut /></button>

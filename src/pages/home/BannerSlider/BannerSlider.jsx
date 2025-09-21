@@ -38,6 +38,7 @@ const BannerSlider = () => {
 
     return (
         <div className="relative z-10 px-2 sm:mx-3 py-3 xl:max-w-[1366px] 2xl:max-w-[1728px] xl:mx-auto">
+
             <Swiper
                 modules={[Autoplay]}
                 spaceBetween={10}
