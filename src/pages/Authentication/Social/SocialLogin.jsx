@@ -22,18 +22,26 @@ const SocialLogin = () => {
                 // 🔑 Ensure token saved
                 const token = await result.user.getIdToken();
                 localStorage.setItem('access-token', token);
+                
+                // Wait a bit for the auth state to update
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
                 const userProfile = {
                     name: displayName,
                     email,
                     photo: photoURL,
                     isVerified: false,
+                    isEmailVerified: false, // Add email verification status
                     role: "user",
                     premiumTaken: null,
                 };
 
                 await axiosSecure.post('/users', userProfile);
 
+                // For social login, we can consider the email as verified since it's from Google
+                // But we still update the user document to reflect this
+                await axiosSecure.patch(`/users/${email}`, { isEmailVerified: true, emailVerifiedAt: new Date() });
+                
                 Swal.fire({
                     toast: true,
                     icon: 'success',

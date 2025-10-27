@@ -27,12 +27,16 @@ const Login = () => {
 
         signInUser(email, password)
             .then(async (res) => {
+                // Wait a bit for the auth state to update and token to be set
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
                 // Set user profile data:
                 const userProfile = {
                     name: res.user.displayName,
                     email: email,
                     photo: res.user.photoURL,
                     isVerified: false,
+                    isEmailVerified: false, // Add email verification status
                     role: "user",
                     premiumTaken: null,
                 };
@@ -40,25 +44,34 @@ const Login = () => {
                 // Send user profile data to the server:
                 await axiosSecure.post('/users', userProfile);
 
-                // Sweet Alert
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 4000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Now you can continue..."
-                });
-                setTimeout(() => {
-                    navigate(from, { replace: true });
-                }, 3000);
+                // Check if user needs email verification
+                const userRes = await axiosSecure.get(`/users/${email}`);
+                if (userRes.data && !userRes.data.isEmailVerified) {
+                    // Redirect to verification page
+                    setTimeout(() => {
+                        navigate('/verify-email', { replace: true });
+                    }, 3000);
+                } else {
+                    // Sweet Alert
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 4000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: "Now you can continue..."
+                    });
+                    setTimeout(() => {
+                        navigate(from, { replace: true });
+                    }, 3000);
+                }
             })
             .catch(err => {
                 toast.error(err.message === "Firebase: Error (auth/invalid-credential)." ? "Something went wrong! try again." : err.message);

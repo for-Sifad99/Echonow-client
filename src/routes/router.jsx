@@ -23,6 +23,7 @@ import DashAllArticles from "../pages/Dashboard/DashAllArticles/DashAllArticles"
 import AddPublisher from "../pages/Dashboard/AddPublisher/AddPublisher";
 import Forbidden from "../pages/Forbidden/Forbidden";
 import Error from "../pages/Error/Error";
+import EmailVerification from "../pages/Authentication/EmailVerification/EmailVerification";
 
 const router = createBrowserRouter([
     {
@@ -89,6 +90,13 @@ const router = createBrowserRouter([
             {
                 path: '/our-blogs',
                 element: <Blogs />
+            },
+            {
+                path: '/verify-email',
+                element: 
+                    <PrivetRoute>
+                        <EmailVerification />
+                    </PrivetRoute>
             },
         ],
     },

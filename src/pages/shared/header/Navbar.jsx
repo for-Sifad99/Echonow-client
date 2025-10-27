@@ -203,7 +203,14 @@ const Navbar = () => {
                     {/* User Profile */}
                     {user ?
                         <Link to='/my-profile' className='ml-1'>
-                            <img src={dbUser?.photo || user?.photoURL} className="w-[25px] h-[h-25px]w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full cursor-pointer" />
+                            <img 
+                                src={dbUser?.photo || user?.photoURL || '/default-user.png'} 
+                                alt="User profile" 
+                                className="w-[25px] h-[25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full object-cover cursor-pointer"
+                                onError={(e) => {
+                                    e.target.src = '/default-user.png';
+                                }}
+                            />
                         </Link> :
                         <Link to='/auth/login'>
                             <button className='flex justify-center items-center gap-2 font-libreBas text-[var(--primary)] dark:text-red-300'>Sign In <LuLogOut /></button>

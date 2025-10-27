@@ -4,19 +4,26 @@ import PageHelmet from '../shared/PageTitle/PageHelmet';
 import useAxiosPublic from '../../../hooks/useAxiosPublic/useAxios';
 import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useAuth from '../../../hooks/useAuth/useAuth';
+import useEmailVerification from '../../../hooks/useEmailVerification/useEmailVerification';
 import SubLoader from '../shared/Loader/SubLoader';
+import EmailVerificationModal from '../shared/EmailVerification/EmailVerificationModal';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const MyProfile = () => {
     const { user, signOutUser, updateUserProfile } = useAuth();
+    const { useVerificationStatus } = useEmailVerification();
     const [dbUser, setDbUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
+
+    // Get email verification status
+    const { data: verificationStatus, isLoading: isVerificationLoading } = useVerificationStatus(user?.email);
 
     const [uploading, setUploading] = useState(false);
     const [updating, setUpdating] = useState(false);
@@ -192,12 +199,43 @@ const MyProfile = () => {
                     </p>
                 </div>
 
-
                 {/* main content */}
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 font-jost">
                     <div className="flex flex-col items-center gap-6">
-                        <img src={dbUser?.photo || 'https://i.ibb.co/qMPZvv6H/8211048.png'} alt="User" className="w-52 h-52 rounded-full object-cover" />
+                        <img 
+                            src={dbUser?.photo || user?.photoURL || '/default-user.png'} 
+                            alt="User profile" 
+                            className="w-52 h-52 rounded-full object-cover"
+                            onError={(e) => {
+                                e.target.src = '/default-user.png';
+                            }}
+                        />
                         <p className=" -mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
+
+                        {/* Email Verification Status */}
+                        {user?.providerData?.[0]?.providerId === 'password' && (
+                            <div className="w-full max-w-xs bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                <h3 className="font-semibold text-gray-800 dark:text-white mb-2">Email Verification</h3>
+                                {isVerificationLoading ? (
+                                    <p className="text-gray-600 dark:text-gray-300 text-sm">Loading...</p>
+                                ) : verificationStatus?.isEmailVerified ? (
+                                    <div className="flex items-center text-green-600 dark:text-green-400">
+                                        <span className="text-sm">Verified</span>
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col gap-2">
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm">Not verified</p>
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
+                                        >
+                                            Verify Email
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <button
                             onClick={handleLogout}
                             className="mt-4 px-10 py-2 bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-400 text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
@@ -254,6 +292,12 @@ const MyProfile = () => {
                     </form>
                 </div>
             </section>
+
+            <EmailVerificationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onVerified={() => setIsModalOpen(false)}
+            />
         </>
     );
 };

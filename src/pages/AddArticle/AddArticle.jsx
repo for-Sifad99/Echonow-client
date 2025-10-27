@@ -177,7 +177,14 @@ const AddArticle = () => {
                                 <span className="opacity-80">Add Article</span>
                             </div>
                             <div className="flex items-center gap-1">
-                                <img src={user?.photoURL} className="w-3.5 sm:w-5 rounded-full" alt="" />
+                                <img 
+                                    src={user?.photoURL || '/default-user.png'} 
+                                    className="w-3.5 sm:w-5 rounded-full object-cover" 
+                                    alt="User profile"
+                                    onError={(e) => {
+                                        e.target.src = '/default-user.png';
+                                    }}
+                                />
                                 <h2 className="text-gray-700 dark:text-[var(--white)]  font-semibold">{user?.displayName}</h2>
                             </div>
                         </div>

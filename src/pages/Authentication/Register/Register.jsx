@@ -27,13 +27,17 @@ const Register = () => {
     const onSubmit = data => {
         const { name, email, password } = data;
         createUser(email, password)
-            .then(async () => {
+            .then(async (userCredential) => {
+                // Wait a bit for the auth state to update and token to be set
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
                 // Set user profile data:
                 const userProfile = {
                     name,
                     email,
                     photo: photo,
                     isVerified: false,
+                    isEmailVerified: false, // Add email verification status
                     role: "user",
                     premiumTaken: null,
                 };
@@ -65,8 +69,9 @@ const Register = () => {
                     title: "Successfully account created!"
                 });
 
+                // For email/password users, redirect to verification page
                 setTimeout(async () => {
-                    navigate(from, { replace: true });
+                    navigate('/verify-email', { replace: true });
                 }, 3000);
             }).catch(err => {
                 toast.error(err.message === "Firebase: Error (auth/email-already-in-use)." ? "Email already in use" : err.message);
