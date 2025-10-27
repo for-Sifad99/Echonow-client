@@ -16,8 +16,14 @@ const Footer = () => {
     const { data: articles = [] } = useQuery({
         queryKey: ["allArticles"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/articles");
-            return res.data.allArticles;
+            const res = await axiosPublic.get("/articles", {
+                params: {
+                    page: 1,
+                    limit: 16
+                }
+            });
+            // Return the articles array from the response
+            return res.data.articles || [];
         },
     });
 

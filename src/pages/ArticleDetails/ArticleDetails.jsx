@@ -80,7 +80,7 @@ const ArticleDetails = () => {
             />
 
             {/* Content */}
-            <section className="flex flex-col lg:flex-row gap-2 sm:gap-3 md:gap-4 xl:gap-6 w-full max-w-[1366px] mx-auto p-4 text-[var(--dark)] dark:text-[var(--white)] ">
+            <section className="flex flex-col md:flex-row gap-2 sm:gap-3 md:gap-4 xl:gap-6 w-full max-w-[1366px] mx-auto p-4 text-[var(--dark)] dark:text-[var(--white)] ">
                 <div className="flex-1">
                     <div className="flex flex-col justify-center gap-2 sm:gap-3">
                         {/* Top header */}

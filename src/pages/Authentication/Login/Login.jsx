@@ -6,7 +6,8 @@ import useAuth from "../../../../hooks/useAuth/useAuth";
 import SocialLogin from "../Social/SocialLogin";
 import { useForm } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import logo from '../../../../public/logo.png';
+// Using public directory asset with proper URL reference
+import logo from '/logo.png';
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 

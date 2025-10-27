@@ -7,7 +7,8 @@ import SocialLogin from '../Social/SocialLogin';
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
-import logo from '../../../../public/logo.png';
+// Using public directory asset with proper URL reference
+import logo from '/logo.png';
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 

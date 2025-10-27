@@ -4,7 +4,7 @@ import useAuth from '../useAuth/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-    baseURL: `https://echonow-server.vercel.app/`
+     baseURL: `${import.meta.env.VITE_server_url}`
 });
 
 const useAxiosSecure = () => {

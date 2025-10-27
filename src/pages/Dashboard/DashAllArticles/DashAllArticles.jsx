@@ -120,7 +120,7 @@ const DashAllArticles = () => {
                 if (result.isConfirmed) {
                     const res = await axiosSecure.delete(`/articles/${id}`);
 
-                    console.log(res.data)
+                    // Removed unnecessary console.log
                     if (res.data.result.deletedCount > 0) {
                         toast.success("Articles successfully deleted!");
                     }

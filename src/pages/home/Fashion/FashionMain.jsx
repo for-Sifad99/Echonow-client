@@ -9,12 +9,18 @@ const FashionMain = () => {
     const axiosPublic = useAxiosPublic();
     const handleNavigate = useHandle();
 
-    // Fetching al fashion articles
+    // Fetching all fashion articles
     const { data: fashionArticles = [], isLoading } = useQuery({
         queryKey: ["fashionArticles"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/articles/special");
-            return res.data.fashion;
+            const res = await axiosPublic.get("/articles", {
+                params: {
+                    tags: "fashion",
+                    limit: 10
+                }
+            });
+            // Return articles from the response
+            return res.data?.articles || [];
         },
     });
 
@@ -58,7 +64,7 @@ const FashionMain = () => {
                     {/* Right content */}
                     <div className="flex flex-col justify-center items-center text-[var(--dark)] dark:text-[var(--white)]  md:mt-3 space-y-2 px-2 pt-2 pb-4">
                         <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">
-                            {article.tags}
+                            {article.tags[0]}
                         </span>
 
                         <h3 className="text-center text-xl sm:text-base lg:text-xl font-bold font-libreBas leading-6 sm:leading-5 lg:leading-6 group-hover:underline">

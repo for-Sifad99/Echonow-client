@@ -10,11 +10,17 @@ const Celebrity = () => {
     const handleNavigate = useHandle();
 
     // Fetching all celebrity articles
-    const { data: celebrityArticles, isPending } = useQuery({
+    const { data: celebrityArticles = [], isPending } = useQuery({
         queryKey: ["celebrityArticles"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/articles/special");
-            return res.data.celebrity;
+            const res = await axiosPublic.get("/articles", {
+                params: {
+                    tags: "celebrity",
+                    limit: 10
+                }
+            });
+            // Return articles from the response
+            return res.data?.articles || [];
         },
     });
 
@@ -69,7 +75,7 @@ const Celebrity = () => {
                         {/* Right content */}
                         <div className="md:mt-3 space-y-2 p-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">
                             <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">
-                                {article.tags}
+                                {article.tags[0]}
                                 
                             </span>
 

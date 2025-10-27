@@ -8,7 +8,8 @@ import { IoIosArrowUp } from "react-icons/io";
 import { FiSearch, FiMoon } from "react-icons/fi";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
-import logo from "../../../../public/logo.png";
+// Using public directory asset with proper URL reference
+import logo from '/logo.png';
 
 const ScrollNavbar = () => {
     const { user } = useAuth();
