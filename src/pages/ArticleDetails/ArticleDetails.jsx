@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import PageHelmet from '../shared/PageTitle/PageHelmet';
+import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
+import useAuth from "../../../hooks/useAuth/useAuth";
+import useDbUser from "../../../hooks/useDbUser/useDbUser";
 import CommonSidebar from '../shared/CommonSidebar/CommonSidebar';
 import SubLoader from '../shared/Loader/SubLoader';
 import { useQuery } from "@tanstack/react-query";
@@ -13,10 +16,15 @@ import { TfiAlarmClock } from "react-icons/tfi";
 import { BiLogoFacebook } from "react-icons/bi";
 import { RiTwitterLine } from "react-icons/ri";
 import { GrView } from "react-icons/gr";
+import toast from "react-hot-toast";
 
 
 const ArticleDetails = () => {
     const { id } = useParams();
+    const { user } = useAuth();
+    const { dbUser } = useDbUser();
+    const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
     const hasUpdatedView = useRef(false);
 
@@ -26,18 +34,61 @@ const ArticleDetails = () => {
     } = useQuery({
         queryKey: ["article", id],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/article/${id}`);
-            return res.data;
+            try {
+                // For premium articles, we need to use secure axios
+                if (user) {
+                    const res = await axiosSecure.get(`/article/${id}`);
+                    return res.data;
+                } else {
+                    // For non-premium articles, we can use public axios
+                    const res = await axiosPublic.get(`/article/${id}`);
+                    return res.data;
+                }
+            } catch (err) {
+                // Handle 401 errors for premium articles
+                if (err.response?.status === 401) {
+                    toast.error('Please login to view premium articles!');
+                    navigate('/auth/login');
+                    return null;
+                }
+                throw err;
+            }
         },
         enabled: !!id,
     });
 
-    // Vew count setting
+    // Check if user has access to premium article
     useEffect(() => {
-        if (!id || hasUpdatedView.current) return;
+        if (article && article.isPremium && !user) {
+            toast.error('Please login to view premium articles!');
+            navigate('/auth/login');
+        } else if (article && article.isPremium && user && !dbUser?.isPremium) {
+            toast.error('Please subscribe to view premium articles!');
+            navigate('/subscription');
+        }
+    }, [article, user, dbUser, navigate]);
+
+    // View count setting
+    useEffect(() => {
+        if (!id || hasUpdatedView.current || !article || article.isPremium) return;
 
         hasUpdatedView.current = true;
-        // Increment view count
+        // Increment view count for non-premium articles
+        axiosPublic
+            .patch(`/article/${id}/views`)
+            .then(() => {
+                console.log("View count updated successfully");
+                refetch();
+            })
+            .catch(console.error);
+    }, [id, axiosPublic, refetch, article]);
+
+    // View count setting for premium articles
+    useEffect(() => {
+        if (!id || hasUpdatedView.current || !article || !article.isPremium || !user) return;
+
+        hasUpdatedView.current = true;
+        // Increment view count for premium articles
         axiosSecure
             .patch(`/article/${id}/views`)
             .then(() => {
@@ -45,7 +96,7 @@ const ArticleDetails = () => {
                 refetch();
             })
             .catch(console.error);
-    }, [id, axiosSecure, refetch]);
+    }, [id, axiosSecure, refetch, article, user]);
 
     // Pending loader
     if (isPending) {
@@ -69,6 +120,11 @@ const ArticleDetails = () => {
                 <p>Error loading article: {error.message}</p>
             </div>
         );
+    }
+
+    // If no article data, show loading or redirect
+    if (!article) {
+        return null;
     }
 
     return (

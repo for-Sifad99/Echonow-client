@@ -47,10 +47,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/article/:id',
-                element:
-                    <PrivetRoute>
-                        <ArticleDetails />
-                    </PrivetRoute>
+                Component: ArticleDetails
             },
             {
                 path: '/subscription',
