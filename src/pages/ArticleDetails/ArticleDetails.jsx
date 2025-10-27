@@ -16,7 +16,7 @@ import { TfiAlarmClock } from "react-icons/tfi";
 import { BiLogoFacebook } from "react-icons/bi";
 import { RiTwitterLine } from "react-icons/ri";
 import { GrView } from "react-icons/gr";
-import toast from "react-hot-toast";
+import { toast } from 'sonner';
 
 
 const ArticleDetails = () => {

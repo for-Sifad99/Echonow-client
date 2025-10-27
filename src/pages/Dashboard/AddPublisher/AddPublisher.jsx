@@ -5,7 +5,7 @@ import SubLoader from '../../shared/Loader/SubLoader';
 import TypeWriterEffect from 'react-typewriter-effect';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import axios from 'axios';
 
 const AddPublisher = () => {

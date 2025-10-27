@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useEmailVerification from '../../../../hooks/useEmailVerification/useEmailVerification';
 import useAuth from '../../../../hooks/useAuth/useAuth';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const EmailVerificationModal = ({ isOpen, onClose, onVerified }) => {
     const { user } = useAuth();
@@ -34,7 +37,7 @@ const EmailVerificationModal = ({ isOpen, onClose, onVerified }) => {
         
         try {
             await requestOTP(user.email);
-            toast.success('Verification code sent to your email!');
+            toast.success("Verification code sent to your email!");
             setCountdown(60);
             setCanResend(false);
             // Clear OTP fields
@@ -55,7 +58,7 @@ const EmailVerificationModal = ({ isOpen, onClose, onVerified }) => {
 
         try {
             await verifyOTP({ email: user.email, otp: otpString });
-            toast.success('Email verified successfully!');
+            toast.success("Email verified successfully!");
             if (onVerified) onVerified();
             onClose();
         } catch (error) {
@@ -118,10 +121,10 @@ const EmailVerificationModal = ({ isOpen, onClose, onVerified }) => {
                 
                 <form onSubmit={handleVerifyOTP} onPaste={handlePaste}>
                     <div className="mb-4">
-                        <label className="block text-gray-700 dark:text-gray-300 mb-2">Verification Code</label>
+                        <Label className="block text-gray-700 dark:text-gray-300 mb-2">Verification Code</Label>
                         <div className="flex justify-between space-x-2">
                             {otp.map((digit, index) => (
-                                <input
+                                <Input
                                     key={index}
                                     ref={(el) => (inputRefs.current[index] = el)}
                                     type="text"
@@ -139,18 +142,14 @@ const EmailVerificationModal = ({ isOpen, onClose, onVerified }) => {
                     </div>
                     
                     <div className="flex justify-between items-center mb-4">
-                        <button
+                        <Button
                             type="button"
                             onClick={handleRequestOTP}
                             disabled={!canResend || isRequestingOTP}
-                            className={`px-4 py-2 rounded-md ${
-                                canResend && !isRequestingOTP
-                                    ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                            }`}
+                            variant={canResend && !isRequestingOTP ? "default" : "secondary"}
                         >
                             {isRequestingOTP ? 'Sending...' : countdown > 0 ? `Resend (${countdown}s)` : 'Resend Code'}
-                        </button>
+                        </Button>
                         
                         <span className="text-sm text-gray-500 dark:text-gray-400">
                             Code expires in 1 minute
@@ -158,24 +157,20 @@ const EmailVerificationModal = ({ isOpen, onClose, onVerified }) => {
                     </div>
                     
                     <div className="flex justify-end gap-3">
-                        <button
+                        <Button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            variant="outline"
                         >
                             Cancel
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             type="submit"
                             disabled={otp.join('').length !== 6 || isVerifyingOTP}
-                            className={`px-4 py-2 rounded-md text-white ${
-                                otp.join('').length === 6 && !isVerifyingOTP
-                                    ? 'bg-green-500 hover:bg-green-600'
-                                    : 'bg-gray-400 cursor-not-allowed'
-                            }`}
+                            variant={otp.join('').length === 6 && !isVerifyingOTP ? "default" : "secondary"}
                         >
                             {isVerifyingOTP ? 'Verifying...' : 'Verify'}
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

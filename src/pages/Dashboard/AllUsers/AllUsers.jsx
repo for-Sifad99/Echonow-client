@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { FaUserShield } from "react-icons/fa";
 import { FiSearch, FiX } from "react-icons/fi";
-import toast from "react-hot-toast";
+import { toast } from 'sonner';
 import Swal from "sweetalert2";
 
 

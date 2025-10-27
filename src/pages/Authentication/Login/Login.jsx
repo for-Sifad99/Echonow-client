@@ -8,8 +8,11 @@ import { useForm } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 // Using public directory asset with proper URL reference
 import logo from '/logo.png';
-import toast from "react-hot-toast";
+import { toast } from 'sonner';
 import Swal from "sweetalert2";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const Login = () => {
     const { signInUser, forgotPassword } = useAuth();
@@ -123,8 +126,8 @@ const Login = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 lg:space-y-3">
                     {/* Email */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Email Address</label>
-                        <input
+                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-100">Email Address</Label>
+                        <Input
                             type="email"
                             {...register("email", { required: "Email is required" })}
                             placeholder="Enter your email"
@@ -135,9 +138,9 @@ const Login = () => {
 
                     {/* Password */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Password</label>
+                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-100">Password</Label>
                         <div className="relative">
-                            <input
+                            <Input
                                 type={showPassword ? "text" : "password"}
                                 {...register("password", { required: "Password is required" })}
                                 placeholder="Enter your password"
@@ -165,12 +168,12 @@ const Login = () => {
 
 
                     {/* Submit */}
-                    <button
+                    <Button
                         type="submit"
                         className="w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-[var(--white)] font-semibold py-2 transition duration-700 cursor-pointer"
                     >
                         Login
-                    </button>
+                    </Button>
 
                     {/* Footer */}
                     <span className="text-sm mb-1">

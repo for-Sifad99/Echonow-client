@@ -10,9 +10,12 @@ import { useQuery } from "@tanstack/react-query";
 import Select from "react-select";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
-import toast from "react-hot-toast";
+import { toast } from 'sonner';
 import axios from "axios";
 import "./addArticle.css";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 
 const AddArticle = () => {
@@ -210,8 +213,8 @@ const AddArticle = () => {
                         >
                             {/* Title */}
                             <div>
-                                <label className="block font-medium mb-1 font-oxygen">Title</label>
-                                <input
+                                <Label className="block font-medium mb-1 font-oxygen">Title</Label>
+                                <Input
                                     type="text"
                                     {...register("title", { required: "Title is required" })}
                                     placeholder="Enter article title"
@@ -225,7 +228,7 @@ const AddArticle = () => {
 
                             {/* Publisher */}
                             <div>
-                                <label className="block font-medium mb-1 font-oxygen">Publisher</label>
+                                <Label className="block font-medium mb-1 font-oxygen">Publisher</Label>
                                 <Controller
                                     name="publisher"
                                     control={control}
@@ -250,7 +253,7 @@ const AddArticle = () => {
 
                             {/* Type */}
                             <div>
-                                <label className="block font-medium mb-1 font-oxygen">Article Type</label>
+                                <Label className="block font-medium mb-1 font-oxygen">Article Type</Label>
                                 <Controller
                                     name="type"
                                     control={control}
@@ -275,7 +278,7 @@ const AddArticle = () => {
 
                             {/* Tags */}
                             <div>
-                                <label className="block font-medium mb-1 font-oxygen">Tags</label>
+                                <Label className="block font-medium mb-1 font-oxygen">Tags</Label>
                                 <Controller
                                     name="tags"
                                     control={control}
@@ -301,7 +304,7 @@ const AddArticle = () => {
 
                             {/* Description */}
                             <div>
-                                <label className="block font-medium mb-1 font-oxygen">Description</label>
+                                <Label className="block font-medium mb-1 font-oxygen">Description</Label>
                                 <textarea
                                     {...register("description", { required: "Description is required" })}
                                     rows="5"
@@ -315,8 +318,8 @@ const AddArticle = () => {
 
                             {/* Upload Image */}
                             <div>
-                                <label className="block font-medium mb-1 font-oxygen">Upload Image</label>
-                                <input
+                                <Label className="block font-medium mb-1 font-oxygen">Upload Image</Label>
+                                <Input
                                     type="file"
                                     accept="image/*"
                                     {...register("image", { required: "Image is required" })}
@@ -328,12 +331,12 @@ const AddArticle = () => {
                             </div>
 
                             {/* Submit */}
-                            <button
+                            <Button
                                 type="submit"
                                 className="w-full sm:w-fit flex items-center justify-center ml-auto gap-2 bg-[#1c1d1e] text-[var(--white)] px-6 py-2 rounded-none transition-all duration-300 no-outline border-none cursor-pointer"
                             >
                                 <FiUpload /> Submit Article
-                            </button>
+                            </Button>
                         </form>
                     </div>
 

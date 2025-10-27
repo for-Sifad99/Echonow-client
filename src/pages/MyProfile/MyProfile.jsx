@@ -7,7 +7,7 @@ import useAuth from '../../../hooks/useAuth/useAuth';
 import useEmailVerification from '../../../hooks/useEmailVerification/useEmailVerification';
 import SubLoader from '../shared/Loader/SubLoader';
 import EmailVerificationModal from '../shared/EmailVerification/EmailVerificationModal';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
@@ -73,7 +73,7 @@ const MyProfile = () => {
                 photo: photoUrl,
             }));
         } catch (err) {
-            toast.error('Image upload failed.', err);
+            toast.error('Image upload failed.');
         } finally {
             setUploading(false);
         }
@@ -100,9 +100,7 @@ const MyProfile = () => {
                     photo: res.data.photo || user.photoURL || '',
                 });
             } catch {
-                toast.error(
-                    'Backend updated but Firebase update failed.',
-                );
+                toast.error('Backend updated but Firebase update failed.');
             }
         } catch {
             toast.error('Sorry! Failed to update profile.');

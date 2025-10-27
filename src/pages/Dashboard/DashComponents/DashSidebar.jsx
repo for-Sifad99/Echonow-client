@@ -14,7 +14,7 @@ import { HiUsers } from "react-icons/hi2";
 import { MdArticle, MdLogout } from "react-icons/md";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FaFeatherPointed } from "react-icons/fa6";
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 
 const DasSidebar = ({ isSidebarOpen }) => {

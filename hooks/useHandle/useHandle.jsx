@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDbUser from '../useDbUser/useDbUser'; 
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const useHandle = () => {
     const { dbUser } = useDbUser();
@@ -16,7 +16,8 @@ const useHandle = () => {
         
         // For premium articles, check user status
         if (!dbUser) {
-            return toast.error('Please login to view premium articles!');
+            toast.error('Please login to view premium articles!');
+            return;
         };
 
         if (dbUser?.isPremium) {

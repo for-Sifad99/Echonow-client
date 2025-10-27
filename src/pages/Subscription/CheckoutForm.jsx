@@ -5,7 +5,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useAuth from '../../../hooks/useAuth/useAuth';
 import { useElements, useStripe, CardElement } from '@stripe/react-stripe-js';
 import Select from 'react-select';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 
 const CheckoutForm = ({ duration, cost }) => {
@@ -70,7 +70,7 @@ const CheckoutForm = ({ duration, cost }) => {
                 }, 3000);
             }
         } catch (err) {
-            toast.error(err);
+            toast.error(err.message || 'Something went wrong during payment.');
             setError('Something went wrong during payment.');
         }
     };
@@ -156,9 +156,9 @@ const CheckoutForm = ({ duration, cost }) => {
             </div>
 
             {/* Error Message */}
-            {error && <p className="text-sm mt-1">{error}</p>}
+            {error && <p className="text-sm mt-1">{error}</p>
 
-            {/* Submit Button */}
+            /* Submit Button */}
             <button
                 type="submit"
                 disabled={!stripe || !selected}

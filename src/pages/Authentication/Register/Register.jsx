@@ -9,8 +9,11 @@ import axios from "axios";
 import { FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
 // Using public directory asset with proper URL reference
 import logo from '/logo.png';
-import toast from "react-hot-toast";
+import { toast } from 'sonner';
 import Swal from "sweetalert2";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const Register = () => {
     const { createUser, updateUserProfile } = useAuth();
@@ -124,8 +127,8 @@ const Register = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 lg:space-y-3">
                     {/* Name */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Your Name</label>
-                        <input
+                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-100">Your Name</Label>
+                        <Input
                             type="text"
                             {...register("name", {
                                 required: "Name is required",
@@ -154,8 +157,8 @@ const Register = () => {
 
                     {/* Email */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Email Address</label>
-                        <input
+                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-100">Email Address</Label>
+                        <Input
                             type="email"
                             {...register("email", { required: "Email is required" })}
                             placeholder="Email address"
@@ -166,9 +169,9 @@ const Register = () => {
 
                     {/* Password */}
                     <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-100">Password</label>
+                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-100">Password</Label>
                         <div className="relative">
-                            <input
+                            <Input
                                 type={showPassword ? "text" : "password"}
                                 {...register("password", {
                                     required: "Password is required",
@@ -209,13 +212,13 @@ const Register = () => {
 
                     {/* Photo (file input) */}
                     <div className='mt-4'>
-                        <label className="relative text-sm font-medium text-gray-700 dark:text-gray-100 flex items-center gap-1">
+                        <Label className="relative text-sm font-medium text-gray-700 dark:text-gray-100 flex items-center gap-1">
                             Profile Photo
                             {uploadSuccess && (
                                 <FiCheckCircle className="text-[var(--primary)] text-sm sm:text-base" />
                             )}
-                        </label>
-                        <input
+                        </Label>
+                        <Input
                             type="file"
                             accept="image/*"
                             name="photo"
@@ -228,30 +231,33 @@ const Register = () => {
                     <div className="flex items-center justify-start gap-2 mt-4">
                         <input
                             type="checkbox"
-                            {...register("terms", { required: "You must accept the terms & conditions" })}
+                            id="terms"
+                            {...register("terms", { required: "You must agree to the terms and conditions" })}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
-                        <label className={`text-sm ${errors.terms ? "text-red-600 dark:text-red-400 font-semibold" : "text-gray-700 dark:text-gray-200"}`}>
-                            I accept the terms & conditions
+                        <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-300">
+                            I agree to the <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">Terms & Conditions</a>
                         </label>
                     </div>
+                    {errors.terms && <p className="text-sm text-red-500 dark:text-red-400 -mt-2">{errors.terms.message}</p>}
 
                     {/* Submit */}
-                    <button
+                    <Button
                         type="submit"
-                        className="-mt-2.5 w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500  hover:to-red-400 text-[var(--white)] font-semibold py-2 transition duration-700 cursor-pointer"
+                        className="w-full bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-[var(--white)] font-semibold py-2 transition duration-700 cursor-pointer"
                     >
                         Register
-                    </button>
+                    </Button>
 
                     {/* Footer */}
-                    <span className="text-sm mb-1">
-                        Don’t have an account?{" "}
+                    <span className="text-sm">
+                        Already have an account?{" "}
                         <Link to="/auth/login" className="text-blue-600 dark:text-blue-400 hover:underline">Login</Link>
                     </span>
                 </form>
 
                 {/* Social login */}
-                <div className="flex justify-start md:hidden">
+                <div className="flex justify-center mt-4">
                     <SocialLogin />
                 </div>
             </div>

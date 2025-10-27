@@ -5,7 +5,7 @@ import { FaFeatherPointed } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { FaCaretDown } from "react-icons/fa";
 import { FaCaretUp } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import Swal from "sweetalert2";
 
 const DashboardAdmin = () => {

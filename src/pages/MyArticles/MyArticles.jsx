@@ -7,7 +7,7 @@ import CommonSidebar from '../shared/CommonSidebar/CommonSidebar';
 import SubLoader from '../shared/Loader/SubLoader';
 import { useQuery } from '@tanstack/react-query';
 import Select from 'react-select';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 
 const MyArticles = () => {
@@ -78,8 +78,8 @@ const MyArticles = () => {
         try {
             await axiosSecure.patch(`/articles/${editArticle._id}`, updatedData);
             refetch();
-            setShowEditModal(false);
             toast.success('Your article has been updated!');
+            setShowEditModal(false);
         } catch (error) {
             Swal.fire('Error!', 'Failed to update article.', error);
         }
