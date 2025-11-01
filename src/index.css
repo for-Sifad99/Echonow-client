@@ -17,6 +17,7 @@
   font-family: "Jost", sans-serif;
 }
 
+
 /* Theme related setting */
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -73,7 +74,7 @@
   --card: 224 71% 4%;
   --card-foreground: 213 31% 91%;
  
-  --primary: 210 40% 98%;
+  --primary: 356, 88%, 56%;
   --primary-foreground: 222.2 47.4% 1.2%;
  
   --secondary: 222.2 47.4% 11.2%;
@@ -99,6 +100,10 @@
   --base-100:#C4C4C8;
   --dark-bg: #3a3944;
   --dark2-bg: #292831;
+}
+
+.dark{
+  --primary: #f22d3a;
 }
 
 /* Sub loader styles */
@@ -127,54 +132,27 @@
     background-position: calc(50% + 1.6em) 0, calc(50% + 3.2em) 0.8em;
   }
 }
-
-/* Scrollbar styles */
-/* Firefox support */
+/* Base sidebar */
 .sidebar {
-  scrollbar-color: #f57f8e #ffe6e7; 
-  scrollbar-width: thin;
+  scrollbar-width: auto; /* Firefox: hide scrollbar completely */
+  overflow-y: scroll;
 }
 
-.sidebar:hover {
-  scrollbar-color: #f22d3a #ffe6e7; 
-}
-
-/* Chrome, Edge, Safari support */
+/* Custom scrollbar for Chrome, Edge, Safari */
 .sidebar::-webkit-scrollbar {
-  width: 4px;
+  width: 3px; /* Super thin scrollbar */
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: #ffe6e7;
-  border-radius: 10px;
+  background: transparent;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: #f57f8e; 
-  border: 2px solid transparent;
-  background-clip: content-box;
+  background-color: #f57f8e;
+  border-radius: 10px;
 }
 
-.sidebar:hover::-webkit-scrollbar-thumb {
-  background-color: #f22d3a; 
-}
-
-
-/* ----------------- */
-
-
-/* Firefox support */
-.dark .custom-scrollbar {
-  scrollbar-color: #f3f4f6 #292831; 
-}
-
-/* Chrome, Edge, Safari support */
+/* Dark mode */
 .dark .sidebar::-webkit-scrollbar-thumb {
-  background-color: #f22d3a; 
-}
-
-/* Highlight */
-::selection {
-  background: #f22d3a;
-  color: #ffffff;   
+  background-color: #f22d3a;
 }

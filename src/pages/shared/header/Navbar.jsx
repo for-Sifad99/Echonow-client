@@ -7,20 +7,22 @@ import EchoLogo from "../EchoLogo/EchoLogo";
 import { LuLogOut } from "react-icons/lu";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
-import { FiSearch, FiMoon } from "react-icons/fi";
+import { FiMoon } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import { FaEnvelope } from "react-icons/fa";
 import { FaFaceGrinWide } from "react-icons/fa6";
 import SideNavbar from './SideNavbar';
+import defaultUser from "../../../assets/default-user.png";
 
 const Navbar = () => {
     const { user } = useAuth();
     const [dbUser, setDbUser] = useState(null);
     const { theme, toggleTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const closeSidebar = () => setIsSidebarOpen(false);
     const sidebarRef = useRef();
+    const profileMenuRef = useRef();
     const axiosPublic = useAxiosPublic();
 
     // Fetch user profile using useEffect and axiosPublic
@@ -41,10 +43,18 @@ const Navbar = () => {
             if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
                 closeSidebar();
             }
+            
+            // Close profile menu when clicking outside
+            if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+                setIsProfileMenuOpen(false);
+            }
         };
 
         const handleEscape = (e) => {
-            if (e.key === "Escape") closeSidebar();
+            if (e.key === "Escape") {
+                closeSidebar();
+                setIsProfileMenuOpen(false);
+            }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -58,7 +68,7 @@ const Navbar = () => {
 
     // NavLinks styles
     const mainNavLinkClass = ({ isActive }) =>
-        `text-[17px] font-medium text-[var(--dark)] dark:text-[var(--white)] relative after:absolute after:bottom-[-16px] after:left-0 after:h-[6px] after:w-full after:bg-[var(--primary)] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
+        `text-[17px] font-medium text-[var(--dark)] dark:text-[var(--white)] relative after:absolute after:bottom-[-16px] after:left-0 after:h-[6px] after:w-full after:bg-[#f22d3a] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
         }`;
 
     // Links data
@@ -158,69 +168,46 @@ const Navbar = () => {
                     </p>
                 </div>
 
-                {/* Right: Search + Cart */}
+                {/* Right: Theme Toggle + User Profile */}
                 <div className="flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3">
-                    {/* Theme */}
-                    <label className="swap swap-rotate">
-                        <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
-
-                        {/* sun icon */}
-                        <TiWeatherSunny className="swap-on text-xl md:text-[22px]" />
-
-                        {/* moon icon */}
-                        <FiMoon className="swap-off text-[19px] md:text-[21px]" />
-                    </label>
-
-                    {/* Search box */}
-                    <div className="relative inline-block text-left">
-                        {/* Search Icon */}
-                        <FiSearch
-                            className="text-xl cursor-pointer"
-                            onClick={() => setIsSearchOpen(!isSearchOpen)}
-                        />
-
-                        {/* Dropdown input */}
-                        <div
-                            className={`absolute -left-61.5 sm:-left-68 md:-left-76 -top-3.5 lg:-left-68 lg:top-8.5 dark:bg-[var(--dark-bg)] bg-[var(--white)] text-[var(--dark)] shadow-sm ${isSearchOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
-                                }`}
-                        >
-                            <div className='relative font-jost w-full'>
-                                <input
-                                    type="text"
-                                    placeholder="Search here..."
-                                    className="w-60 sm:w-66 md:w-74 p-4 text-xs bg-[var(--white)] text-[var(--dark)] placeholder-[var(--dark)] dark:placeholder-[var(--white)] dark:bg-[var(--dark-bg)] dark:text-[var(--white)] focus:outline-none"
-                                />
-                                <button
-                                    type="submit"
-                                    className="absolute right-2.5 top-2.5 bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-sm text-[var(--white)] px-3 py-1 font-medium transition duration-700 cursor-pointer"
-                                >
-                                    Search
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {/* Theme Toggle Button - Show only sun or moon icon */}
+                    <button 
+                        onClick={toggleTheme}
+                        className="transition-colors duration-300 focus:outline-none cursor-pointer"
+                    >
+                        {theme === 'dark' ? (
+                            <TiWeatherSunny className="text-yellow-500 text-xl" />
+                        ) : (
+                            <FiMoon className="text-gray-700 text-lg" />
+                        )}
+                        <span className="sr-only">Toggle theme</span>
+                    </button>
 
                     {/* User Profile */}
-                    {user ?
-                        <Link to='/my-profile' className='ml-1'>
-                            <img 
-                                src={dbUser?.photo || user?.photoURL || '/default-user.png'} 
-                                alt="User profile" 
-                                className="w-[25px] h-[25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] rounded-full object-cover cursor-pointer"
-                                onError={(e) => {
-                                    e.target.src = '/default-user.png';
-                                }}
-                            />
-                        </Link> :
+                    {user ? (
+                        <div className="relative" ref={profileMenuRef}>
+                            <Link to="/my-profile">
+                                <img 
+                                    src={dbUser?.photo || user?.photoURL || defaultUser} 
+                                    alt="User profile" 
+                                    className="w-[25px] h-[25px] md:w-[27px] md:h-[27px] lg:w-[29px] lg:h-[29px] border-2 border-gray-50 rounded-full object-cover cursor-pointer"
+                                    onError={(e) => {
+                                        e.target.src = defaultUser;
+                                    }}
+                                />
+                            </Link>
+                        </div>
+                    ) : (
                         <Link to='/auth/login'>
                             <button className='flex justify-center items-center gap-2 font-libreBas text-[var(--primary)] dark:text-red-300'>Sign In <LuLogOut /></button>
                         </Link>
-                    }
+                    )}
+
                 </div>
             </div>
 
             {/* Bottom Nav */}
-            <nav className="hidden lg:flex justify-center gap-6 border-t border-red-200 dark:border-[var(--accent)] py-4 font-jost font-semibold">
+            <nav className="hidden lg:flex justify-center gap-6 border-t border-red-200 dark:border-gray-600 py-4 font-jost font-semibold">
                 {links}
             </nav>
 

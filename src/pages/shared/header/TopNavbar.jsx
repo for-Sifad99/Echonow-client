@@ -5,7 +5,7 @@ import useAuth from "../../../../hooks/useAuth/useAuth";
 import SideNavbar from "./SideNavbar";
 import { FaFaceGrinWide, FaEnvelope } from "react-icons/fa6";
 import { IoIosArrowUp } from "react-icons/io";
-import { FiSearch, FiMoon } from "react-icons/fi";
+import { FiMoon } from "react-icons/fi";
 import { TiWeatherSunny } from "react-icons/ti";
 import { VscMenu } from "react-icons/vsc";
 // Using public directory asset with proper URL reference
@@ -17,7 +17,6 @@ const ScrollNavbar = () => {
     const [showNavbar, setShowNavbar] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const closeSidebar = useCallback(() => setIsSidebarOpen(false), []);
     const sidebarRef = useRef();
@@ -114,7 +113,7 @@ const ScrollNavbar = () => {
 
     return (
         <>
-            <div className={`fixed top-0 left-0 right-0 transition-all duration-500 z-[999]  ${showNavbar ? !isSidebarOpen ? "translate-y-0" : "-translate-y-full" : "-translate-y-full"}`}>
+            <div className={`fixed top-0 left-0 right-0 transition-all duration-500 z-[1000]  ${showNavbar ? !isSidebarOpen ? "translate-y-0" : "-translate-y-full" : "-translate-y-full"}`}>
                 <div className="bg-[var(--secondary)] dark:bg-[#212227] text-[var(--dark)] dark:text-[var(--white)] py-[19px] px-5 sm:px-6 xl:px-28 flex items-center justify-between">
                     {/* Left: Logo + Menu */}
                     <div className="flex items-center justify-center gap-4">
@@ -142,41 +141,18 @@ const ScrollNavbar = () => {
 
                     {/* Right: Icons */}
                     <div className="flex items-center gap-2">
-                        {/* Theme */}
-                        <label className="swap swap-rotate">
-                            <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
-                            <TiWeatherSunny className="swap-on text-xl" />
-                            <FiMoon className="swap-off text-[19px]" />
-                        </label>
-
-                        {/* Search icon */}
-                        <div className="relative inline-block text-left md:mr-1">
-                            {/* Search Icon */}
-                            <FiSearch
-                                className="text-xl cursor-pointer"
-                                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                            />
-
-                            {/* Dropdown input */}
-                            <div
-                                className={`absolute -left-64 top-[41px] sm:-left-64 sm:top-[45px] md:-left-69.5 dark:bg-[var(--dark-bg)] bg-[var(--white)] text-[var(--dark)] shadow-sm  ${showNavbar || "hidden"} ${isSearchOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
-                                    }`}
-                            >
-                                <div className='relative font-jost w-full'>
-                                    <input
-                                        type="text"
-                                        placeholder="Search here..."
-                                        className="w-68 md:w-74 p-4 text-xs bg-[var(--white)] text-[var(--dark)] placeholder-[var(--dark)] dark:placeholder-[var(--white)] dark:bg-[var(--dark-bg)] dark:text-[var(--white)] focus:outline-none"
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="absolute right-2.5 top-2.5 bg-gradient-to-r from-red-400 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-400 text-sm text-[var(--white)] px-3 py-1 font-medium transition duration-700 cursor-pointer"
-                                    >
-                                        Search
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Theme Toggle Button - Show only sun or moon icon */}
+                                            <button 
+                                                onClick={toggleTheme}
+                                                className="transition-colors duration-300 focus:outline-none cursor-pointer"
+                                            >
+                                                {theme === 'dark' ? (
+                                                    <TiWeatherSunny className="text-yellow-500 text-xl" />
+                                                ) : (
+                                                    <FiMoon className="text-gray-700 text-lg" />
+                                                )}
+                                                <span className="sr-only">Toggle theme</span>
+                                            </button>
 
                         {/* Subscription button */}
                         <Link to={user ? '/subscription' : '/'}>

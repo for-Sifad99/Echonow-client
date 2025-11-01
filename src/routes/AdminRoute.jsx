@@ -4,7 +4,7 @@ import useAuth from '../../hooks/useAuth/useAuth';
 import useRole from '../../hooks/useUserRole/useRole';
 import Loader from '../pages/shared/Loader/Loader';
 
-const PrivetRoute = ({ children }) => {
+const AdminRoute = ({ children }) => {
     const { user, loading } = useAuth();
     const { role, loading: roleLoading } = useRole();
     const location = useLocation();
@@ -23,5 +23,4 @@ const PrivetRoute = ({ children }) => {
     return children;
 };
 
-export default PrivetRoute;
-
+export default AdminRoute;

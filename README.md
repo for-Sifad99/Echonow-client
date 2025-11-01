@@ -20,59 +20,56 @@ EchoNow is a dynamic and modern newspaper web application that revolutionizes th
 - ✅ Environment variables secure **Firebase & MongoDB secrets**  
 - ✅ Smooth UI/UX with **private & public routes** 
 - ✅ **Pagination** support on `All Articles` page
+- ✅ **Carousel slider** for trending articles on homepage
+- ✅ **Dark/Light theme** toggle functionality
+- ✅ **Social login** with Google
 
 ---
 
 ## 🚀 Technologies Used
 
-- **React**
+- **React 18** with **Vite**
 - **Firebase Authentication**
-- **React Router DOM**
-- **TanStack Query**
-- **SweetAlert2 / React Hot Toast**
-- **Imgbb**
-- **Tailwind CSS**
+- **React Router DOM v6+**
+- **TanStack Query (React Query) v5**
+- **Tailwind CSS v4**
 - **Material UI (MUI)**
-- **Stripe (Payment Integration)**
-- **Recharts / react-google-charts (Data Visualization)**
-- **GSAP (Animation Library)**
-- **React CountUp**
-- **React Simple Typewriter**
+- **Stripe** Payment Integration
+- **Recharts** for data visualization
+- **GSAP** for animations
+- **React Slick** for carousels
 - **React Icons**
 - **React Hook Form**
-- **React Helmet Async (SEO)**
-- **React Loading Skeleton**
-- **React Select**
-- **LDRS (Loaders)**
-- **Axios (API calls)**
-- **Clsx (Conditional classNames)**
+- **Axios** for API calls
+- **Sonner** for toast notifications
 
 ---
 
 ### Public Routes:
 
-- `/` - Home page with trending articles (slider), publishers, statistics, subscription plans & more
+- `/` - Home page with trending articles (carousel), publishers, statistics, subscription plans & more
 - `/auth/login` - Login form with validations
 - `/auth/register` - Register form with complex password validations
 - `/all-articles` - Searchable and filterable list of approved articles
 - `/our-blogs` - Showed some relevant static blogs card
+- `/article/:id` - View single article (public access)
 - `*` - Custom 404 Not Found page
 
 ### Private Routes:
 
-- `/article/:id` - View single article (only for logged-in users)
 - `/add-article` - Post articles (normal users: 1 post max; premium: unlimited)
-- `/my-articles` - User’s own articles (edit/delete/view status)
+- `/my-articles` - User's own articles (edit/delete/view status)
 - `/my-profile` - View and update profile info
 - `/premium-articles` - Premium-only articles view
 - `/subscription` - Subscription packages & payment flow
+- `/payment/:duration/:cost` - Payment processing page
 
 ### Admin Routes:
 
-- `/dashboard/dashboard` - Role-based sidebar dashboard
-- `/dashboard/all-users` - Manage users (Make Admin and handle users)
-- `/dashboard/all-articles` - Approve/Decline/Make Premium articles
-- `/dashboard/add-publisher` - Add new publishers
+- `/Dashboard/dashboard` - Role-based sidebar dashboard
+- `/Dashboard/all-users` - Manage users (Make Admin and handle users)
+- `/Dashboard/all-articles` - Approve/Decline/Make Premium articles
+- `/Dashboard/add-publisher` - Add new publishers
 
 ---
 
@@ -87,7 +84,7 @@ EchoNow is a dynamic and modern newspaper web application that revolutionizes th
 
 ## ⚙️ Environment Variables
 
-You need to setup `.env`file:
+You need to setup `.env.local` file:
 
 ```env
 # 🔹 Firebase Config
@@ -103,6 +100,9 @@ VITE_image_upload_key=YOUR_IMAGE_UPLOAD_KEY
 
 # 🔹 Payment Gateway (Stripe) Keys
 VITE_payment_key=YOUR_STRIPE_PUBLIC_KEY
+
+# 🔹 Server URL
+VITE_SERVER_URL=http://localhost:5001
 ```
 
 ---
@@ -110,16 +110,26 @@ VITE_payment_key=YOUR_STRIPE_PUBLIC_KEY
 ## 🛠 Installation & Setup
 
 1. Clone the client repo
-   - git clone https://github.com/for-Sifad99/Echonow-client.git
+   ```bash
+   git clone https://github.com/for-Sifad99/Echonow-client.git
+   ```
 
 2. Navigate to the project directory
-   - cd echonow-client
+   ```bash
+   cd echonow-client
+   ```
 
 3. Install dependencies
-   - npm install
+   ```bash
+   npm install
+   ```
 
-4. Start the development server
-   - npm run dev
+4. Create a `.env.local` file in the root directory and add your environment variables
+
+5. Start the development server
+   ```bash
+   npm run dev
+   ```
 
 ---
 
@@ -131,6 +141,8 @@ VITE_payment_key=YOUR_STRIPE_PUBLIC_KEY
 4. Smart Premium Modal → auto-triggers after 10s on homepage for **subscription**
 5. Dynamic publisher assignment → admin can **approve/decline** posts and assign publisher roles
 6. **Context-aware alerts** → Toast & SweetAlert customized for each action (CRUD/auth)
+7. **Responsive carousel slider** for trending articles on homepage
+8. **Theme switching** between light and dark modes
 
 ---
 
@@ -142,4 +154,4 @@ This project is just the beginning. In the future, many exciting features and im
 
 ## 🪶 Notes
 
-You can paste this entire block into your `README.md` file in the client repo. 
+You can paste this entire block into your `README.md` file in the client repo.

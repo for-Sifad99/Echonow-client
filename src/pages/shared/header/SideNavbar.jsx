@@ -48,6 +48,15 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                 )}</NavLink>
             {user &&
                 <>
+                   {user === 'admin' && 
+                    <NavLink to="/Dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
+                        {({ isActive }) => (
+                            <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                                Dashboard
+                                <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
+                            </span>
+                        )}</NavLink>
+                   }
                     <NavLink to="/add-article" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
 
@@ -62,16 +71,6 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                             {({ isActive }) => (
                                 <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
                                     Subscription
-                                    <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
-                                </span>
-                            )}</NavLink>
-                    }
-                    {
-                        !loading && role === 'admin' &&
-                        <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
-                            {({ isActive }) => (
-                                <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
-                                    Dashboard
                                     <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                                 </span>
                             )}</NavLink>
@@ -114,11 +113,11 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
     return (
         <aside
             ref={sidebarRef}
-            className={`sidebar fixed top-0 left-0 h-full w-full max-w-[310px] flex flex-col gap-6 bg-[var(--white)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] shadow-lg transform transition-transform duration-300 overflow-x-hidden overflow-y-visible ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            className={`sidebar fixed top-0 left-0 h-full w-full max-w-[350px] flex flex-col gap-6 bg-[var(--white)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] shadow-lg transform transition-transform duration-300 overflow-x-hidden overflow-y-visible ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
         >
             {/* Sidebar Header */}
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-200 dark:border-gray-500">
+            <div className="flex fixed top-0 left-0 items-center justify-between w-full bg-[var(--white)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] px-5 py-3.5 border-b border-gray-200 dark:border-gray-500">
                 {/* Logo */}
                 <Link to='/'>
                     <div className='flex items-center justify-center gap-1 -mt-[7px]'>
@@ -140,7 +139,7 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
             </div>
 
             {/* Sidebar Links */}
-            <nav className="flex flex-col px-5 font-jost font-medium">
+            <nav className="flex flex-col px-5 mt-22 font-jost font-medium">
                 {sidebarLinks}
             </nav>
 
