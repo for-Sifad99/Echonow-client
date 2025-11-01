@@ -79,15 +79,17 @@ const DashboardRoot = () => {
                     </div>
 
                     {/* Theme */}
-                    <label className="swap swap-rotate md:-mr-1.5 cursor-pointer text-[var(--dark)]">
-                        <input
-                            type="checkbox"
-                            onChange={toggleTheme}
-                            checked={theme === 'dark'}
-                        />
-                        <FiMoon className="stroke-[var(--primary)] bg-[var(--secondary)] p-[10px] h-[34px] w-[34px] rounded-full swap-off" />
-                        <IoSunnyOutline className="stroke-[var(--dark)] bg-[var(--accent-white)] p-[10px] h-[34px] w-[34px] rounded-full swap-on" />
-                    </label>
+                                        <button 
+                                            onClick={toggleTheme}
+                                            className="transition-colors duration-300 focus:outline-none cursor-pointer"
+                                        >
+                                            {theme === 'dark' ? (
+                                                 <FiMoon className="stroke-yellow-500 bg-gray-600 p-[10px] h-[34px] w-[34px] rounded-full swap-off" />
+                                            ) : (
+                                                 <IoSunnyOutline className="stroke-[var(--dark)] bg-[var(--accent-white)] p-[10px] h-[34px] w-[34px] rounded-full swap-on" />
+                                            )}
+                                            <span className="sr-only">Toggle theme</span>
+                                        </button>
 
                     {/* User info */}
                     <div className='ml-[6px] flex-1'>

@@ -30,7 +30,7 @@ const InfoCards = () => {
     const { data = {}, isLoading } = useQuery({
         queryKey: ["all-users"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/users-count-info");
+            const res = await axiosPublic.get("/api/users-count-info");
             return res.data;
         },
     });

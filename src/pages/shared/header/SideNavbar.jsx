@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import useAuth from '../../../../hooks/useAuth/useAuth';
-import useRole from '../../../../hooks/useUserRole/useRole';
+import useDbUser from '../../../../hooks/useDbUser/useDbUser';
 import SideArticle from '../SideArticles/SideArticle';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { BiLogoFacebook } from "react-icons/bi";
@@ -15,7 +15,7 @@ import logo from '/logo.png';
 
 const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
     const { user } = useAuth();
-    const { role, loading } = useRole();
+    const { dbUser } = useDbUser();
 
     // NavLinks styles
     const sideNavLinkClass = () =>
@@ -48,8 +48,8 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                 )}</NavLink>
             {user &&
                 <>
-                   {user === 'admin' && 
-                    <NavLink to="/Dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
+                   {dbUser?.role === 'admin' && 
+                    <NavLink to="/dashboard" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
                             <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
                                 Dashboard
@@ -81,7 +81,8 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                                 My Articles
                                 <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
                             </span>
-                        )}</NavLink>
+                        )}
+                        </NavLink>
                     <NavLink to="/premium-articles" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
                             <div className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
@@ -93,10 +94,10 @@ const SideNavbar = ({ sidebarRef, isSidebarOpen, closeSidebar }) => {
                         )}</NavLink>
                     <NavLink to="/my-profile" className={sideNavLinkClass} onClick={closeSidebar}>
                         {({ isActive }) => (
-                            <span className='py-[9px] flex justify-between items-center'>
-                                My Profile
-                                <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
-                            </span>
+                             <span className='border-b border-gray-200 dark:border-gray-600 py-[9px] flex justify-between items-center'>
+                                     My Profile
+                                    <MdKeyboardArrowRight className={`${isActive ? 'rotate-90' : ' '}`} size={22} />
+                                </span>
                         )}</NavLink>
                 </>
             }

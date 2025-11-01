@@ -54,7 +54,7 @@ const BannerSlider = () => {
     const { data: trendingArticles = [], isLoading } = useQuery({
         queryKey: ['trendingArticles'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/articles/banner-trending');
+            const res = await axiosPublic.get('/api/articles/banner-trending');
             return res.data?.hot || [];
         }
     });

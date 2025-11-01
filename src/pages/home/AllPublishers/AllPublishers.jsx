@@ -12,7 +12,7 @@ const AllPublishers = () => {
     const { data = {}, isPending } = useQuery({
         queryKey: ['publishers'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/publisher-with-articles');
+            const res = await axiosSecure.get('/api/publisher-with-articles');
             return res.data;
         },
     });

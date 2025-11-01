@@ -71,7 +71,7 @@ const CommonSidebar = () => {
     const { data: topFashion = [], isLoading } = useQuery({
         queryKey: ["top-fashion"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/articles/top-fashion");
+            const res = await axiosPublic.get("/api/articles/top-fashion");
             return res.data;
         },
     });

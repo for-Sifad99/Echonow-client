@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
 import { useTheme } from '../../../../hooks/themeContext/themeContext';
 import useAuth from '../../../../hooks/useAuth/useAuth';
+import useDbUser from '../../../../hooks/useDbUser/useDbUser';
 import EchoLogo from "../EchoLogo/EchoLogo";
 import { LuLogOut } from "react-icons/lu";
 import { TiWeatherSunny } from "react-icons/ti";
@@ -16,72 +16,21 @@ import defaultUser from "../../../assets/default-user.png";
 
 const Navbar = () => {
     const { user } = useAuth();
-    const [dbUser, setDbUser] = useState(null);
+    const { dbUser, refetch: refetchDbUser } = useDbUser();
     const { theme, toggleTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const closeSidebar = () => setIsSidebarOpen(false);
     const sidebarRef = useRef();
     const profileMenuRef = useRef();
-    const axiosPublic = useAxiosPublic();
-
-    // Fetch user profile using useEffect and axiosPublic
-    useEffect(() => {
-        if (!user?.email) return;
-
-        const fetchUser = async () => {
-            const res = await axiosPublic.get(`/users/${user.email}`);
-            setDbUser(res.data);
-        };
-
-        fetchUser();
-    }, [user?.email, axiosPublic]);
-
-    // Close sidebar when clicking outside or pressing Escape
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
-                closeSidebar();
-            }
-            
-            // Close profile menu when clicking outside
-            if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
-                setIsProfileMenuOpen(false);
-            }
-        };
-
-        const handleEscape = (e) => {
-            if (e.key === "Escape") {
-                closeSidebar();
-                setIsProfileMenuOpen(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("keydown", handleEscape);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-            document.removeEventListener("keydown", handleEscape);
-        };
-    }, []);
 
     // NavLinks styles
     const mainNavLinkClass = ({ isActive }) =>
         `text-[17px] font-medium text-[var(--dark)] dark:text-[var(--white)] relative after:absolute after:bottom-[-16px] after:left-0 after:h-[6px] after:w-full after:bg-[#f22d3a] after:transition-opacity after:duration-500 ${isActive ? "after:opacity-100" : "after:opacity-0 hover:after:opacity-100"
-        }`;
+        }`
 
     // Links data
     const links = (
         <>
-            <NavLink to="/" className={mainNavLinkClass}>
-                {({ isActive }) => (
-                    <span className='flex gap-1 items-center'>
-                        Home
-                        <IoIosArrowUp className={`${isActive ? 'rotate-180' : ' '}`} />
-                    </span>
-                )}
-            </NavLink>
             <NavLink to="/all-articles" className={mainNavLinkClass}>
                 {({ isActive }) => (
                     <span className='flex gap-1 items-center'>

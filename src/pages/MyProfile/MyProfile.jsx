@@ -208,12 +208,11 @@ const MyProfile = () => {
                                 e.target.src = '/default-user.png';
                             }}
                         />
-                        <p className=" -mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
+                        <p className="-mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
 
                         {/* Email Verification Status */}
                         {user?.providerData?.[0]?.providerId === 'password' && (
-                            <div className="w-full max-w-xs bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                                <h3 className="font-semibold text-gray-800 dark:text-white mb-2">Email Verification</h3>
+                            <div className="w-full max-w-xs bg-gray-50 dark:bg-gray-700 rounded-lg p-4 -mb-8 mt-2">
                                 {isVerificationLoading ? (
                                     <p className="text-gray-600 dark:text-gray-300 text-sm">Loading...</p>
                                 ) : verificationStatus?.isEmailVerified ? (

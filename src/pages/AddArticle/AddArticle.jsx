@@ -37,7 +37,7 @@ const AddArticle = () => {
     const { data: allPublishers = [] } = useQuery({
         queryKey: ["allPublishers"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/publisher-with-articles");
+            const res = await axiosPublic.get("/api/publisher-with-articles");
             return res.data.publishers;
         },
     });

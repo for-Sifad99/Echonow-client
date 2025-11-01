@@ -12,8 +12,8 @@ const SideArticle = ({ closeSidebar }) => {
     const { data: hotArticles = [], isPending } = useQuery({
         queryKey: ['hotArticles'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/articles/special');
-            return res.data.hot
+            const res = await axiosPublic.get('/api/articles/special');
+            return res.data?.hot || [];
         }
     });
 
@@ -27,7 +27,7 @@ const SideArticle = ({ closeSidebar }) => {
     return (
         <div className="pb-6">
             {/* Title */}
-            <h2 className="text-xl font-libreBas text-[var(--dark] dark:text-[var(--white)] font-semibold mb-3">Trending Articles</h2>
+            <h2 className="text-xl font-libreBas text-[var(--dark)] dark:text-[var(--white)] font-semibold mb-3">Trending Articles</h2>
 
             {/* Big article */}
             {hotArticles.slice(0, 1).map(article => (

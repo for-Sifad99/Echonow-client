@@ -8,7 +8,7 @@ const useEmailVerification = () => {
     // Request OTP
     const requestOTPMutation = useMutation({
         mutationFn: async (email) => {
-            const res = await axiosSecure.post('/request-otp', { email });
+            const res = await axiosSecure.post('/api/request-otp', { email });
             return res.data;
         },
         onSuccess: () => {
@@ -19,7 +19,7 @@ const useEmailVerification = () => {
     // Verify OTP
     const verifyOTPMutation = useMutation({
         mutationFn: async ({ email, otp }) => {
-            const res = await axiosSecure.post('/verify-otp', { email, otp });
+            const res = await axiosSecure.post('/api/verify-otp', { email, otp });
             return res.data;
         },
         onSuccess: () => {
@@ -33,7 +33,7 @@ const useEmailVerification = () => {
             queryKey: ['email-verification-status', email],
             queryFn: async () => {
                 if (!email) return { isEmailVerified: false };
-                const res = await axiosSecure.get(`/verification-status/${email}`);
+                const res = await axiosSecure.get(`/api/verification-status/${email}`);
                 return res.data;
             },
             enabled: !!email,
