@@ -3,10 +3,11 @@ import PageHelmet from '../shared/PageTitle/PageHelmet';
 import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
 import useHandle from "../../../hooks/useHandle/useHandle";
 import Pagination from "../../pages/shared/Pagination/Pagination";
-import SubLoader from "../shared/Loader/SubLoader";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegShareSquare } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const AllArticles = () => {
     const [search, setSearch] = useState("");
@@ -20,7 +21,7 @@ const AllArticles = () => {
     const { data = [], isPending } = useQuery({
         queryKey: ["articles", { search, tags: selectedTags, publisher: selectedPublisher, page }],
         queryFn: async () => {
-            const res = await axiosPublic.get("/articles", {
+            const res = await axiosPublic.get("/api/articles", {
                 params: {
                     search,
                     tags: selectedTags.join(","),
@@ -43,17 +44,63 @@ const AllArticles = () => {
 
     // Pending loader
     if (isPending) {
-        return <div className="flex items-center justify-center mx-auto my-10">
-            <div className="md:hidden">
-                <SubLoader size="text-lg" />
+        return (
+            <div className="w-full flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6 text-[var(--dark)] dark:text-[var(--white)] py-4 px-2 sm:px-4">
+                {/* Filter sidebar skeleton */}
+                <aside className="md:-mt-1 w-full md:w-[280px] lg:min-w-[290px] h-full space-y-3 sm:space-y-6">
+                    <div className="w-full max-w-sm">
+                        <Skeleton width={80} height={20} className="mb-2" />
+                        <div className="relative mt-1">
+                            <Skeleton height={44} />
+                        </div>
+                    </div>
+
+                    <div className="w-full max-w-sm">
+                        <Skeleton width={150} height={20} className="mb-2" />
+                        <div className="space-y-2">
+                            {[...Array(3)].map((_, i) => (
+                                <Skeleton key={i} width={100} height={18} />
+                            ))}
+                            <Skeleton width={60} height={30} className="mt-2" />
+                        </div>
+                    </div>
+
+                    <div className="w-full max-w-sm">
+                        <Skeleton width={120} height={20} className="mb-2" />
+                        <div className="flex flex-wrap gap-1 sm:gap-2">
+                            {[...Array(5)].map((_, i) => (
+                                <Skeleton key={i} width={60} height={25} borderRadius={50} />
+                            ))}
+                        </div>
+                    </div>
+                </aside>
+
+                {/* Main articles section skeleton */}
+                <div className="flex flex-col gap-6 flex-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
+                        {[...Array(6)].map((_, index) => (
+                            <div key={index} className="flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]">
+                                <Skeleton className="w-full h-60 md:h-52 lg:h-60" />
+                                <div className="flex flex-col justify-center items-center md:mt-3 space-y-2 px-2 pt-2 pb-4">
+                                    <Skeleton width={80} height={20} />
+                                    <Skeleton width={200} height={25} />
+                                    <Skeleton width={150} height={20} />
+                                    <div className='mt-1 md:mt-0 lg:mt-1 flex items-center justify-between gap-2 w-full'>
+                                        <Skeleton width={120} height={15} />
+                                        <Skeleton width={20} height={20} circle={true} />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Pagination skeleton */}
+                    <div className="flex justify-center">
+                        <Skeleton width={300} height={40} />
+                    </div>
+                </div>
             </div>
-            <div className="hidden md:block xl:hidden">
-                <SubLoader size="text-xl" />
-            </div>
-            <div className="hidden xl:flex">
-                <SubLoader size="text-2xl" />
-            </div>
-        </div>
+        );
     };
 
     // Set content while have no article
@@ -66,7 +113,7 @@ const AllArticles = () => {
             {/* Page Title */}
             <PageHelmet
                 title="See All Latest Articles"
-                description="Explore all articles on EchoNow – from fashion to tech, entertainment to education, we’ve got it all covered."
+                description="Explore all articles on EchoNow – from fashion to tech, entertainment to education, we've got it all covered."
             />
 
             {/* Content */}
@@ -151,7 +198,7 @@ const AllArticles = () => {
                 }
 
                 {/* Main articles section */}
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 flex-1">
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
                         {
                             articles.map((article) => (
@@ -164,7 +211,9 @@ const AllArticles = () => {
                                         <img
                                             src={article.image}
                                             alt={article.title}
-                                            className="w-full h-60 md:h-52 lg:h-60 object-cover"
+                                            className="w-full h-60 md:h-52 lg:h-60 object-cover blur-sm transition-all duration-500"
+                                            onLoad={(e) => e.target.classList.remove('blur-sm')}
+                                            onError={(e) => (e.target.src = '/default-article.png')}
                                         />
                                         {article.isPremium &&
                                             <div className='absolute top-6.5 -left-5.5 rotate-270 transition duration-500'>

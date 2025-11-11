@@ -10,11 +10,12 @@ import {
     signOut,
     onAuthStateChanged
 } from "firebase/auth";
-import { auth } from '../firebase/firebase.config'
+import { auth } from '../firebase/firebase.config';
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
+    const [popupInProgress, setPopupInProgress] = useState(false);
 
     // Create User
     const createUser = (email, password) => {
@@ -29,10 +30,40 @@ const AuthProvider = ({ children }) => {
     };
 
     // Google Sign In
-    const googleSignIn = () => {
+    const googleSignIn = async () => {
+        // Prevent multiple simultaneous popup requests
+        if (popupInProgress) {
+            throw new Error('A popup request is already in progress');
+        }
+        
         setLoading(true);
-        const provider = new GoogleAuthProvider();
-        return signInWithPopup(auth, provider);
+        setPopupInProgress(true);
+        
+        try {
+            const provider = new GoogleAuthProvider();
+            // Add custom parameters to prevent multiple popups
+            provider.setCustomParameters({
+                prompt: 'select_account'
+            });
+            
+            const result = await signInWithPopup(auth, provider);
+            return result;
+        } catch (error) {
+            // Handle specific Firebase errors
+            if (error.code === 'auth/cancelled-popup-request') {
+                // This error occurs when multiple popups are opened
+                // We can ignore this as it's handled by preventing multiple popups
+                console.warn('Popup request was cancelled');
+                throw new Error('Login popup was closed or cancelled');
+            } else if (error.code === 'auth/popup-blocked') {
+                throw new Error('Popup was blocked by browser. Please allow popups for this site.');
+            } else {
+                throw error;
+            }
+        } finally {
+            setPopupInProgress(false);
+            setLoading(false);
+        }
     };
 
     // Update Profile

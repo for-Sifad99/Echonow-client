@@ -5,11 +5,13 @@ import useAxiosPublic from '../../../hooks/useAxiosPublic/useAxios';
 import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useAuth from '../../../hooks/useAuth/useAuth';
 import useEmailVerification from '../../../hooks/useEmailVerification/useEmailVerification';
-import SubLoader from '../shared/Loader/SubLoader';
 import EmailVerificationModal from '../shared/EmailVerification/EmailVerificationModal';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { CheckCircle, XCircle, MailCheck } from 'lucide-react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const MyProfile = () => {
     const { user, signOutUser, updateUserProfile } = useAuth();
@@ -22,7 +24,6 @@ const MyProfile = () => {
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
 
-    // Get email verification status
     const { data: verificationStatus, isLoading: isVerificationLoading } = useVerificationStatus(user?.email);
 
     const [uploading, setUploading] = useState(false);
@@ -32,7 +33,6 @@ const MyProfile = () => {
         photo: '',
     });
 
-    // Fetch user profile using useEffect and axiosPublic
     useEffect(() => {
         if (!user?.email) return;
 
@@ -40,7 +40,7 @@ const MyProfile = () => {
             setLoading(true);
             setError(null);
             try {
-                const res = await axiosPublic.get(`/users/${user.email}`);
+                const res = await axiosPublic.get(`/api/users/${user.email}`);
                 setDbUser(res.data);
                 setFormData({
                     name: res.data.name || user.displayName || '',
@@ -56,7 +56,6 @@ const MyProfile = () => {
         fetchUser();
     }, [user?.email, axiosPublic, user.displayName, user.photoURL]);
 
-    // Upload image file to ImgBB
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -79,11 +78,10 @@ const MyProfile = () => {
         }
     };
 
-    // Profile update handler
     const updateUserProfileHandler = async (updatedUser) => {
         setUpdating(true);
         try {
-            await axiosSecure.patch(`/users/${user.email}`, updatedUser);
+            await axiosSecure.patch(`/api/users/${user.email}`, updatedUser);
             try {
                 await updateUserProfile({
                     displayName: updatedUser.name,
@@ -92,8 +90,7 @@ const MyProfile = () => {
 
                 toast.success('Your profile has been updated!');
 
-                // Refetch user data after update
-                const res = await axiosPublic.get(`/users/${user.email}`);
+                const res = await axiosPublic.get(`/api/users/${user.email}`);
                 setDbUser(res.data);
                 setFormData({
                     name: res.data.name || user.displayName || '',
@@ -122,7 +119,6 @@ const MyProfile = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Logout handler
     const handleLogout = () => {
         Swal.fire({
             title: 'Are you sure?',
@@ -145,87 +141,95 @@ const MyProfile = () => {
         });
     };
 
-    // Loading loader
     if (loading) {
-        return <div className="flex items-center justify-center mx-auto my-10">
-            <div className="md:hidden">
-                <SubLoader size="text-lg" />
-            </div>
-            <div className="hidden md:block xl:hidden">
-                <SubLoader size="text-xl" />
-            </div>
-            <div className="hidden xl:flex">
-                <SubLoader size="text-2xl" />
-            </div>
-        </div>
-    };
+        return (
+            <section className="max-w-[1100px] mx-auto px-4 py-8 bg-[var(--white)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500">
+                <div className="text-center mb-8">
+                    <Skeleton width={200} height={30} className="mx-auto" />
+                    <Skeleton width={300} height={20} className="mt-2 mx-auto" />
+                </div>
 
-    // Error content
+                <div className="flex flex-col sm:flex-row justify-center items-start gap-6 font-jost">
+                    <div className="flex flex-col items-center gap-4 sm:gap-6 bg-gray-50 dark:bg-[#1d1d1d] p-6 rounded-xl shadow-md w-full sm:w-1/3">
+                        <Skeleton circle width={180} height={180} />
+                        <Skeleton width={150} height={25} />
+                        <Skeleton width={200} height={40} />
+                        <Skeleton width="100%" height={40} />
+                    </div>
+
+                    <div className="w-full sm:w-2/3 bg-gray-50 dark:bg-[#1d1d1d] p-6 rounded-xl shadow-md space-y-5 transition-all">
+                        <div>
+                            <Skeleton width={100} height={20} />
+                            <Skeleton width="100%" height={40} className="mt-2" />
+                        </div>
+                        <div>
+                            <Skeleton width={150} height={20} />
+                            <Skeleton width="100%" height={40} className="mt-2" />
+                        </div>
+                        <div className="flex justify-end pt-3">
+                            <Skeleton width={120} height={40} />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     if (error) {
         return <p className="text-red-500 dark:text-red-400 text-center mt-10 font-jost">{error.message}</p>;
     }
 
     return (
         <>
-            {/* Page Title */}
             <PageHelmet
                 title="My Profile"
                 description="View and edit your EchoNow profile, subscriptions, and preferences."
             />
 
-            {/* Content */}
-            <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-4 text-[ver(--dark)] dark:text-[var(--white)] bg-[var(--white)] dark:bg-[var(--dark2-bg)] isolate relative">
-                <div
-                    className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden pl-20 sm:px-36 blur-3xl"
-                    aria-hidden="true"
-                >
-                    <div className="dark:hidden mx-auto aspect-1100/650 w-140.75 bg-linear-to-tr from-[#ff0011] to-[#fcbabf] opacity-30">
-                    </div>
-                </div>
-
+            <section className="max-w-[1100px] mx-auto px-4 py-8 bg-[var(--white)] dark:bg-[var(--dark2-bg)] text-[var(--dark)] dark:text-[var(--white)] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-500">
                 {/* Title */}
-                <div className="text-center mb-5 sm:mb-6 md:mb-8">
-                    <div className="flex justify-center items-center gap-1.5 sm:gap-3">
-                        <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                        <h2 className="text-2xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
-                            Latest Stories
-                        </h2>
-                        <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                    </div>
-                    <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
-                        Let's know about our current modern fashions
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold font-libreBas">My Profile</h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        Manage your account and update your information.
                     </p>
                 </div>
 
-                {/* main content */}
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 font-jost">
-                    <div className="flex flex-col items-center gap-6">
-                        <img 
-                            src={dbUser?.photo || user?.photoURL || '/default-user.png'} 
-                            alt="User profile" 
-                            className="w-52 h-52 rounded-full object-cover"
-                            onError={(e) => {
-                                e.target.src = '/default-user.png';
-                            }}
+                <div className="flex flex-col sm:flex-row justify-center items-start gap-6 font-jost">
+                    {/* Left: Profile info */}
+                    <div className="flex flex-col items-center gap-4 sm:gap-6 bg-gray-50 dark:bg-[#1d1d1d] p-6 rounded-xl shadow-md w-full sm:w-1/3">
+                        <img
+                            src={dbUser?.photo || user?.photoURL}
+                            alt="User profile"
+                            className="w-40 h-40 sm:w-48 sm:h-48 rounded-full object-cover ring-4 ring-gray-200 dark:ring-gray-700 transition-all blur-sm"
+                            onLoad={(e) => e.target.classList.remove('blur-sm')}
+                            onError={(e) => (e.target.src = '/default-user.png')}
                         />
-                        <p className="-mb-8 -mt-2 font-libreBas font-bold">{dbUser?.name}</p>
+                        <h3 className="text-lg sm:text-xl font-semibold">{dbUser?.name}</h3>
 
                         {/* Email Verification Status */}
                         {user?.providerData?.[0]?.providerId === 'password' && (
-                            <div className="w-full max-w-xs bg-gray-50 dark:bg-gray-700 rounded-lg p-4 -mb-8 mt-2">
+                            <div className="w-full max-w-[250px]">
                                 {isVerificationLoading ? (
-                                    <p className="text-gray-600 dark:text-gray-300 text-sm">Loading...</p>
+                                    <div className="flex justify-center text-gray-600 dark:text-gray-300 text-sm">
+                                        Loading status...
+                                    </div>
                                 ) : verificationStatus?.isEmailVerified ? (
-                                    <div className="flex items-center text-green-600 dark:text-green-400">
-                                        <span className="text-sm">Verified</span>
+                                    <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/40 px-4 py-2 rounded-full shadow-sm">
+                                        <CheckCircle size={18} />
+                                        <span className="text-sm font-medium">Email Verified</span>
                                     </div>
                                 ) : (
-                                    <div className="flex flex-col gap-2">
-                                        <p className="text-gray-600 dark:text-gray-300 text-sm">Not verified</p>
+                                    <div className="flex flex-col items-center gap-2">
+                                        <div className="flex items-center justify-center gap-2 text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/40 px-4 py-2 rounded-full shadow-sm">
+                                            <XCircle size={18} />
+                                            <span className="text-sm font-medium">Not Verified</span>
+                                        </div>
                                         <button
                                             onClick={() => setIsModalOpen(true)}
-                                            className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
+                                            className="flex items-center gap-2 text-sm bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-1.5 rounded-md font-medium transition-all"
                                         >
+                                            <MailCheck size={16} />
                                             Verify Email
                                         </button>
                                     </div>
@@ -235,35 +239,35 @@ const MyProfile = () => {
 
                         <button
                             onClick={handleLogout}
-                            className="mt-4 px-10 py-2 bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-400 text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
+                            className="w-full px-8 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg font-medium shadow-md transition-all"
                         >
                             Logout
                         </button>
                     </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-3 sm:space-y-5">
-
-                        {/* Name */}
+                    {/* Right: Edit form */}
+                    <form
+                        onSubmit={handleSubmit}
+                        className="w-full sm:w-2/3 bg-gray-50 dark:bg-[#1d1d1d] p-6 rounded-xl shadow-md space-y-5 transition-all"
+                    >
                         <div>
-                            <label className="block text-sm font-medium mb-1">Name</label>
+                            <label className="block text-sm font-medium mb-2">Name</label>
                             <input
                                 type="text"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full border border-gray-400 dark:border-[#3f3f3f] px-3 py-2"
+                                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#2a2a2a] focus:ring-2 focus:ring-blue-500 outline-none transition"
                                 required
                             />
                         </div>
 
-                        {/* Photo */}
                         <div>
-                            <label className="block text-sm font-medium mb-1">
-                                Photo{' '}
+                            <label className="block text-sm font-medium mb-2">
+                                Profile Photo{' '}
                                 {uploading && (
-                                    <span className="text-gray-600">
-                                        Uploading <span className="loading loading-dots loading-sm"></span>
+                                    <span className="text-gray-600 dark:text-gray-400 text-xs ml-2">
+                                        Uploading...
                                     </span>
                                 )}
                             </label>
@@ -271,19 +275,25 @@ const MyProfile = () => {
                                 type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}
-                                className="w-full border border-gray-400 dark:border-[#3f3f3f] p-2"
+                                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-[#2a2a2a] focus:ring-2 focus:ring-blue-500 outline-none transition"
                                 disabled={uploading}
                             />
                         </div>
 
-                        {/* Action */}
-                        <div className="flex justify-end sm:pt-4">
+                        <div className="flex justify-end pt-3">
                             <button
                                 type="submit"
                                 disabled={updating || uploading}
-                                className="px-10 py-2 bg-gradient-to-r bg-[#8884d8] hover:text-[var(--dark)] hover:bg-[#ebe9e9] text-[var(--white)] font-semibold transition duration-700 cursor-pointer"
+                                className="px-8 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-lg font-medium shadow-md transition-all"
                             >
-                                {updating ? <>Editing <span className="loading loading-spinner w-4 text-white"></span></> : 'Edit'}
+                                {updating ? (
+                                    <>
+                                        Updating
+                                        <span className="loading loading-spinner w-4 ml-2 text-white"></span>
+                                    </>
+                                ) : (
+                                    'Save Changes'
+                                )}
                             </button>
                         </div>
                     </form>

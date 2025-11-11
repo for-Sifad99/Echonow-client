@@ -7,9 +7,7 @@ import Sponsored from "../Sponsored/Sponsored";
 import Fashion from "../Fashion/Fashion";
 import AllPublishers from "../AllPublishers/AllPublishers";
 import PlanSection from "../Plans/Plans";
-import UserSummaryCards from '../InfoCards/InfoCards';
 import Testimonial from '../Testimonial/Testimonial';
-
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,7 +41,6 @@ const Home = () => {
       <Fashion />
       <AllPublishers />
       <PlanSection />
-      <UserSummaryCards />
       <Testimonial />
 
       {/* Subscribe Modal */}

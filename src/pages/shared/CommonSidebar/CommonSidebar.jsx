@@ -1,7 +1,6 @@
 import React from 'react';
 import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
 import useHandle from "../../../../hooks/useHandle/useHandle";
-import SubLoader from '../Loader/SubLoader';
 import { useQuery } from "@tanstack/react-query";
 import { SlSocialPintarest } from "react-icons/sl";
 import { AiOutlineYoutube } from "react-icons/ai";
@@ -10,6 +9,8 @@ import { IoLogoInstagram } from "react-icons/io";
 import { BiLogoFacebook } from "react-icons/bi";
 import { RiTwitterLine } from "react-icons/ri";
 import { LiaGithub } from "react-icons/lia";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 // Social links data
 const socialLinks = [
@@ -78,7 +79,7 @@ const CommonSidebar = () => {
 
     return (
         <aside className="w-full md:w-[260px] lg:w-[350px] xl:w-sm md:sticky top-4 h-fit">
-            {/* Social Icons */}
+            {/* Social Icons */ }
             <div className="pb-1.5 sm:pb-4 rounded-md">
                 <div className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-1 text-base text-[var(--white)] font-jost">
                     {socialLinks.map((item) => (
@@ -95,20 +96,51 @@ const CommonSidebar = () => {
                 </div>
             </div>
    
-            {/* Explore More Section */}
+            {/* Explore More Section */ }
             {isLoading ? (
-                <div className="flex items-center justify-center mx-auto my-6">
-                    <div className="md:hidden"><SubLoader size="text-base" /></div>
-                    <div className="hidden md:block"><SubLoader size="text-xl" /></div>
+                <div className="py-1 sm:py-4 rounded-md">
+                    {/* Title skeleton */}
+                    <Skeleton width={150} height={25} className="mb-3" />
+                    
+                    {/* Big article skeleton */}
+                    <div className="group relative flex flex-col">
+                        <Skeleton className="w-full h-60" />
+                        <div className="text-[var(--dark)] dark:text-[var(--white)] md:mt-3 space-y-1 sm:space-y-2 py-1 sm:py-3 pr-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">
+                            <Skeleton width={80} height={20} />
+                            <Skeleton width={200} height={25} />
+                            <Skeleton width={150} height={20} />
+                            <div className='mt-0 xl:mt-2 flex items-center justify-between gap-2'>
+                                <Skeleton width={120} height={15} />
+                                <Skeleton width={20} height={20} circle={true} />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Three articles skeleton */}
+                    <div className="sm:py-1.5 mt-4 space-y-3">
+                        {[...Array(3)].map((_, index) => (
+                            <div key={index} className="group flex gap-3 w-full h-24 dark:text-[var(--white)] transition">
+                                <Skeleton width={84} height={80} />
+                                <div className='flex flex-col gap-2 flex-1'>
+                                    <div className="flex items-center gap-1">
+                                        <Skeleton width={60} height={20} />
+                                        <Skeleton width={20} height={20} />
+                                    </div>
+                                    <Skeleton width={150} height={20} />
+                                    <Skeleton width={100} height={15} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ) : (
                 <>
-                    {/* Big one article */}
+                    {/* Big one article */ }
                     <div className="py-1 sm:py-4 rounded-md">
-                        {/* Title */}
+                        {/* Title */ }
                         <h3 className="text-lg font-bold font-libreBas mb-1 sm:mb-3 text-[var(--dark)] dark:text-[var(--white)]">Explore More</h3>
 
-                        {/* Main content */}
+                        {/* Main content */ }
                         {topFashion.slice(0, 1).map((article, idx) => (
                             <div
                                 onClick={() => handleNavigate(article, article._id)}
@@ -118,7 +150,9 @@ const CommonSidebar = () => {
                                 <img
                                     src={article.image}
                                     alt={article.title}
-                                    className="w-full h-60 object-cover"
+                                    className="w-full h-60 object-cover blur-sm transition-all duration-500"
+                                    onLoad={(e) => e.target.classList.remove('blur-sm')}
+                                    onError={(e) => (e.target.src = '/default-article.png')}
                                 />
 
                                 <div className="text-[var(--dark)] dark:text-[var(--white)] md:mt-3 space-y-1 sm:space-y-2 py-1 sm:py-3 pr-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">
@@ -142,7 +176,7 @@ const CommonSidebar = () => {
                                     </div>
                                 </div>
 
-                                {/* isPremium logic */}
+                                {/* isPremium logic */ }
                                 {article.isPremium && (
                                     <div className='absolute top-[27px] -left-5.5 rotate-270 transition duration-500'>
                                         <span className="font-jost px-3 py-[3px] text-[10px] uppercase font-semibold bg-orange-400 text-[var(--white)] inline-block">Premium</span>
@@ -152,7 +186,7 @@ const CommonSidebar = () => {
                         ))}
                     </div>
 
-                    {/* Three articles */}
+                    {/* Three articles */ }
                     <div className="sm:py-1.5">
                         {topFashion.slice(1, 4).map((article, idx) => (
                             <div
@@ -163,7 +197,9 @@ const CommonSidebar = () => {
                                 <img
                                     src={article.image}
                                     alt={article.title}
-                                    className="min-w-[84px] max-w-[84px] min-h-[80px] max-h-[80px] object-cover rounded"
+                                    className="min-w-[84px] max-w-[84px] min-h-[80px] max-h-[80px] object-cover rounded blur-sm transition-all duration-500"
+                                    onLoad={(e) => e.target.classList.remove('blur-sm')}
+                                    onError={(e) => (e.target.src = '/default-article.png')}
                                 />
 
                                 <div className='flex flex-col gap-2'>

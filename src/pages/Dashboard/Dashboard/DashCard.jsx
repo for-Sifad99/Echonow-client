@@ -10,9 +10,9 @@ import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
 
 const fetchDashboardStats = async (axiosSecure) => {
     const [userRes, articleRes, publisherRes] = await Promise.all([
-        axiosSecure.get('/all-users'),
-        axiosSecure.get('/all-articles'),
-        axiosSecure.get('/publisher'),
+        axiosSecure.get('/api/all-users'),
+        axiosSecure.get('/api/all-articles'),
+        axiosSecure.get('/api/publisher'),
     ]);
 
     return {

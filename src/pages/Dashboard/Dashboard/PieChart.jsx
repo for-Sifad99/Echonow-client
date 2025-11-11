@@ -18,7 +18,7 @@ const DynamicPublicationPieChart = () => {
     const { data: publications = [], isLoading } = useQuery({
         queryKey: ['publishers-stats'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/publishers-stats');
+            const res = await axiosPublic.get('/api/publishers-stats');
             return res.data;
         },
     });

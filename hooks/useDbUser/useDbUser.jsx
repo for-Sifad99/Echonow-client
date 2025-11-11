@@ -16,7 +16,7 @@ const useDbUser = () => {
     } = useQuery({
         queryKey: ['user-info', authUser?.email],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/users/${authUser?.email}`);
+            const res = await axiosPublic.get(`/api/users/${authUser?.email}`);
             return res.data;
         },
         enabled: !!authUser?.email,

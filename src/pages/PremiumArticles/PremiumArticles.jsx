@@ -4,9 +4,9 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useHandle from '../../../hooks/useHandle/useHandle';
 import Pagination from '../../pages/shared/Pagination/Pagination';
 import CommonSidebar from '../shared/CommonSidebar/CommonSidebar';
-import SubLoader from '../shared/Loader/SubLoader';
 import { useQuery } from '@tanstack/react-query';
 import { FaRegShareSquare } from "react-icons/fa";
+import Skeleton from 'react-loading-skeleton';
 
 const PremiumArticles = () => {
     const [page, setPage] = useState(1);
@@ -21,7 +21,7 @@ const PremiumArticles = () => {
     } = useQuery({
         queryKey: ['premium-articles', page],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/articles/premium?page=${page}&limit=${limit}`);
+            const res = await axiosSecure.get(`/api/articles/premium?page=${page}&limit=${limit}`);
             return res.data;
         },
         keepPreviousData: true,
@@ -31,17 +31,36 @@ const PremiumArticles = () => {
     const totalPages = articleData?.totalPages || 1;
 
     if (isPending) {
-        return <div className="flex items-center justify-center mx-auto my-10">
-            <div className="md:hidden">
-                <SubLoader size="text-lg" />
+        return (
+            <div className="max-w-[1200px] mx-auto px-2 sm:px-4 py-4">
+                <div className='flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6'>
+                    {/* Left Content */}
+                    <div className='flex-1'>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
+                            {[...Array(6)].map((_, index) => (
+                                <div key={index} className="flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]">
+                                    <Skeleton className="w-full h-60 md:h-52 lg:h-60" />
+                                    <div className="flex flex-col justify-center items-center md:mt-3 space-y-2 px-2 pt-2 pb-4">
+                                        <Skeleton width={60} height={20} />
+                                        <Skeleton width={200} height={25} />
+                                        <Skeleton width={150} height={20} />
+                                        <div className='mt-1 md:mt-0 lg:mt-1 flex items-center justify-between gap-2 w-full'>
+                                            <Skeleton width={120} height={15} />
+                                            <Skeleton width={20} height={20} circle={true} />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    {/* Right sidebar */}
+                    <div className='md:w-[300px] lg:w-[350px] xl:w-[400px]'>
+                        <Skeleton className="h-full" />
+                    </div>
+                </div>
             </div>
-            <div className="hidden md:block xl:hidden">
-                <SubLoader size="text-xl" />
-            </div>
-            <div className="hidden xl:flex">
-                <SubLoader size="text-2xl" />
-            </div>
-        </div>
+        );
     } else if (articles.length === 0) {
         return <p className="my-10 text-xl text-[var(--dark)] dark:text-[var(--white)] col-span-full text-center font-libreBas">No articles found.</p>
     }
@@ -57,7 +76,6 @@ const PremiumArticles = () => {
             {/* Content */}
             <section className="max-w-[1200px] mx-auto px-2 sm:px-4 py-4">
                 <div className='flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6'>
-
                     {/* Left Content */}
                     <div className='flex-1'>
                         <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
@@ -65,14 +83,16 @@ const PremiumArticles = () => {
                                 articles.map((article) => (
                                     <div
                                         onClick={() => handleNavigate(article, article._id)}
-                                        key={articles._id}
+                                        key={article._id}
                                         className="group flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]"
                                     >
                                         <div className='relative'>
                                             <img
                                                 src={article.image}
                                                 alt={article.title}
-                                                className="w-full h-60 md:h-52 lg:h-60 object-cover"
+                                                className="w-full h-60 md:h-52 lg:h-60 object-cover blur-sm transition-all duration-500"
+                                                onLoad={(e) => e.target.classList.remove('blur-sm')}
+                                                onError={(e) => (e.target.src = '/default-article.png')}
                                             />
 
                                             {article.isPremium &&
@@ -83,7 +103,6 @@ const PremiumArticles = () => {
                                         </div>
 
                                         <div className="flex flex-col justify-center items-center text-[var(--dark)] dark:text-[var(--white)]  md:mt-3 space-y-2 px-2 pt-2 pb-4">
-
                                             <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-[var(--primary)] text-[var(--white)] inline-block">{article.tags}
                                             </span>
 

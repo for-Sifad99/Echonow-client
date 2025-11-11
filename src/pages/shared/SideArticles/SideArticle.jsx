@@ -1,8 +1,8 @@
 import React from 'react';
 import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
 import useHandle from '../../../../hooks/useHandle/useHandle';
-import SubLoader from '../Loader/SubLoader';
 import { useQuery } from '@tanstack/react-query';
+import Skeleton from 'react-loading-skeleton';
 
 const SideArticle = ({ closeSidebar }) => {
     const axiosPublic = useAxiosPublic();
@@ -19,9 +19,33 @@ const SideArticle = ({ closeSidebar }) => {
 
     // Pending loader
     if (isPending) {
-        return <div className="flex items-center justify-center mx-auto my-6">
-            <SubLoader size="text-base" />
-        </div>
+        return (
+            <div className="pb-6">
+                <h2 className="text-xl font-libreBas text-[var(--dark)] dark:text-[var(--white)] font-semibold mb-3">
+                    <Skeleton width={150} />
+                </h2>
+                
+                {/* Big article skeleton */}
+                <div className="group relative flex flex-col gap-2 w-full h-44 transition mb-10">
+                    <Skeleton className="w-full min-h-36 max-h-36" />
+                    <div className='flex items-center justify-start w-full'>
+                        <Skeleton width={40} height={20} className="mr-2" />
+                        <Skeleton width={120} height={20} />
+                    </div>
+                </div>
+                
+                {/* Four articles skeleton */}
+                {[...Array(3)].map((_, index) => (
+                    <div key={index} className="group relative flex items-center gap-2 w-full h-24 text:[var(--dark-bg)] dark:text-[var(--white)] transition mb-3">
+                        <div className='flex flex-col gap-2 flex-1'>
+                            <Skeleton width={60} height={15} />
+                            <Skeleton width={150} height={15} />
+                        </div>
+                        <Skeleton width={84} height={80} />
+                    </div>
+                ))}
+            </div>
+        );
     };
 
     return (
@@ -39,7 +63,9 @@ const SideArticle = ({ closeSidebar }) => {
                     <img
                         src={article.image}
                         alt={article.title}
-                        className="w-full min-h-36 max-h-36 object-cover"
+                        className="w-full min-h-36 max-h-36 object-cover blur-sm transition-all duration-500"
+                        onLoad={(e) => e.target.classList.remove('blur-sm')}
+                        onError={(e) => (e.target.src = '/default-article.png')}
                     />
                     <div className='flex items-center justify-start w-full'>
                         <span className="font-jost h-[20px] -ml-[27.6px] text-[10px] px-3 py-0.5 uppercase font-semibold bg-[var(--primary)] text-[var(--white)]  rotate-270">
@@ -78,7 +104,9 @@ const SideArticle = ({ closeSidebar }) => {
                     <img
                         src={article.image}
                         alt={article.title}
-                        className="min-w-[84px] min-h-[80px] max-h-[80px] object-cover"
+                        className="min-w-[84px] min-h-[80px] max-h-[80px] object-cover blur-sm transition-all duration-500"
+                        onLoad={(e) => e.target.classList.remove('blur-sm')}
+                        onError={(e) => (e.target.src = '/default-article.png')}
                     />
 
                     {/* isPremium logic */}

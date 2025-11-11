@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from '../../../../hooks/useAuth/useAuth';
+import useDbUser from '../../../../hooks/useDbUser/useDbUser';
 import { FaFeatherPointed } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { FaCaretDown } from "react-icons/fa";
@@ -10,6 +11,7 @@ import Swal from "sweetalert2";
 
 const DashboardAdmin = () => {
     const { signOutUser, user } = useAuth();
+    const { dbUser } = useDbUser();
     const [isOpen, setIsOpen] = useState(false);
     const [clickedOpen, setClickedOpen] = useState(false);
     const modalRef = useRef(null);
@@ -80,16 +82,16 @@ const DashboardAdmin = () => {
                 className="flex items-center gap-2 cursor-pointer">
                 <img
                     ref={profileRef}
-                    src={user?.photoURL || "/default-user.png"}
+                    src={dbUser?.photo || user?.photoURL || "/default-user.png"}
                     alt="User"
                     className="w-[40px] h-[40px] p-0.5  border border-blue-500  dark:border-blue-400  rounded-full"
+                    onError={(e) => {
+                        e.target.src = "/default-user.png";
+                    }}
                 />
                 <div className="font-jost">
                     <h2 className="flex justify-between items-center text-base uppercase font-bold leading-4 dark:text-[var(--white)] text-[var(--dark)]">
-                        {user?.displayName || "User Name"}
-                        {
-                            isOpen ? <FaCaretDown /> : <FaCaretUp />
-                        }
+                        {dbUser?.name || user?.displayName || "User Name"}
                     </h2>
 
                     <h2 className="text-xs dark:text-[var(--accent-white)] text-[var(--dark-bg)]">

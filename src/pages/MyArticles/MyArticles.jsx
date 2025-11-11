@@ -4,11 +4,12 @@ import PageHelmet from '../shared/PageTitle/PageHelmet';
 import useAxiosSecure from '../../../hooks/useAxiosSecure/useAxios';
 import useAuth from '../../../hooks/useAuth/useAuth';
 import CommonSidebar from '../shared/CommonSidebar/CommonSidebar';
-import SubLoader from '../shared/Loader/SubLoader';
 import { useQuery } from '@tanstack/react-query';
 import Select from 'react-select';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const MyArticles = () => {
     const axiosSecure = useAxiosSecure();
@@ -22,7 +23,7 @@ const MyArticles = () => {
     const { data: articles = [], refetch, isPending } = useQuery({
         queryKey: ['my-articles', user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/articles/user?email=${user.email}`);
+            const res = await axiosSecure.get(`/api/articles/user?email=${user.email}`);
             return res.data;
         },
         enabled: !!user?.email,
@@ -42,7 +43,7 @@ const MyArticles = () => {
 
         if (result.isConfirmed) {
             try {
-                await axiosSecure.delete(`/articles/${id}`);
+                await axiosSecure.delete(`/api/articles/${id}`);
                 refetch();
                 Swal.fire('Deleted!', 'Your article has been deleted.', 'success');
             } catch (err) {
@@ -76,7 +77,7 @@ const MyArticles = () => {
         };
 
         try {
-            await axiosSecure.patch(`/articles/${editArticle._id}`, updatedData);
+            await axiosSecure.patch(`/api/articles/${editArticle._id}`, updatedData);
             refetch();
             toast.success('Your article has been updated!');
             setShowEditModal(false);
@@ -149,17 +150,45 @@ const MyArticles = () => {
 
     // Pending loader
     if (isPending) {
-        return <div className="flex items-center justify-center mx-auto my-10">
-            <div className="md:hidden">
-                <SubLoader size="text-lg" />
-            </div>
-            <div className="hidden md:block xl:hidden">
-                <SubLoader size="text-xl" />
-            </div>
-            <div className="hidden xl:flex">
-                <SubLoader size="text-2xl" />
-            </div>
-        </div>
+        return (
+            <section className="max-w-[1200px] text-[var(--dark)] dark:text-[var(--white)] mx-auto sm:px-4 px-2 py-4 flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-5 xl:gap-6 font-jost">
+                <div className="flex-1">
+                    {/* Title */}
+                    <div className="text-center mb-5 sm:mb-6 md:mb-8">
+                        <div className="flex justify-center items-center gap-1.5 sm:gap-3">
+                            <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                            <Skeleton width={200} height={30} />
+                            <div className="w-10 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                        </div>
+                        <Skeleton width={150} height={20} className="mt-2 mx-auto" />
+                    </div>
+
+                    {/* Main content */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
+                        {[...Array(6)].map((_, index) => (
+                            <div
+                                key={index}
+                                className="flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]"
+                            >
+                                <Skeleton height={200} />
+                                <div className="flex flex-col justify-center items-center text-[var(--dark)] dark:text-[var(--white)] md:mt-3 space-y-2 px-2 pt-2 pb-4">
+                                    <Skeleton width={80} height={20} />
+                                    <Skeleton width={150} height={25} />
+                                    <Skeleton width={100} height={20} />
+                                    <div className='flex flex-col gap-2'>
+                                        <div className='flex items-center gap-2 py-1'>
+                                            <Skeleton width={60} height={30} />
+                                            <Skeleton width={60} height={30} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <CommonSidebar />
+            </section>
+        );
     };
 
     return (
@@ -204,7 +233,8 @@ const MyArticles = () => {
                                             <img
                                                 src={article.image}
                                                 alt={article.title}
-                                                className="w-full h-60 md:h-52 lg:h-60 object-cover"
+                                                className="w-full h-60 md:h-52 lg:h-60 object-cover blur-sm"
+                                                onLoad={(e) => e.target.classList.remove('blur-sm')}
                                             />
 
                                             {/* isPremium logic */}
@@ -276,22 +306,21 @@ const MyArticles = () => {
 
                 {/* Edit Article Modal */}
                 {showEditModal && (
-                    <div className="fixed inset-0 backdrop-blur-xs bg-black/20 bg-opacity-40 flex justify-center items-center z-[999] overflow-y-auto">
-                        <div className="bg-[var(--white)] dark:bg-[var(--dark2-bg)] darkk:text-[var(--dark)] rounded-lg p-4 sm:p-6 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
-
+                    <div className="fixed inset-0 backdrop-blur-xs bg-black/20 bg-opacity-40 flex justify-center items-center z-[999] overflow-y-auto p-4">
+                        <div className="bg-[var(--white)] dark:bg-[var(--dark2-bg)] darkk:text-[var(--dark)] rounded-lg p-4 w-full max-w-xs sm:max-w-sm md:max-w-md">
                             {/* Title */}
-                            <h3 className="text-3xl font-semibold mb-2 mt-3 sm:my-3">Edit Article</h3>
+                            <h3 className="text-xl font-semibold mb-3 mt-2">Edit Article</h3>
 
                             {/* Form */}
-                            <form onSubmit={handleEditSubmit} className="space-y-4">
+                            <form onSubmit={handleEditSubmit} className="space-y-3">
                                 {/* Title input */}
-                                <input type="text" className="w-full border border-[#ccc] p-2 no-outline" placeholder="Title" value={editArticle.title} onChange={(e) => setEditArticle({ ...editArticle, title: e.target.value })} />
+                                <input type="text" className="w-full border border-[#ccc] dark:border-[#3f3f3f] p-2 rounded-md" placeholder="Title" value={editArticle.title} onChange={(e) => setEditArticle({ ...editArticle, title: e.target.value })} />
 
                                 {/* Publisher input */}
-                                <input type="text" className="w-full border border-[#ccc] p-2 no-outline" placeholder="Publisher" value={editArticle.publisher} onChange={(e) => setEditArticle({ ...editArticle, publisher: e.target.value })} />
+                                <input type="text" className="w-full border border-[#ccc] dark:border-[#3f3f3f] p-2 rounded-md" placeholder="Publisher" value={editArticle.publisher} onChange={(e) => setEditArticle({ ...editArticle, publisher: e.target.value })} />
 
                                 {/* Image input */}
-                                <input type="text" className="w-full border border-[#ccc] p-2 no-outline" placeholder="Image URL" value={editArticle.image} onChange={(e) => setEditArticle({ ...editArticle, image: e.target.value })} />
+                                <input type="text" className="w-full border border-[#ccc] dark:border-[#3f3f3f] p-2 rounded-md" placeholder="Image URL" value={editArticle.image} onChange={(e) => setEditArticle({ ...editArticle, image: e.target.value })} />
 
                                 {/* Tags select */}
                                 <Select
@@ -305,16 +334,16 @@ const MyArticles = () => {
                                     value={editArticle.tags}
                                     onChange={(selectedOptions) => setEditArticle({ ...editArticle, tags: selectedOptions })}
                                     styles={customSelectStyles}
-                                    className='text-[var(--dark)] no-outline'
+                                    className='text-[var(--dark)] dark:text-[var(--white)]'
                                 />
 
                                 {/* Description textarea */}
-                                <textarea className="w-full teaxt-base leading-5 md:leading-5.5 border border-[#ccc] p-2 no-outline" rows={5} placeholder="Description" value={editArticle.description} onChange={(e) => setEditArticle({ ...editArticle, description: e.target.value })} />
+                                <textarea className="w-full text-base leading-5 border border-[#ccc] dark:border-[#3f3f3f] p-2 rounded-md" rows={4} placeholder="Description" value={editArticle.description} onChange={(e) => setEditArticle({ ...editArticle, description: e.target.value })} />
 
                                 {/* Actions */}
-                                <div className="flex justify-end gap-4">
-                                    <button type="button" onClick={closeEditModal} className="px-4 py-2 text-sm  bg-red-500 text-[var(--white)] hover:bg-[#ebe9e9] hover:text-[var(--dark)] transition duration-500 cursor-pointer">Cancel</button>
-                                    <button type="submit" className="px-4 py-2 text-sm  bg-[#8884d8] text-[var(--white)] hover:bg-[#ebe9e9] hover:text-[var(--dark)] transition duration-500 cursor-pointer">Update</button>
+                                <div className="flex justify-end gap-2">
+                                    <button type="button" onClick={closeEditModal} className="px-3 py-1.5 text-sm bg-red-500 text-[var(--white)] hover:bg-red-600 transition duration-300 cursor-pointer rounded-md">Cancel</button>
+                                    <button type="submit" className="px-3 py-1.5 text-sm bg-[#8884d8] text-[var(--white)] hover:bg-[#7a76c9] transition duration-300 cursor-pointer rounded-md">Update</button>
                                 </div>
                             </form>
                         </div>

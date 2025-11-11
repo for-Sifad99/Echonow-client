@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import DashboardAdmin from '../pages/Dashboard/DashComponents/DashboardAdmin';
 import DasSidebar from '../pages/Dashboard/DashComponents/DashSidebar';
 import { MUIButton } from '../pages/shared/MUIButton/MUIButton';
@@ -8,10 +8,60 @@ import { RiMenuUnfold2Fill, RiMenuFold2Fill } from "react-icons/ri";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FiSearch, FiMoon } from "react-icons/fi";
 import logo from '/logo.png';
+import Loader from '../pages/shared/Loader/Loader';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const DashboardRoot = () => {
     const { theme, toggleTheme } = useTheme();
+    const { loading: authLoading } = useContext(AuthContext);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const location = useLocation();
+    const loaderTimeoutRef = useRef(null);
+    const hasInitialLoadCompleted = useRef(false);
+
+    // Handle route transitions
+    useEffect(() => {
+        // Don't show loader for route transitions after initial load
+        if (hasInitialLoadCompleted.current) {
+            return;
+        }
+        
+        // Show loader on initial load only
+        setLoading(true);
+        
+        // Clear any existing timeout
+        if (loaderTimeoutRef.current) {
+            clearTimeout(loaderTimeoutRef.current);
+        }
+        
+        // Set minimum loading time for better UX
+        loaderTimeoutRef.current = setTimeout(() => {
+            setLoading(false);
+            hasInitialLoadCompleted.current = true;
+        }, 3000);
+
+        return () => {
+            if (loaderTimeoutRef.current) {
+                clearTimeout(loaderTimeoutRef.current);
+            }
+        };
+    }, []); // Only trigger on initial mount, not on location changes
+
+    // Handle auth loading state
+    useEffect(() => {
+        if (!authLoading && !hasInitialLoadCompleted.current) {
+            // Add slight delay to ensure smooth transition
+            if (loaderTimeoutRef.current) {
+                clearTimeout(loaderTimeoutRef.current);
+            }
+            
+            loaderTimeoutRef.current = setTimeout(() => {
+                setLoading(false);
+                hasInitialLoadCompleted.current = true;
+            }, 3000);
+        }
+    }, [authLoading]);
 
     // Sidebar toggle handler
     const toggleSidebar = () => {
@@ -38,6 +88,11 @@ const DashboardRoot = () => {
         // Cleanup
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    // Show loader during initial load and auth loading
+    if (loading || authLoading) {
+        return <Loader minDisplayTime={3000} />;
+    }
 
     return (
         <section className="flex flex-col min-h-screen overflow-y-hidden">

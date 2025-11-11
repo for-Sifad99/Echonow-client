@@ -5,7 +5,7 @@ import clsx from 'clsx';
 const SubLoader = ({ text = 'LOADING...', size = 'text-2xl', className = '' }) => {
     return (
         <div className={clsx('w-fit font-sans leading-none', className)}>
-            <div className={clsx('loader-text', size)}>
+            <div className={clsx('loader-text', size, 'animate-pulse')}>
                 {text}
             </div>
         </div>
@@ -19,4 +19,3 @@ SubLoader.propTypes = {
 };
 
 export default SubLoader;
-

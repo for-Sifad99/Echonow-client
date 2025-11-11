@@ -1,12 +1,13 @@
 import React from 'react';
 import PageHelmet from '../../shared/PageTitle/PageHelmet';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure/useAxios';
-import SubLoader from '../../shared/Loader/SubLoader';
 import TypeWriterEffect from 'react-typewriter-effect';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import axios from 'axios';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const AddPublisher = () => {
     const { register, handleSubmit, reset } = useForm();
@@ -16,7 +17,7 @@ const AddPublisher = () => {
     const { data: publishers = [], refetch, isPending } = useQuery({
         queryKey: ['publishers'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/publisher');
+            const res = await axiosSecure.get('/api/publisher');
             return res.data.recent;
         },
     });
@@ -37,7 +38,7 @@ const AddPublisher = () => {
                 postedDate: new Date(),
             };
 
-            await axiosSecure.post('/publisher', publisher);
+            await axiosSecure.post('/api/publisher', publisher);
             toast.success('Publisher added!');
             reset();
             refetch();
@@ -66,11 +67,12 @@ const AddPublisher = () => {
                     Add Publisher
                 </h1>
 
-                <p className="flex flex-col gap-6 font-jost text-sm sm:text-lg md:text-xl leading-3.5 sm:leading-5 md:leading-5.5 text-center sm:text-start text-[var(--accent)] dark:text-[var(--accent-white)] w-full max-w-sm sm:max-w-3xl mx-auto sm:mx-0 mb-6 sm:mb-10 -mt-3.5 sm:-mt-2">
-                    Publishers help organize books and content in our system. Add top publishers to improve visibility and credibility of your library!
-
-                    <p className='w-32 border-b-2 pt-1 sm:pt-2 mx-auto sm:mx-0'> </p>
-                </p>
+                <div className="flex flex-col gap-6 font-jost text-sm sm:text-lg md:text-xl leading-3.5 sm:leading-5 md:leading-5.5 text-center sm:text-start text-[var(--accent)] dark:text-[var(--accent-white)] w-full max-w-sm sm:max-w-3xl mx-auto sm:mx-0 mb-6 sm:mb-10 -mt-3.5 sm:-mt-2">
+                    <p>
+                        Publishers help organize books and content in our system. Add top publishers to improve visibility and credibility of your library!
+                    </p>
+                    <div className='w-32 border-b-2 pt-1 sm:pt-2 mx-auto sm:mx-0'></div>
+                </div>
 
                 <div className="font-jost grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-8 xl:gap-14 w-full max-w-sm sm:max-w-full items-start mx-auto sm:mx-0 ">
                     {/* Form Section */}
@@ -103,7 +105,7 @@ const AddPublisher = () => {
                                 />
                             </div>
 
-                            <button className="btn shadow-none text-[var(--white)] dark:text-[var(--dark)] bg-[var(--primary)] hover:bg-red-500 dark:bg-[var(--accent-white)] dark:hover:bg-[var(--white)] w-full transition duration-300">
+                            <button className="btn py-2 shadow-none text-[var(--white)] dark:text-[var(--dark)] bg-[var(--primary)] hover:bg-red-500 dark:bg-[var(--accent-white)] dark:hover:bg-[var(--white)] w-full rounded-lg transition duration-300">
                                 Add Publisher
                             </button>
                         </form>
@@ -133,26 +135,26 @@ const AddPublisher = () => {
                         </h3>
 
                         {isPending ? (
-                            <div className="flex items-center justify-center mx-auto my-6">
-                                <div className="md:hidden">
-                                    <SubLoader size="text-base" />
-                                </div>
-                                <div className="hidden md:block xl:hidden">
-                                    <SubLoader size="text-lg" />
-                                </div>
-                                <div className="hidden xl:block">
-                                    <SubLoader size="text-xl" />
-                                </div>
+                            <div className="space-y-2">
+                                {[...Array(3)].map((_, index) => (
+                                    <div key={index} className="group flex items-center gap-4 bg-[var(--white)] dark:bg-[var(--accent)] p-3 rounded-lg shadow-sm">
+                                        <Skeleton circle width={36} height={36} />
+                                        <div className='flex flex-col gap-2'>
+                                            <Skeleton width={100} height={20} />
+                                            <Skeleton width={80} height={15} />
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-
                         ) : (
                             <div className="space-y-2">
                                 {recentPublishers.map((pub) => (
-                                    <div key={pub._id} className="group flex items-center gap-4  bg-[var(--white)] dark:bg-[var(--accent)] hover:bg-[#ffeabc] dark:hover:bg-[#e7e6ff] p-3 rounded-lg shadow-sm transition duration-400">
+                                    <div key={pub._id} className="group flex items-center gap-4 bg-[var(--white)] dark:bg-[var(--accent)] hover:bg-[#ffeabc] dark:hover:bg-[#e7e6ff] p-3 rounded-lg shadow-sm transition duration-400">
                                         <img
                                             src={pub.logo}
                                             alt={pub.name}
-                                            className="w-9 h-9 rounded-md object-contain"
+                                            className="w-9 h-9 rounded-md object-contain blur-sm"
+                                            onLoad={(e) => e.target.classList.remove('blur-sm')}
                                         />
 
                                         <div className='transition duration-400'>
@@ -160,7 +162,7 @@ const AddPublisher = () => {
                                                 {pub.name}
                                             </h4>
 
-                                            <p className="text-[var(--accent)] dark:text-[var(--base-100)] dark:group-hover:text-[var(--accent)] text-xs">
+                                            <p className="text-[var(--accent)] dark:text-[var(--base-100)] dark:group-hover:text-gray-700 text-xs">
                                                 {new Date(pub.postedDate).toLocaleDateString()}
                                             </p>
                                         </div>

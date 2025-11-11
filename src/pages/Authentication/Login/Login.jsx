@@ -9,7 +9,6 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 // Using public directory asset with proper URL reference
 import logo from '/logo.png';
 import { toast } from 'sonner';
-import Swal from "sweetalert2";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -55,22 +54,12 @@ const Login = () => {
                         navigate('/verify-email', { replace: true });
                     }, 3000);
                 } else {
-                    // Sweet Alert
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 4000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
+                    // Success toast notification
+                    toast.success("Now you can continue...", {
+                        duration: 4000,
+                        position: 'top-right'
                     });
-                    Toast.fire({
-                        icon: "success",
-                        title: "Now you can continue..."
-                    });
+                    
                     setTimeout(() => {
                         navigate(from, { replace: true });
                     }, 3000);
@@ -87,13 +76,9 @@ const Login = () => {
             return toast.error("Please enter your email first!");
         } else {
             await forgotPassword(email);
-            Swal.fire({
-                icon: "success",
-                title: "Done! Please check your email.",
-                toast: true,
-                timer: 3000,
-                showConfirmButton: false,
-                position: "top-end"
+            toast.success("Done! Please check your email.", {
+                duration: 3000,
+                position: 'top-right'
             });
         }
     };

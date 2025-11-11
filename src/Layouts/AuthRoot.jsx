@@ -1,10 +1,66 @@
-import React from 'react';
-import { Link, Outlet } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Link, Outlet, useLocation } from "react-router-dom";
 import SocialLogin from '../pages/Authentication/Social/SocialLogin';
 import authPic from "../assets/auth-pic.png";
 import logo from '/logo.png';
+import Loader from '../pages/shared/Loader/Loader';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const AuthRoot = () => {
+    const { loading: authLoading } = useContext(AuthContext);
+    const [loading, setLoading] = useState(true);
+    const location = useLocation();
+    const loaderTimeoutRef = useRef(null);
+    const hasInitialLoadCompleted = useRef(false);
+
+    // Handle initial load only
+    useEffect(() => {
+        // Don't show loader for route transitions after initial load
+        if (hasInitialLoadCompleted.current) {
+            return;
+        }
+        
+        // Show loader on initial load only
+        setLoading(true);
+        
+        // Clear any existing timeout
+        if (loaderTimeoutRef.current) {
+            clearTimeout(loaderTimeoutRef.current);
+        }
+        
+        // Set minimum loading time for better UX
+        loaderTimeoutRef.current = setTimeout(() => {
+            setLoading(false);
+            hasInitialLoadCompleted.current = true;
+        }, 3000);
+
+        return () => {
+            if (loaderTimeoutRef.current) {
+                clearTimeout(loaderTimeoutRef.current);
+            }
+        };
+    }, []); // Only trigger on initial mount, not on location changes
+
+    // Handle auth loading state
+    useEffect(() => {
+        if (!authLoading && !hasInitialLoadCompleted.current) {
+            // Add slight delay to ensure smooth transition
+            if (loaderTimeoutRef.current) {
+                clearTimeout(loaderTimeoutRef.current);
+            }
+            
+            loaderTimeoutRef.current = setTimeout(() => {
+                setLoading(false);
+                hasInitialLoadCompleted.current = true;
+            }, 3000);
+        }
+    }, [authLoading]);
+
+    // Show loader during initial load and auth loading
+    if (loading || authLoading) {
+        return <Loader minDisplayTime={3000} />;
+    }
+
     return (
         <section className="min-h-screen grid grid-cols-1 md:grid-cols-2">
             {/* Left Side - Image as Background */}

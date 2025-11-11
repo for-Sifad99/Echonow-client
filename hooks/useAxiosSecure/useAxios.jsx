@@ -34,11 +34,12 @@ const useAxiosSecure = () => {
             response => response,
             error => {
                 const status = error.response?.status;
+                const url = error.config?.url;
 
                 if (status === 401) {
                     signOutUser()
                         .then(() => {
-                            console.warn(`401 on ${error.config?.url}`);
+                            console.warn(`401 on ${url}`);
                             console.log(`Signed out user due to 401 Unauthorized!`);
                             shouldNavigateRef.current = true;
                         })
@@ -46,7 +47,11 @@ const useAxiosSecure = () => {
 
                 } else if (status === 403) {
                     console.log(`403 Forbidden Access!`);
-                    navigate('/status/forbidden');
+                    // Don't automatically navigate for article submission endpoint
+                    // Let the component handle it
+                    if (!url?.includes('/api/article')) {
+                        navigate('/status/forbidden');
+                    }
                     
                 } else if (status === 402) {
                     console.log('402 received, ignoring...');

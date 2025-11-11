@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 // Plans data
@@ -52,15 +52,64 @@ const plans = [
 
 const Plans = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
+    // Add minimum loading time
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+        
+        return () => clearTimeout(timer);
+    }, []);
 
     // Navigate handler
     const handleSubscribe = () => {
         navigate("/subscription");
     };
 
+    // Show skeleton loader for 2 seconds
+    if (loading) {
+        return (
+            <section className="max-w-[1200px] mx-auto px-2 px:px-4 py-7 sm:py-9 md:py-11 lg:py-12">
+                {/* Title skeleton */}
+                <div className="text-center mb-5 sm:mb-6 md:mb-8">
+                    <div className="flex justify-center items-center gap-1.5 sm:gap-3">
+                        <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                        <div className="h-8 w-40 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                        <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    </div>
+                    <div className="h-4 w-60 bg-gray-300 dark:bg-gray-600 rounded mt-2 mx-auto"></div>
+                </div>
+
+                {/* Content skeleton */}
+                <div className="grid md:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 max-w-7xl mx-auto">
+                    {[...Array(3)].map((_, index) => (
+                        <div 
+                            key={index}
+                            className="text-[var(--dark)] dark:text-[var(--white)] p-4 sm:p-10 md:p-6 lg:p-7 xl:p-8 transition duration-300 border border-[#e0e0e0] dark:border-[#3f3f3f]"
+                        >
+                            <div className="h-6 w-24 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+                            <div className="flex items-baseline gap-x-2 mb-6">
+                                <div className="h-10 w-12 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                                <div className="h-4 w-16 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                            </div>
+                            <div className="h-4 w-48 bg-gray-300 dark:bg-gray-600 rounded mb-6"></div>
+                            <div className="space-y-2 mb-6">
+                                {[...Array(6)].map((_, i) => (
+                                    <div key={i} className="h-4 w-full bg-gray-300 dark:bg-gray-600 rounded"></div>
+                                ))}
+                            </div>
+                            <div className="h-10 w-32 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="max-w-[1200px] mx-auto px-2 px:px-4 py-7 sm:py-9 md:py-11 lg:py-12">
-
             {/* Title */}
             <div className="text-center mb-5 sm:mb-6 md:mb-8">
                 <div className="flex justify-center items-center gap-1.5 sm:gap-3">

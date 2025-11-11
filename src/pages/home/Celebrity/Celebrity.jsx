@@ -1,9 +1,10 @@
 import React from 'react';
 import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
 import useHandle from '../../../../hooks/useHandle/useHandle';
-import SubLoader from "../../shared/Loader/SubLoader";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegShareSquare } from "react-icons/fa";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const Celebrity = () => {
     const axiosPublic = useAxiosPublic();
@@ -13,7 +14,7 @@ const Celebrity = () => {
     const { data: celebrityArticles = [], isPending } = useQuery({
         queryKey: ["celebrityArticles"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/articles", {
+            const res = await axiosPublic.get("/api/articles", {
                 params: {
                     tags: "celebrity",
                     limit: 10
@@ -24,24 +25,46 @@ const Celebrity = () => {
         },
     });
 
-    // Pending Loader
+    // Pending Loader with skeleton
     if (isPending) {
-        return <div className="flex items-center justify-center mx-auto my-10">
-            <div className="md:hidden">
-                <SubLoader size="text-xl" />
+        return (
+            <div className="max-w-[1200px] text-[var(--dark)] dark:text-[var(--white)] mx-auto sm:px-4 px-2 py-7 sm:py-9 md:py-11 lg:py-12 mt-2 sm:mt-4 md:mt-6 lg:mt-7 xl:mt-8">
+                {/* Title */}
+                <div className="text-center mb-5 sm:mb-6 md:mb-8">
+                    <div className="flex justify-center items-center gap-1.5 sm:gap-3">
+                        <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                        <Skeleton width={200} height={30} />
+                        <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
+                    </div>
+                    <Skeleton width={150} height={20} className="mt-2 mx-auto" />
+                </div>
+
+                {/* Content */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+                    {[...Array(4)].map((_, idx) => (
+                        <div
+                            key={idx}
+                            className="group relative flex flex-col md:flex-row justify-center md:gap-4 border border-[#e0e0e0] dark:border-[#3f3f3f]"
+                        >
+                            <Skeleton width={220} height={150} className="md:w-56 md:h-full" />
+                            <div className="md:mt-3 space-y-2 p-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">
+                                <Skeleton width={80} height={20} />
+                                <Skeleton width={180} height={25} />
+                                <Skeleton width={220} height={20} count={2} />
+                                <div className='mt-2 sm:mt-0 xl:mt-2 flex items-center justify-between gap-2 text-xs sm:text-[10px] lg:text-xs font-jost'>
+                                    <Skeleton width={150} height={15} />
+                                    <Skeleton circle width={15} height={15} />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-            <div className="hidden md:block xl:hidden">
-                <SubLoader size="text-2xl" />
-            </div>
-            <div className="hidden xl:flex">
-                <SubLoader size="text-3xl" />
-            </div>
-        </div>
+        );
     };
 
     return (
         <div className="max-w-[1200px] text-[var(--dark)] dark:text-[var(--white)] mx-auto sm:px-4 px-2 py-7 sm:py-9 md:py-11 lg:py-12 mt-2 sm:mt-4 md:mt-6 lg:mt-7 xl:mt-8">
-
             {/* Title */}
             <div className="text-center mb-5 sm:mb-6 md:mb-8">
                 <div className="flex justify-center items-center gap-1.5 sm:gap-3">
@@ -64,13 +87,15 @@ const Celebrity = () => {
                         key={article._id}
                         className="group relative flex flex-col md:flex-row justify-center md:gap-4 border border-[#e0e0e0] dark:border-[#3f3f3f]"
                     >
-
-                        {/* Left image */}
-                        <img
-                            src={article.image}
-                            alt={article.title}
-                            className="h-44 w-full sm:h-48 md:h-full md:w-40 lg:h-52 lg:w-48 object-cover rounded"
-                        />
+                        {/* Left image with blur effect loader - even wider on md screens and no rounded corners */}
+                        <div className="relative">
+                            <img
+                                src={article.image}
+                                alt={article.title}
+                                className="h-44 w-full sm:h-48 md:w-72 object-cover blur-sm"
+                                onLoad={(e) => e.target.classList.remove('blur-sm')}
+                            />
+                        </div>
 
                         {/* Right content */}
                         <div className="md:mt-3 space-y-2 p-3 md:p-0 md:pr-3 md:pt-2 md:pb-3 lg:pb-0">

@@ -32,7 +32,7 @@ const CheckoutForm = ({ duration, cost }) => {
 
         try {
             // Create payment intent via axiosSecure
-            const res = await axiosSecure.post('/create-payment-intent', { cost });
+            const res = await axiosSecure.post('/api/create-payment-intent', { cost });
             const clientSecret = res.data.clientSecret;
 
             // Confirm card payment
@@ -59,7 +59,7 @@ const CheckoutForm = ({ duration, cost }) => {
                     showConfirmButton: false,
                     position: "top-end"
                 });
-                await axiosSecure.post('/users', {
+                await axiosSecure.post('/api/users', {
                     email: user?.email,
                     premiumTaken: new Date(),
                     duration: selected?.value || duration
@@ -156,9 +156,9 @@ const CheckoutForm = ({ duration, cost }) => {
             </div>
 
             {/* Error Message */}
-            {error && <p className="text-sm mt-1">{error}</p>
+            {error && <p className="text-sm mt-1 text-red-500">{error}</p>}
 
-            /* Submit Button */}
+            {/* Submit Button */}
             <button
                 type="submit"
                 disabled={!stripe || !selected}

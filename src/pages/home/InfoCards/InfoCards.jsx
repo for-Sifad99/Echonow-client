@@ -1,12 +1,25 @@
 import React from "react";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
-import SubLoader from "../../shared/Loader/SubLoader";
 import { useQuery } from "@tanstack/react-query";
 import { FaUsers, FaUserCheck, FaUserShield } from "react-icons/fa";
 import CountUp from "react-countup";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 // All stat cards
-const StatCard = ({ title, icon, count, color }) => {
+const StatCard = ({ title, icon, count, color, loading }) => {
+    if (loading) {
+        return (
+            <div className="p-6 flex flex-col gap-3 w-full border border-[#e0e0e0] dark:border-[#3f3f3f]">
+                <div className="flex items-center gap-6">
+                    <Skeleton circle width={80} height={80} />
+                    <Skeleton width={60} height={40} />
+                </div>
+                <Skeleton width={150} height={25} />
+            </div>
+        );
+    }
+    
     return (
         <div className="p-6 flex flex-col gap-3 w-full border border-[#e0e0e0] dark:border-[#3f3f3f]">
             <div className="flex items-center gap-6">
@@ -37,36 +50,28 @@ const InfoCards = () => {
 
     const { totalUsers = 0, premiumUsers = 0, normalUsers = 0 } = data;
 
-    // Loading loader
-    if (isLoading) {
-        return <div className="flex items-center justify-center mx-auto my-10">
-            <div className="md:hidden">
-                <SubLoader size="text-lg" />
-            </div>
-            <div className="hidden md:block xl:hidden">
-                <SubLoader size="text-xl" />
-            </div>
-            <div className="hidden xl:flex">
-                <SubLoader size="text-2xl" />
-            </div>
-        </div>
-    };
-
     return (
         <section className="max-w-4xl mx-auto px-2 sm:px-4 py-7 sm:py-9 md:py-11 lg:py-12">
-
             {/* Title */}
             <div className="text-center mb-5 sm:mb-6 md:mb-8">
                 <div className="flex justify-center items-center gap-1.5 sm:gap-3">
                     <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
-                    <h2 className="text-xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
-                        User Overview
-                    </h2>
+                    {isLoading ? (
+                        <Skeleton width={200} height={30} />
+                    ) : (
+                        <h2 className="text-xl sm:text-3xl font-libreBas font-bold text-[var(--dark)] dark:text-[var(--white)]">
+                            User Overview
+                        </h2>
+                    )}
                     <div className="w-8 sm:w-12 bg-[var(--dark)] dark:bg-[var(--white)] h-[2px]"></div>
                 </div>
-                <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
-                    Quick stats of all, premium, and normal users
-                </p>
+                {isLoading ? (
+                    <Skeleton width={150} height={20} className="mt-2 mx-auto" />
+                ) : (
+                    <p className="font-oxygen text-[var(--accent)] dark:text-[var(--accent-white)] text-xs sm:text-sm sm:mt-1">
+                        Quick stats of all, premium, and normal users
+                    </p>
+                )}
             </div>
 
             {/* Cards content */}
@@ -76,18 +81,21 @@ const InfoCards = () => {
                     icon={<FaUsers />}
                     count={totalUsers}
                     color="bg-blue-500"
+                    loading={isLoading}
                 />
                 <StatCard
                     title="Normal users"
                     icon={<FaUserCheck />}
                     count={normalUsers}
                     color="bg-emerald-500"
+                    loading={isLoading}
                 />
                 <StatCard
                     title="Premium users"
                     icon={<FaUserShield />}
                     count={premiumUsers}
                     color="bg-yellow-500"
+                    loading={isLoading}
                 />
             </div>
         </section>

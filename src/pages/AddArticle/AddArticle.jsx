@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PageHelmet from '../shared/PageTitle/PageHelmet';
 import useAxiosSecure from "../../../hooks/useAxiosSecure/useAxios";
 import useAxiosPublic from "../../../hooks/useAxiosPublic/useAxios";
@@ -13,6 +13,7 @@ import { FiUpload } from "react-icons/fi";
 import { toast } from 'sonner';
 import axios from "axios";
 import "./addArticle.css";
+import defaultUser from '../../assets/default-user.png'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,6 +22,7 @@ import { Label } from '@/components/ui/label';
 const AddArticle = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
 
     const {
         register,
@@ -145,14 +147,24 @@ const AddArticle = () => {
                 viewCount: 0,
             };
 
-            const res = await axiosSecure.post("/article", articleData);
-            if (res.data.insertedId) {
-                toast.success("Article submitted for approval!");
-            }
+            const res = await axiosSecure.post("/api/article", articleData);
+            // Show success message and navigate on successful submission
+            toast.success("Article submitted for approval!");
+            navigate('/');
         } catch (err) {
             console.error(err);
-            if (err.response && err.response.status === 409) {
-                toast.error("You can't post more than one!");
+
+            // Handle different error types
+            if (err.response) {
+                if (err.response.status === 409) {
+                    toast.error("You can't post more than one!");
+                } else if (err.response.status === 403) {
+                    // Show a specific error message for 403 instead of letting interceptor navigate
+                    toast.error("Normal users can only post one article. Upgrade to premium for unlimited posts.");
+                    // Optionally navigate to a different page or stay on the same page
+                } else {
+                    toast.error("Failed to submit article");
+                }
             } else {
                 toast.error("Failed to submit article");
             }
@@ -181,12 +193,9 @@ const AddArticle = () => {
                             </div>
                             <div className="flex items-center gap-1">
                                 <img 
-                                    src={user?.photoURL || '/default-user.png'} 
+                                    src={user?.photoURL || defaultUser} 
                                     className="w-3.5 sm:w-5 rounded-full object-cover" 
                                     alt="User profile"
-                                    onError={(e) => {
-                                        e.target.src = '/default-user.png';
-                                    }}
                                 />
                                 <h2 className="text-gray-700 dark:text-[var(--white)]  font-semibold">{user?.displayName}</h2>
                             </div>

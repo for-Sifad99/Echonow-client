@@ -1,9 +1,10 @@
 import React from 'react';
 import useAxiosPublic from "../../../../hooks/useAxiosPublic/useAxios";
 import useHandle from '../../../../hooks/useHandle/useHandle';
-import SubLoader from "../../shared/Loader/SubLoader";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegShareSquare } from "react-icons/fa";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const FashionMain = () => {
     const axiosPublic = useAxiosPublic();
@@ -13,7 +14,7 @@ const FashionMain = () => {
     const { data: fashionArticles = [], isLoading } = useQuery({
         queryKey: ["fashionArticles"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/articles", {
+            const res = await axiosPublic.get("/api/articles", {
                 params: {
                     tags: "fashion",
                     limit: 10
@@ -24,19 +25,29 @@ const FashionMain = () => {
         },
     });
 
-    // Loading loader
+    // Loading with skeleton
     if (isLoading) {
-        return <div className="flex items-center justify-center mx-auto my-10">
-            <div className="md:hidden">
-                <SubLoader size="text-lg" />
-            </div>
-            <div className="hidden md:block xl:hidden">
-                <SubLoader size="text-xl" />
-            </div>
-            <div className="hidden xl:flex">
-                <SubLoader size="text-2xl" />
-            </div>
-        </div>
+        return (
+            <section className="grid md:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+                {[...Array(4)].map((_, idx) => (
+                    <div
+                        key={idx}
+                        className="group flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]"
+                    >
+                        <Skeleton height={200} />
+                        <div className="flex flex-col justify-center items-center text-[var(--dark)] dark:text-[var(--white)] md:mt-3 space-y-2 px-2 pt-2 pb-4">
+                            <Skeleton width={80} height={20} />
+                            <Skeleton width={200} height={25} />
+                            <Skeleton width={250} height={20} count={2} />
+                            <div className='mt-1 md:mt-0 lg:mt-1 flex items-center justify-between gap-2 text-xs sm:text-[10px] lg:text-xs font-jost'>
+                                <Skeleton width={150} height={15} />
+                                <Skeleton circle width={15} height={15} />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </section>
+        );
     };
 
     return (
@@ -47,13 +58,16 @@ const FashionMain = () => {
                     key={idx}
                     className="group flex flex-col border border-[#e0e0e0] dark:border-[#3f3f3f]"
                 >
-                    {/* Left image and isPremium logic */}
+                    {/* Left image with blur effect loader */}
                     <div className='relative'>
-                        <img
-                            src={article.image}
-                            alt={article.title}
-                            className="w-full h-60 md:h-52 lg:h-60 object-cover"
-                        />
+                        <div className="relative">
+                            <img
+                                src={article.image}
+                                alt={article.title}
+                                className="w-full h-60 md:h-52 lg:h-60 object-cover blur-sm"
+                                onLoad={(e) => e.target.classList.remove('blur-sm')}
+                            />
+                        </div>
                         {article.isPremium &&
                             <div className='absolute top-6.5 -left-5.5 rotate-270 transition duration-500'>
                                 <span className="font-jost px-3 py-[3px] text-[10px]  uppercase font-semibold bg-orange-400 text-[var(--white)]  inline-block">Premium</span>

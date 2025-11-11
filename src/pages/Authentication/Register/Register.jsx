@@ -10,7 +10,6 @@ import { FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
 // Using public directory asset with proper URL reference
 import logo from '/logo.png';
 import { toast } from 'sonner';
-import Swal from "sweetalert2";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,7 +43,7 @@ const Register = () => {
                     role: "user",
                     premiumTaken: null,
                 };
-                await axiosSecure.post('/users', userProfile);
+                await axiosSecure.post('/api/users', userProfile);
 
                 // Update user profile in firebase:
                 updateUserProfile({ displayName: name, photoURL: photo })
@@ -55,21 +54,10 @@ const Register = () => {
                         console.log('Error updating user profile:', error);
                     });
 
-                // Sweet Alert:
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 4000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Successfully account created!"
+                // Success toast notification
+                toast.success("Successfully account created!", {
+                    duration: 4000,
+                    position: 'top-right'
                 });
 
                 // For email/password users, redirect to verification page

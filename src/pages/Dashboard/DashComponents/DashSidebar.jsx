@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../../hooks/themeContext/themeContext';
 import useAuth from '../../../../hooks/useAuth/useAuth';
+import useDbUser from '../../../../hooks/useDbUser/useDbUser';
 import useRole from '../../../../hooks/useUserRole/useRole';
 import SideArticle from '../../shared/SideArticles/SideArticle';
 import { MUILink } from '../../shared/MUIButton/MUIButton';
@@ -19,6 +20,7 @@ import Swal from 'sweetalert2';
 
 const DasSidebar = ({ isSidebarOpen }) => {
     const { signOutUser, user } = useAuth();
+    const { dbUser } = useDbUser();
     const { role, loading } = useRole();
     const { theme, toggleTheme } = useTheme();
     const [openStg, setOpenStg] = useState(false);
@@ -143,22 +145,6 @@ const DasSidebar = ({ isSidebarOpen }) => {
                             icon2={<IoIosArrowForward className={`transform transition-transform duration-300 ${openStg ? 'rotate-90' : ''}`} />}
                         />
                     </div>
-
-                    <label
-                        className={`relative swap transition-all duration-300 ease-in-out
-        ${openStg ? 'block' : 'hidden'}  text-[var(--dark-bg)] dark:text-[var(--base-100)] font-semibold`}
-                    >
-                        {/* Theme */}
-                        <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
-
-                        <p className='swap-off absolute top-0 left-8 pl-4 border-l  border-gray-400 flex items-center gap-1 cursor-pointer'>
-                            <FiMoon /> Dark Mode
-                        </p>
-
-                        <p className='swap-on absolute top-0 left-8 pl-4 opacity-70 border-l border-gray-400 flex items-center gap-1  cursor-pointer'>
-                            <IoSunnyOutline />Light Mode
-                        </p>
-                    </label>
                 </li>
 
                 <li className='md:hidden'>
@@ -177,7 +163,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                         >
                             <div className="flex items-center py-1 w-full">
                                 <img 
-                                    src={user?.photoURL || '/default-user.png'} 
+                                    src={dbUser?.photo || user?.photoURL || '/default-user.png'} 
                                     className='rounded-full w-8 p-0.5 border border-blue-600 dark:border-blue-400 object-cover' 
                                     alt="User profile"
                                     onError={(e) => {
@@ -187,7 +173,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
 
                                 <div className="flex flex-col items-start justify-start opacity-90 ml-2 mr-auto">
                                     <p className='font-bold font-oxygen leading-2 mt-1 dark:text-[var(--white)] text-[var(--dark)]'>
-                                        {user?.displayName}
+                                        {dbUser?.name || user?.displayName}
                                     </p>
 
                                     <p className='text-xs font-jost dark:text-[var(--accent-white)] text-[var(--dark-secondary)]'>
@@ -227,7 +213,7 @@ const DasSidebar = ({ isSidebarOpen }) => {
                     className='w-full h-full object-cover rounded-xl' alt="" />
 
                 <Link to='/' className='flex items-center justify-center mx-auto cursor-pointer '>
-                    <button className='absolute top-[46%] flex items-center gap-1 font-jost w-fit px-3 py-0.5 uppercase font-semibold bg-[var(--primary)] text-[var(--secondary)] rounded'><GrHomeOption className=' fill-[var(--secondary)]' />
+                    <button className='absolute top-[46%] text-white flex items-center gap-1 font-jost w-fit px-3 py-0.5 uppercase font-semibold bg-[var(--primary)] text-[var(--white)] rounded'><GrHomeOption className=' fill-[var(--white)]' />
                         Back to Home
                     </button>
                 </Link>

@@ -1,32 +1,36 @@
 import React, { useState } from "react";
 import PageHelmet from "../../shared/PageTitle/PageHelmet";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure/useAxios";
-import SubLoader from '../../shared/Loader/SubLoader';
 import { useQuery } from "@tanstack/react-query";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-import { FaUserShield } from "react-icons/fa";
+import { AiOutlineInfoCircle, AiOutlineUserSwitch } from "react-icons/ai";
+import { FaUserShield, FaCrown, FaUserCheck } from "react-icons/fa";
 import { FiSearch, FiX } from "react-icons/fi";
+import { MdWorkspacePremium, MdOutlineAdminPanelSettings } from "react-icons/md";
 import { toast } from 'sonner';
 import Swal from "sweetalert2";
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
     const [filters, setFilters] = useState({ name: "", email: "", role: "" });
     const [selectedUser, setSelectedUser] = useState(null);
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10); // 10 users per page
 
-    // Fetching all users info
-    const { data: users = [], refetch, isPending } = useQuery({
-        queryKey: ["users"],
+    // Fetching all users info with pagination
+    const { data, refetch, isPending } = useQuery({
+        queryKey: ["users", page],
         queryFn: async () => {
-            const res = await axiosSecure.get("/all-users");
-            return res.data.allUsers;
+            const res = await axiosSecure.get(`/api/all-users?page=${page}&limit=${limit}`);
+            return res.data;
         },
     });
 
+    const { allUsers = [], totalUsers = 0, totalPages = 1 } = data || {};
+
     // Make admin handler
     const handleMakeAdmin = async (email) => {
-
         try {
             Swal.fire({
                 title: 'Are you sure?',
@@ -38,14 +42,13 @@ const AllUsers = () => {
                 confirmButtonText: 'Yes!',
                 cancelButtonText: 'Cancel'
             }).then(async (result) => {
-
                 if (result.isConfirmed) {
-                    const res = await axiosSecure.patch(`/users/admin/${email}`, {
+                    const res = await axiosSecure.patch(`/api/users/admin/${email}`, {
                         role: "admin",
                     });
 
                     if (res.data.modifiedCount > 0) {
-                        toast.success("User promoted to admin! 👑");
+                        toast.success("User promoted to admin!");
                         refetch();
                     }
                 };
@@ -56,17 +59,58 @@ const AllUsers = () => {
         }
     };
 
+    // Make premium handler
+    const handleMakePremium = async (email) => {
+        try {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to make this user Premium!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes!',
+                cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await axiosSecure.patch(`/api/users/${email}`, {
+                        isPremium: true,
+                        premiumTaken: new Date(),
+                        premiumExpiresAt: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+                    });
+
+                    if (res.data.modifiedCount > 0) {
+                        toast.success("User upgraded to Premium!");
+                        refetch();
+                    }
+                };
+            });
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to upgrade user!");
+        }
+    };
+
     const clearFilter = (field) => {
         setFilters({ ...filters, [field]: "" });
     };
 
-    const filteredUsers = users.filter((user) => {
+    const filteredUsers = allUsers.filter((user) => {
         const nameMatch = user.name?.toLowerCase().includes(filters.name.toLowerCase());
         const emailMatch = user.email?.toLowerCase().includes(filters.email.toLowerCase());
         const roleMatch = user.role?.toLowerCase().includes(filters.role.toLowerCase());
 
         return nameMatch && emailMatch && roleMatch;
     });
+
+    // Pagination handlers
+    const handlePrevPage = () => {
+        if (page > 1) setPage(page - 1);
+    };
+
+    const handleNextPage = () => {
+        if (page < totalPages) setPage(page + 1);
+    };
 
     return (
         <>
@@ -107,32 +151,72 @@ const AllUsers = () => {
                 </div>
 
                 {isPending ? (
-                    <div className="flex items-center justify-center mx-auto my-10">
-                        <div className="md:hidden">
-                            <SubLoader size="text-xl" />
-                        </div>
-                        <div className="hidden md:block xl:hidden">
-                            <SubLoader size="text-2xl" />
-                        </div>
-                        <div className="hidden xl:block">
-                            <SubLoader size="text-3xl" />
-                        </div>
+                    <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)] shadow-md">
+                        <table className="table w-full border-separate border-spacing-0">
+                            <thead>
+                                <tr className="font-oxygen bg-[var(--accent-white)] dark:bg-gray-700 text-base">
+                                    <th className="p-3 text-left font-semibold rounded-tl-lg">Index</th>
+                                    <th className="p-3 text-left font-semibold">Profile</th>
+                                    <th className="p-3 text-left font-semibold">Name</th>
+                                    <th className="p-3 text-left font-semibold">Email</th>
+                                    <th className="p-3 text-left font-semibold">Role</th>
+                                    <th className="p-3 text-left font-semibold">Premium</th>
+                                    <th className="p-3 text-center font-semibold rounded-tr-lg">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody className="font-jost">
+                                {[...Array(5)].map((_, index) => (
+                                    <tr
+                                        key={index}
+                                        className="hover:bg-slate-50 dark:hover:bg-[#33333d] border-b border-gray-200 dark:border-gray-600 last:border-b-0"
+                                    >
+                                        <td className="p-3 text-base font-medium">
+                                            <Skeleton width={20} />
+                                        </td>
+                                        <td className="p-3">
+                                            <Skeleton circle width={40} height={40} />
+                                        </td>
+                                        <td className="p-3 text-base">
+                                            <Skeleton width={100} />
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="text-base text-gray-700 dark:text-gray-200">
+                                                <Skeleton width={150} />
+                                            </div>
+                                        </td>
+                                        <td className="p-3">
+                                            <Skeleton width={80} height={25} />
+                                        </td>
+                                        <td className="p-3">
+                                            <Skeleton width={60} />
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="flex justify-center items-center gap-2">
+                                                <Skeleton circle width={24} height={24} />
+                                                <Skeleton circle width={24} height={24} />
+                                                <Skeleton circle width={24} height={24} />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
-
-                ) : users.length === 0 ? (
+                ) : allUsers.length === 0 ? (
                     <p className="text-xl text-gray-600 col-span-full text-center font-libreBas">No users found.</p>
                 ) : <>
                     {/* Table */}
-                    <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)]">
-                        <table className="table w-full">
+                    <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)] shadow-md">
+                        <table className="table w-full border-separate border-spacing-0">
                             <thead>
-                                <tr className="font-oxygen bg-[var(--accent-white)] (--dark-secondary)] dark:text-[var(--white)] dark:bg-gray-700">
-                                    <th>Index</th>
-                                    <th>Profile</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th className="text-center">Action</th>
+                                <tr className="font-oxygen bg-[var(--accent-white)] dark:bg-gray-700 text-base">
+                                    <th className="p-3 text-left font-semibold rounded-tl-lg">Index</th>
+                                    <th className="p-3 text-left font-semibold">Profile</th>
+                                    <th className="p-3 text-left font-semibold">Name</th>
+                                    <th className="p-3 text-left font-semibold">Email</th>
+                                    <th className="p-3 text-left font-semibold">Role</th>
+                                    <th className="p-3 text-left font-semibold">Premium</th>
+                                    <th className="p-3 text-center font-semibold rounded-tr-lg">Action</th>
                                 </tr>
                             </thead>
 
@@ -140,16 +224,20 @@ const AllUsers = () => {
                                 {filteredUsers.map((user, index) => (
                                     <tr
                                         key={user._id}
-                                        className="hover:bg-slate-50 dark:hover:bg-[#33333d]"
+                                        className="hover:bg-slate-50 dark:hover:bg-[#33333d] border-b border-gray-200 dark:border-gray-600 last:border-b-0"
                                     >
-                                        <td>{index + 1}</td>
+                                        <td className="p-3 text-base font-medium">
+                                            {(page - 1) * limit + index + 1}
+                                        </td>
 
-                                        <td>
+                                        <td className="p-3">
                                             <div className="avatar">
-                                                <div className="mask mask-squircle w-7 h-7 md:w-10 md:h-10">
+                                                <div className="mask mask-squircle w-10 h-10">
                                                     <img 
                                                         src={user.photo || '/default-user.png'} 
                                                         alt="User profile" 
+                                                        className="object-cover blur-sm"
+                                                        onLoad={(e) => e.target.classList.remove('blur-sm')}
                                                         onError={(e) => {
                                                             e.target.src = '/default-user.png';
                                                         }}
@@ -158,49 +246,74 @@ const AllUsers = () => {
                                             </div>
                                         </td>
 
-                                        <td className="text-xs md:text-sm">
-                                            {user.name || "Unnamed"}
+                                        <td className="p-3 text-base">
+                                            <span className="font-medium">{user.name || "Unnamed"}</span>
                                         </td>
-                                        <td className="text-xs md:text-sm text-gray-600 dark:text-gray-200 font-semibold">
-                                            <p className="md:hidden">
-                                                {user.email.slice(0, 12)}...
-                                            </p>
-                                            <p className="hidden md:block">{user.email}</p>
+                                        <td className="p-3">
+                                            <div className="text-base text-gray-700 dark:text-gray-200">
+                                                <p>{user.email}</p>
+                                            </div>
                                         </td>
-                                        <td className="uppercase">
-                                            {user.role || "user"}
+                                        <td className="p-3">
+                                            <span className="text-base font-semibold uppercase px-2 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
+                                                {user.role || "user"}
+                                            </span>
                                         </td>
-                                        <td className="flex justify-center items-center gap-1">
-                                            {user.role === "admin" ? (
-                                                <span className="text-base md:text-lg text-[var(--primary)] dark:text-[#a5a1fa] font-semibold rounded-md ">Admin</span>
+                                        <td className="p-3">
+                                            {user.isPremium ? (
+                                                <span className="flex items-center text-amber-600 dark:text-amber-400 text-base font-semibold">
+                                                    <FaCrown className="mr-1" /> Yes
+                                                </span>
                                             ) : (
-                                                <>
-                                                    <div className="tooltip" data-tip="Make Admin" >
-                                                        <button
-                                                            onClick={() => handleMakeAdmin(user.email)}
-                                                            className="btn btn-xs md:btn-sm bg-[#8884d8] text-[var(--white)] hover:hover:bg-[#ebe9e9]  hover:text-[#8884d8] rounded-lg transition duration-500 border-none shadow-none"
-                                                        >
-                                                            <FaUserShield />
-                                                        </button>
-                                                    </div>
-
-                                                    <div className="tooltip" data-tip="View Details">
-                                                        <button
-                                                            onClick={() => setSelectedUser(user)}
-                                                            className="btn btn-xs md:btn-sm bg-[var(--primary)] text-[var(--white)] hover:hover:bg-[#ebe9e9] hover:text-[var(--primary)] dark:bg-[var(--accent-white)] dark:text-[var(--dark)] rounded-lg transition duration-500 border-none shadow-none"
-                                                        >
-                                                            <AiOutlineInfoCircle />
-                                                        </button>
-                                                    </div>
-                                                </>
+                                                <span className="text-gray-500 dark:text-gray-400 text-base">No</span>
                                             )}
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="flex justify-center items-center gap-2">
+                                                {user.role === "admin" ? (
+                                                    <span className="text-base text-[var(--primary)] dark:text-[#a5a1fa] font-semibold px-2 py-1 rounded-md bg-purple-100 dark:bg-purple-900">
+                                                        Admin
+                                                    </span>
+                                                ) : (
+                                                    <>
+                                                        <div className="tooltip" data-tip="Make Admin">
+                                                            <button
+                                                                onClick={() => handleMakeAdmin(user.email)}
+                                                                className="btn btn-sm p-1.5 bg-[#8884d8] text-[var(--white)] hover:bg-[#6c68c0] rounded-xs cursor-pointer transition duration-300 border-none shadow-sm"
+                                                            >
+                                                                <MdOutlineAdminPanelSettings  className="text-base" />
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        {!user.isPremium && (
+                                                            <div className="tooltip" data-tip="Make Premium">
+                                                                <button
+                                                                    onClick={() => handleMakePremium(user.email)}
+                                                                    className="btn btn-sm p-1.5 bg-amber-500 text-[var(--white)] hover:bg-amber-600 rounded-xs cursorpointer transition duration-300 border-none shadow-sm"
+                                                                >
+                                                                    <MdWorkspacePremium className="text-base" />
+                                                                </button>
+                                                            </div>
+                                                        )}
+
+                                                        <div className="tooltip" data-tip="View Details">
+                                                            <button
+                                                                onClick={() => setSelectedUser(user)}
+                                                                className="btn btn-sm p-1.5 bg-[var(--primary)] text-[var(--white)] hover:bg-[#d33] rounded-xs cursor-pointer transition duration-300 border-none shadow-sm"
+                                                            >
+                                                                <AiOutlineInfoCircle className="text-base" />
+                                                            </button>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
 
                                 {filteredUsers.length === 0 && (
-                                    <tr className="rounded-md">
-                                        <td colSpan="6" className="text-center py-3 text-lg">
+                                    <tr>
+                                        <td colSpan="7" className="text-center py-6 text-lg rounded-b-lg">
                                             No users found with that search info.
                                         </td>
                                     </tr>
@@ -208,11 +321,38 @@ const AllUsers = () => {
                             </tbody>
                         </table>
                     </div>
+                    
+                    {/* Pagination */}
+                    <div className="flex justify-between items-center mt-4">
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Showing {(page - 1) * limit + 1} to {Math.min(page * limit, totalUsers)} of {totalUsers} users
+                        </p>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={handlePrevPage}
+                                disabled={page === 1}
+                                className={`px-4 py-2 rounded-lg ${page === 1 ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-[var(--primary)] hover:bg-[#d33] text-white'}`}
+                            >
+                                Previous
+                            </button>
+                            <span className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                                Page {page} of {totalPages}
+                            </span>
+                            <button
+                                onClick={handleNextPage}
+                                disabled={page === totalPages}
+                                className={`px-4 py-2 rounded-lg ${page === totalPages ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-[var(--primary)] hover:bg-[#d33] text-white'}`}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
                 </>}
+
                 {/* Modal */}
                 {
                     selectedUser && (
-                        <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-[9999]">
+                        <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-[999999]">
                             <div className="bg-white dark:bg-[var(--dark-secondary)] p-6 rounded-lg shadow w-[95%] max-w-[280px] sm:max-w-sm space-y-4 relative text-[var(--dark)] dark:text-[var(--white)]">
                                 <div className="flex justify-between items-center">
                                     <h2 className="text-2xl font-bold font-oxygen">
