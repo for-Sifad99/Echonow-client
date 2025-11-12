@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useAxiosPublic from '../../../../hooks/useAxiosPublic/useAxios';
 import useHandle from '../../../../hooks/useHandle/useHandle';
 import { useQuery } from '@tanstack/react-query';
@@ -12,43 +12,36 @@ import 'react-loading-skeleton/dist/skeleton.css';
 const BannerSlider = () => {
     const axiosPublic = useAxiosPublic();
     const handleNavigate = useHandle();
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    // Handle window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Determine slides to show based on window width
+    const getSlidesToShow = () => {
+        if (windowWidth < 640) return 1;
+        if (windowWidth < 768) return 2;
+        if (windowWidth < 1024) return 3;
+        return 4;
+    };
 
     // Carousel settings
     const settings = {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 4,
+        slidesToShow: getSlidesToShow(),
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
-        pauseOnHover: false,
-        responsive: [
-            {
-                breakpoint: 640,
-                settings: {
-                    slidesToShow: 1
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2
-                }
-            },
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3
-                }
-            },
-            {
-                breakpoint: 1280,
-                settings: {
-                    slidesToShow: 4
-                }
-            }
-        ]
+        pauseOnHover: false
     };
 
     // Fetching all hot articles (special articles)
@@ -65,8 +58,8 @@ const BannerSlider = () => {
         return (
             <div className="relative z-0 px-2 sm:mx-3 py-3 xl:max-w-[1366px] 2xl:max-w-[1728px] xl:mx-auto">
                 <div className="overflow-hidden">
-                    <Slider {...settings}>
-                        {[...Array(4)].map((_, idx) => (
+                    <Slider key={windowWidth} {...settings}>
+                        {[...Array(getSlidesToShow())].map((_, idx) => (
                             <div key={idx} className="px-1">
                                 <div className="group relative w-full h-full overflow-hidden shadow-lg">
                                     <Skeleton height={300} className="w-full" />
@@ -91,7 +84,7 @@ const BannerSlider = () => {
         <div className="relative z-0 px-2 sm:mx-3 py-3 xl:max-w-[1366px] 2xl:max-w-[1728px] xl:mx-auto">
             {trendingArticles.length > 0 ? (
                 <div className="overflow-hidden">
-                    <Slider {...settings}>
+                    <Slider key={windowWidth} {...settings}>
                         {trendingArticles.map((article, idx) => (
                             <div key={idx} className="px-1">
                                 <div onClick={() => handleNavigate(article, article._id)} className="group relative w-full h-full overflow-hidden shadow-lg">

@@ -45,7 +45,18 @@ const testimonials = [
 export default function TestimonialSection() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const intervalRef = useRef(null);
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000); // 2s minimum skeleton
@@ -106,10 +117,15 @@ export default function TestimonialSection() {
     }
   };
 
-  // Get visible testimonials for carousel (always 4 items)
+  // Get visible testimonials for carousel (responsive number of items)
   const getVisibleTestimonials = () => {
+    // Determine how many testimonials to show based on screen size
+    const testimonialsToShow = windowWidth < 640 ? 1 : 
+                              windowWidth < 768 ? 2 : 
+                              windowWidth < 1024 ? 3 : 4;
+    
     const visible = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < testimonialsToShow; i++) {
       const index = (currentIndex + i) % testimonials.length;
       visible.push({ ...testimonials[index], originalIndex: index });
     }
@@ -155,19 +171,14 @@ export default function TestimonialSection() {
           </svg>
         </button>
 
-        {/* Testimonials grid with left-to-right sliding animation */}
-        <div className="grid gap-2 sm:gap-3 xl:gap-4 sm:grid-cols-2 lg:grid-cols-4 px-10">
-          {getVisibleTestimonials().map((item, idx) => (
-            <div
-              key={`${item.originalIndex}-${idx}`}
-              className={`text-[var(--dark)] dark:text-[var(--white)] border border-[#e0e0e0] dark:border-[#3f3f3f] p-6 shadow-lg flex flex-col justify-between transition-all duration-700 transform ${
-                loading ? '' : 'hover:scale-105 hover:shadow-xl'
-              }`}
-              style={{
-                animation: 'slideInLeft 0.7s ease-out',
-              }}
-            >
-              {loading ? (
+        {/* Testimonials grid with responsive columns */}
+        <div className="grid gap-2 sm:gap-3 xl:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-10">
+          {loading ? (
+            // Skeleton loading for different screen sizes
+            Array.from({ length: windowWidth < 640 ? 1 : 
+                               windowWidth < 768 ? 2 : 
+                               windowWidth < 1024 ? 3 : 4 }).map((_, idx) => (
+              <div key={idx} className="text-[var(--dark)] dark:text-[var(--white)] border border-[#e0e0e0] dark:border-[#3f3f3f] p-6 shadow-lg flex flex-col justify-between">
                 <div>
                   <Skeleton width="70%" height={20} />
                   <Skeleton count={3} className="mt-3" />
@@ -176,7 +187,14 @@ export default function TestimonialSection() {
                     <Skeleton width={100} />
                   </div>
                 </div>
-              ) : (
+              </div>
+            ))
+          ) : (
+            getVisibleTestimonials().map((item, idx) => (
+              <div
+                key={`${item.originalIndex}-${idx}`}
+                className="text-[var(--dark)] dark:text-[var(--white)] border border-[#e0e0e0] dark:border-[#3f3f3f] p-6 shadow-lg flex flex-col justify-between transition-all duration-700 transform hover:scale-105 hover:shadow-xl"
+              >
                 <div className="flex flex-col justify-between h-full">
                   <div>
                     <h3 className="font-oxygen text-lg font-semibold">{item.title}</h3>
@@ -203,9 +221,9 @@ export default function TestimonialSection() {
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            ))
+          )}
         </div>
 
         {/* Dots indicator */}
@@ -224,20 +242,6 @@ export default function TestimonialSection() {
           ))}
         </div>
       </div>
-
-      {/* Custom animation styles for left-to-right sliding */}
-      <style>{`
-        @keyframes slideInLeft {
-          from { 
-            opacity: 0; 
-            transform: translateX(-20px); 
-          }
-          to { 
-            opacity: 1; 
-            transform: translateX(0); 
-          }
-        }
-      `}</style>
     </section>
   );
 }
