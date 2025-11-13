@@ -136,16 +136,6 @@ const DasSidebar = ({ isSidebarOpen }) => {
                     </>
                 }
 
-                <li className='md:hidden'>
-                    <div onClick={() => setOpenStg(!openStg)} className="w-full flex flex-col justify-center items-center">
-                        <MUILink
-                            size={'90%'}
-                            text={'Mode Settings'}
-                            icon1={<RiSettings3Fill />}
-                            icon2={<IoIosArrowForward className={`transform transition-transform duration-300 ${openStg ? 'rotate-90' : ''}`} />}
-                        />
-                    </div>
-                </li>
 
                 <li className='md:hidden'>
                     <div onClick={() => setOpenPro(!openPro)} className="w-full flex flex-col justify-center items-center">
