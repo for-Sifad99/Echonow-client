@@ -60,9 +60,16 @@ const Login = () => {
                         position: 'top-right'
                     });
                     
-                    setTimeout(() => {
-                        navigate(from, { replace: true });
-                    }, 3000);
+                    // Check if user is admin and redirect accordingly
+                    if (userRes.data && userRes.data.role === 'admin') {
+                        setTimeout(() => {
+                            navigate('/dashboard', { replace: true });
+                        }, 3000);
+                    } else {
+                        setTimeout(() => {
+                            navigate(from, { replace: true });
+                        }, 3000);
+                    }
                 }
             })
             .catch(err => {
@@ -108,7 +115,7 @@ const Login = () => {
                 <p className="mb-4 sm:mb-6 text-sm text-[var(--accent)] dark:text-[var(--accent-white)]">Welcome back</p>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 lg:space-y-3">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-2 lg:space-y-3">
                     {/* Email */}
                     <div>
                         <Label className="text-sm font-medium text-gray-700 dark:text-gray-100">Email Address</Label>
@@ -168,7 +175,7 @@ const Login = () => {
                 </form>
 
                 {/* Social login */}
-                <div className="flex justify-start md:hidden">
+                <div className="flex justify-start md:hidden mt-2">
                     <SocialLogin />
                 </div>
             </div>

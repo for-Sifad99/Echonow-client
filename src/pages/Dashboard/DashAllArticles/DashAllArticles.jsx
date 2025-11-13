@@ -13,15 +13,13 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 const DashAllArticles = () => {
     const axiosSecure = useAxiosSecure();
-    const [searchName, setSearchName] = useState('');
-    const [searchEmail, setSearchEmail] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [declineModalOpen, setDeclineModalOpen] = useState(false);
     const [declineReason, setDeclineReason] = useState('');
     const [page, setPage] = useState(1);
-    const [limit] = useState(10); // 10 articles per page
+    const [limit] = useState(10);
 
-    // Status badge component
     const StatusBadge = ({ status }) => {
         const statusStyles = {
             pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100",
@@ -36,7 +34,6 @@ const DashAllArticles = () => {
         );
     };
 
-    // Fetching all articles info with pagination
     const { data, isLoading, refetch } = useQuery({
         queryKey: ['articles', page],
         queryFn: async () => {
@@ -47,7 +44,6 @@ const DashAllArticles = () => {
 
     const { allArticles = [], total = 0, totalPages = 1 } = data || {};
 
-    // Approve handler
     const handleApprove = async (id) => {
         try {
             Swal.fire({
@@ -62,7 +58,6 @@ const DashAllArticles = () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const res = await axiosSecure.patch(`/api/articles/${id}`, { status: 'approved' });
-
                     if (res.data.result.modifiedCount > 0) {
                         toast.success("Articles successfully approved!");
                         refetch();
@@ -75,14 +70,12 @@ const DashAllArticles = () => {
         };
     };
 
-    // Make premium handler
     const handleMakePremium = async (id) => {
         try {
             const res = await axiosSecure.patch(`/api/articles/${id}`, { isPremium: true });
             if (res.data.result.modifiedCount > 0) {
                 toast.success("Articles successfully made premium!");
             }
-
             refetch();
         } catch (err) {
             console.error(err);
@@ -90,36 +83,30 @@ const DashAllArticles = () => {
         }
     };
 
-    // Decline handler
     const handleDecline = (article) => {
         setSelectedArticle(article);
         setDeclineModalOpen(true);
     };
 
-    // Conform decline handler
     const confirmDecline = async () => {
         try {
             const CleanDeclineReason = declineReason === '' ? null : declineReason;
             const status = declineReason === '' ? 'pending' : 'declined';
-
             const res = await axiosSecure.patch(`/api/articles/${selectedArticle._id}`, {
                 status: status,
                 declineReason: CleanDeclineReason,
             });
-
             setDeclineModalOpen(false);
             if (res.data.result.modifiedCount > 0) {
                 toast.success("Articles successfully declined!");
             }
             refetch();
-
         } catch (err) {
             console.error(err);
             toast.error("Failed to decline!");
         };
     };
 
-    // Delete handler
     const handleDelete = async (id) => {
         try {
             Swal.fire({
@@ -134,8 +121,6 @@ const DashAllArticles = () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const res = await axiosSecure.delete(`/api/articles/${id}`);
-
-                    // Removed unnecessary console.log
                     if (res.data.result.deletedCount > 0) {
                         toast.success("Articles successfully deleted!");
                         refetch();
@@ -150,11 +135,11 @@ const DashAllArticles = () => {
     };
 
     const filteredArticles = allArticles.filter((a) =>
-        a.authorName.toLowerCase().includes(searchName.toLowerCase()) &&
-        a.authorEmail.toLowerCase().includes(searchEmail.toLowerCase())
+        a.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        a.authorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        a.authorEmail.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Pagination handlers
     const handlePrevPage = () => {
         if (page > 1) setPage(page - 1);
     };
@@ -165,54 +150,32 @@ const DashAllArticles = () => {
 
     return (
         <>
-            {/* Page Title */}
             <PageHelmet
                 title="Manage Article"
                 description="Approve, decline, or make articles premium from this admin panel."
             />
 
-            {/* Content */}
             <div className="space-y-4">
-                <h1 className='flex justify-center sm:justify-start text-4xl sm:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-11 mb-6'>
+                <h1 className='flex justify-center sm:justify-start text-3xl sm:text-4xl md:text-5xl text-[var(--dark)] dark:text-[var(--white)] font-oxygen font-semibold leading-tight mb-6'>
                     All Articles
                 </h1>
 
-                <div className="w-full max-w-[280px] sm:max-w-4/5 md:max-w-4/7 flex flex-col sm:flex-row gap-1 sm:gap-2">
+               {/* Search Box */}
+                <div className="w-full">
                     <div
-                        className='font-oxygen flex items-center text-sm px-1 w-full h-11 text-[var(--dark)] dark:text-[var(--white)] dark:bg-[var(--accent)] bg-[var(--accent-white)] border-2 border-gray-100 dark:border-gray-600 rounded-xl relative'
+                        className='font-oxygen flex items-center text-sm px-2 sm:px-3 w-full sm:w-[400px] md:w-[450px] h-11 sm:h-12 text-[var(--dark)] dark:text-[var(--white)] dark:bg-[var(--accent)] bg-[var(--accent-white)] border-2 border-gray-100 dark:border-gray-600 rounded-xl relative transition-all duration-300 focus-within:ring-2 focus-within:ring-[var(--primary)]'
                     >
                         <input
                             type="text"
-                            placeholder="Search by Name"
-                            value={searchName}
-                            onChange={(e) => setSearchName(e.target.value)}
-                            className='ml-2 bg-transparent border-none outline-none w-full'
+                            placeholder="Search by title, author name or email"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className='ml-2 bg-transparent border-none outline-none w-full text-sm sm:text-base'
                         />
 
-                        {searchName ? (
+                        {searchTerm ? (
                             <FiX
-                                onClick={() => setSearchName('')}
-                                className="stroke-[var(--primary)] dark:stroke-[var(--white)] dark:bg-[var(--accent)] bg-[var(--accent-white)] p-[10px] h-[36px] w-[36px] rounded-xl cursor-pointer"
-                            />
-                        ) :
-                            <FiSearch className="stroke-[var(--primary)] dark:stroke-[var(--white)] dark:bg-[var(--accent)] bg-[var(--accent-white)] p-[10px] h-[36px] w-[36px] rounded-xl cursor-pointer" />
-                        }
-                    </div>
-
-                    <div
-                        className='font-oxygen flex items-center text-sm px-1 w-full h-11 text-[var(--dark)] dark:text-[var(--white)] dark:bg-[var(--accent)] bg-[var(--accent-white)] border-2 border-gray-100 dark:border-gray-600 rounded-xl'
-                    >
-                        <input
-                            type="text"
-                            placeholder="Search by Email"
-                            value={searchEmail}
-                            onChange={(e) => setSearchEmail(e.target.value)}
-                            className='ml-2 bg-transparent border-none outline-none w-full'
-                        />
-
-                        {searchEmail ? (
-                            <FiX
-                                onClick={() => setSearchEmail('')}
+                                onClick={() => setSearchTerm('')}
                                 className="stroke-[var(--primary)] dark:stroke-[var(--white)] dark:bg-[var(--accent)] bg-[var(--accent-white)] p-[10px] h-[36px] w-[36px] rounded-xl cursor-pointer"
                             />
                         ) :
@@ -221,180 +184,119 @@ const DashAllArticles = () => {
                     </div>
                 </div>
 
+                {/* Table */}
                 {isLoading ? (
-                    <div className="rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)] shadow-md">
-                        <table className="table w-full border-separate border-spacing-0">
-                            <thead>
-                                <tr className="font-oxygen bg-[var(--accent-white)] dark:bg-gray-700 text-sm">
-                                    <th className="p-2 text-left font-semibold rounded-tl-lg">Index</th>
-                                    <th className="p-2 text-left font-semibold">Image</th>
-                                    <th className="p-2 text-left font-semibold">Title</th>
-                                    <th className="p-2 text-left font-semibold">Author</th>
-                                    <th className="p-2 text-left font-semibold">Status</th>
-                                    <th className="p-2 text-left font-semibold">Premium</th>
-                                    <th className="p-2 text-center font-semibold rounded-tr-lg">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="font-jost">
-                                {[...Array(5)].map((_, index) => (
-                                    <tr
-                                        key={index}
-                                        className="hover:bg-slate-50 dark:hover:bg-[#33333d] border-b border-gray-200 dark:border-gray-600 last:border-b-0"
-                                    >
-                                        <td className="p-2 text-sm font-medium">
-                                            <Skeleton width={20} />
-                                        </td>
-                                        <td className="p-2">
-                                            <Skeleton circle width={32} height={32} />
-                                        </td>
-                                        <td className="p-2 text-sm max-w-xs">
-                                            <Skeleton width={100} />
-                                        </td>
-                                        <td className="p-2">
-                                            <div className="text-sm">
-                                                <Skeleton width={80} />
-                                                <Skeleton width={100} className="mt-1" />
-                                            </div>
-                                        </td>
-                                        <td className="p-2">
-                                            <Skeleton width={60} height={25} />
-                                        </td>
-                                        <td className="p-2">
-                                            <Skeleton width={40} />
-                                        </td>
-                                        <td className="p-2">
-                                            <div className="flex justify-center items-center gap-1">
-                                                <Skeleton circle width={24} height={24} />
-                                                <Skeleton circle width={24} height={24} />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)] shadow-md">
+                        <Skeleton count={8} height={40} />
                     </div>
                 ) : (
-                    <div className="rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)] shadow-md">
-                        <table className="table w-full border-separate border-spacing-0">
+                    <div className="overflow-x-auto rounded-lg custom-scrollbar text-[var(--dark)] dark:text-[var(--white)] shadow-md">
+                        <table className="table w-full border-separate border-spacing-0 min-w-[800px] md:min-w-full">
                             <thead>
-                                <tr className="font-oxygen bg-[var(--accent-white)] dark:bg-gray-700 text-sm">
-                                    <th className="p-2 text-left font-semibold rounded-tl-lg">Index</th>
-                                    <th className="p-2 text-left font-semibold">Image</th>
-                                    <th className="p-2 text-left font-semibold">Title</th>
-                                    <th className="p-2 text-left font-semibold">Author</th>
-                                    <th className="p-2 text-left font-semibold">Status</th>
-                                    <th className="p-2 text-left font-semibold">Premium</th>
-                                    <th className="p-2 text-center font-semibold rounded-tr-lg">Actions</th>
+                                <tr className="font-oxygen bg-[var(--accent-white)] dark:bg-gray-700 text-xs sm:text-sm">
+                                    <th className="p-3 text-left font-semibold rounded-tl-lg">Index</th>
+                                    <th className="p-3 text-left font-semibold">Image</th>
+                                    <th className="p-3 text-left font-semibold">Title</th>
+                                    <th className="p-3 text-left font-semibold">Author</th>
+                                    <th className="p-3 text-left font-semibold">Status</th>
+                                    <th className="p-3 text-left font-semibold">Premium</th>
+                                    <th className="p-3 text-center font-semibold rounded-tr-lg">Actions</th>
                                 </tr>
                             </thead>
-
                             <tbody className="font-jost">
                                 {filteredArticles.map((article, index) => (
-                                    <tr
-                                        key={article._id}
-                                        className="hover:bg-slate-50 dark:hover:bg-[#33333d] border-b border-gray-200 dark:border-gray-600 last:border-b-0"
-                                    >
-                                        <td className="p-2 text-sm font-medium">
+                                    <tr key={article._id} className="hover:bg-slate-50 dark:hover:bg-[#33333d] border-b border-gray-200 dark:border-gray-600 last:border-b-0 transition-all duration-300">
+                                        <td className="p-3 text-xs sm:text-sm font-medium">
                                             {(page - 1) * limit + index + 1}
                                         </td>
 
-                                        <td className="p-2">
+                                        <td className="p-3">
                                             <div className="avatar">
-                                                <div className="mask mask-squircle w-8 h-8">
-                                                    <img 
-                                                        src={article.image} 
-                                                        alt="Article" 
-                                                        className="object-cover blur-sm"
+                                                <div className="mask mask-squircle w-9 h-9">
+                                                    <img
+                                                        src={article.image}
+                                                        alt="Article"
+                                                        className="object-cover blur-sm rounded-md"
                                                         onLoad={(e) => e.target.classList.remove('blur-sm')}
                                                     />
                                                 </div>
                                             </div>
                                         </td>
 
-                                        <td className="p-2 text-sm max-w-xs">
-                                            <span className="font-medium line-clamp-1">{article.title}</span>
+                                        <td className="p-3 text-xs sm:text-sm max-w-[100px] sm:max-w-xs font-medium line-clamp-1">
+                                            {article.title}
                                         </td>
-                                        <td className="p-2">
-                                            <div className="text-sm">
-                                                <p className="font-medium truncate max-w-[100px]">{article.authorName}</p>
-                                                <p className="text-xs text-gray-600 dark:text-gray-300 truncate max-w-[100px]">{article.authorEmail}</p>
-                                            </div>
+
+                                        <td className="p-3 text-xs sm:text-sm">
+                                            <p className="font-medium truncate">{article.authorName}</p>
+                                            <p className="text-xs text-gray-600 dark:text-gray-300 truncate">{article.authorEmail}</p>
                                         </td>
-                                        <td className="p-2">
+
+                                        <td className="p-3">
                                             <StatusBadge status={article.status} />
                                         </td>
-                                        <td className="p-2">
+
+                                        <td className="p-3">
                                             {article.isPremium ? (
-                                                <span className="flex items-center text-amber-600 dark:text-amber-400 text-sm font-semibold">
+                                                <span className="flex items-center text-amber-600 dark:text-amber-400 text-xs sm:text-sm font-semibold">
                                                     <FaCrown className="mr-1 text-xs" /> Yes
                                                 </span>
                                             ) : (
-                                                <span className="text-gray-500 dark:text-gray-400 text-sm">No</span>
+                                                <span className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No</span>
                                             )}
                                         </td>
-                                        <td className="p-2">
+
+                                        <td className="p-3">
                                             <div className="flex justify-center items-center gap-1">
                                                 {article.status === 'pending' ? (
                                                     <>
-                                                        <div className="tooltip" data-tip="Approve">
-                                                            <button
-                                                                onClick={() => handleApprove(article._id)}
-                                                                className="btn btn-xs p-1 bg-green-500 text-[var(--white)] hover:bg-green-600 rounded-md transition duration-300 border-none shadow-sm"
-                                                            >
-                                                                <FaCheck className="text-sm" />
-                                                            </button>
-                                                        </div>
+                                                        <button
+                                                            onClick={() => handleApprove(article._id)}
+                                                            className="btn btn-xs p-1 bg-green-500 text-white hover:bg-green-600 rounded-md border-none"
+                                                        >
+                                                            <FaCheck className="text-xs" />
+                                                        </button>
 
-                                                        <div className="tooltip" data-tip="Decline">
-                                                            <button
-                                                                onClick={() => handleDecline(article)}
-                                                                className="btn btn-xs p-1 bg-red-500 text-[var(--white)] hover:bg-red-600 rounded-md transition duration-300 border-none shadow-sm"
-                                                            >
-                                                                <FaTimes className="text-sm" />
-                                                            </button>
-                                                        </div>
+                                                        <button
+                                                            onClick={() => handleDecline(article)}
+                                                            className="btn btn-xs p-1 bg-red-500 text-white hover:bg-red-600 rounded-md border-none"
+                                                        >
+                                                            <FaTimes className="text-xs" />
+                                                        </button>
                                                     </>
                                                 ) : article.status === 'approved' ? (
                                                     <>
                                                         {!article.isPremium && (
-                                                            <div className="tooltip" data-tip="Make Premium">
-                                                                <button
-                                                                    onClick={() => handleMakePremium(article._id)}
-                                                                    className="btn btn-xs p-1 bg-amber-500 text-[var(--white)] hover:bg-amber-600 rounded-md transition duration-300 border-none shadow-sm"
-                                                                >
-                                                                    <FaCrown className="text-sm" />
-                                                                </button>
-                                                            </div>
+                                                            <button
+                                                                onClick={() => handleMakePremium(article._id)}
+                                                                className="btn btn-xs p-1 bg-amber-500 text-white hover:bg-amber-600 rounded-md border-none"
+                                                            >
+                                                                <FaCrown className="text-xs" />
+                                                            </button>
                                                         )}
 
-                                                        <div className="tooltip" data-tip="View Details">
-                                                            <button
-                                                                onClick={() => setSelectedArticle(article)}
-                                                                className="btn btn-xs p-1 bg-[var(--primary)] text-[var(--white)] hover:bg-[#d33] rounded-md transition duration-300 border-none shadow-sm"
-                                                            >
-                                                                <AiOutlineInfoCircle className="text-sm" />
-                                                            </button>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <div className="tooltip" data-tip="View Details">
                                                         <button
                                                             onClick={() => setSelectedArticle(article)}
-                                                            className="btn btn-xs p-1 bg-[var(--primary)] text-[var(--white)] hover:bg-[#d33] rounded-md transition duration-300 border-none shadow-sm"
+                                                            className="btn btn-xs p-1 bg-[var(--primary)] text-white hover:bg-[#d33] rounded-md border-none"
                                                         >
-                                                            <AiOutlineInfoCircle className="text-sm" />
+                                                            <AiOutlineInfoCircle className="text-xs" />
                                                         </button>
-                                                    </div>
+                                                    </>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => setSelectedArticle(article)}
+                                                        className="btn btn-xs p-1 bg-[var(--primary)] text-white hover:bg-[#d33] rounded-md border-none"
+                                                    >
+                                                        <AiOutlineInfoCircle className="text-xs" />
+                                                    </button>
                                                 )}
 
-                                                <div className="tooltip" data-tip="Delete">
-                                                    <button
-                                                        onClick={() => handleDelete(article._id)}
-                                                        className="btn btn-xs p-1 bg-red-500 text-[var(--white)] hover:bg-red-600 rounded-md transition duration-300 border-none shadow-sm"
-                                                    >
-                                                        <FaTrashAlt className="text-sm" />
-                                                    </button>
-                                                </div>
+                                                <button
+                                                    onClick={() => handleDelete(article._id)}
+                                                    className="btn btn-xs p-1 bg-red-500 text-white hover:bg-red-600 rounded-md border-none"
+                                                >
+                                                    <FaTrashAlt className="text-xs" />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -402,8 +304,8 @@ const DashAllArticles = () => {
 
                                 {filteredArticles.length === 0 && (
                                     <tr>
-                                        <td colSpan="7" className="text-center py-4 text-base rounded-b-lg">
-                                            No articles found with that search info.
+                                        <td colSpan="7" className="text-center py-4 text-sm sm:text-base rounded-b-lg">
+                                            No articles found.
                                         </td>
                                     </tr>
                                 )}
@@ -412,27 +314,26 @@ const DashAllArticles = () => {
                     </div>
                 )}
 
-                {/* Pagination */}
                 {!isLoading && allArticles.length > 0 && (
-                    <div className="flex justify-between items-center mt-4">
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mt-4">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                             Showing {(page - 1) * limit + 1} to {Math.min(page * limit, total)} of {total} articles
                         </p>
                         <div className="flex gap-2">
                             <button
                                 onClick={handlePrevPage}
                                 disabled={page === 1}
-                                className={`px-4 py-2 rounded-lg ${page === 1 ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-[var(--primary)] hover:bg-[#d33] text-white'}`}
+                                className={`px-4 py-2 rounded-lg text-sm ${page === 1 ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-[var(--primary)] hover:bg-[#d33] text-white'}`}
                             >
                                 Previous
                             </button>
-                            <span className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                            <span className="px-4 py-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg">
                                 Page {page} of {totalPages}
                             </span>
                             <button
                                 onClick={handleNextPage}
                                 disabled={page === totalPages}
-                                className={`px-4 py-2 rounded-lg ${page === totalPages ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-[var(--primary)] hover:bg-[#d33] text-white'}`}
+                                className={`px-4 py-2 rounded-lg text-sm ${page === totalPages ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-[var(--primary)] hover:bg-[#d33] text-white'}`}
                             >
                                 Next
                             </button>
@@ -441,8 +342,8 @@ const DashAllArticles = () => {
                 )}
 
                 {/* Decline Modal */}
-                <Dialog open={declineModalOpen} onClose={() => setDeclineModalOpen(false)}>
-                    <DialogTitle>Decline Article</DialogTitle>
+                <Dialog open={declineModalOpen} onClose={() => setDeclineModalOpen(false)} maxWidth="sm" fullWidth>
+                    <DialogTitle className="text-lg sm:text-xl">Decline Article</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -451,57 +352,63 @@ const DashAllArticles = () => {
                             type="text"
                             fullWidth
                             multiline
-                            rows={4}
+                            rows={3}
                             value={declineReason}
                             onChange={(e) => setDeclineReason(e.target.value)}
+                            variant="outlined"
+                            size="small"
                         />
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setDeclineModalOpen(false)} color="primary">
+                    <DialogActions className="px-4 pb-4">
+                        <Button onClick={() => setDeclineModalOpen(false)} color="primary" size="small">
                             Cancel
                         </Button>
-                        <Button onClick={confirmDecline} color="primary">
+                        <Button onClick={confirmDecline} color="primary" variant="contained" size="small">
                             Confirm
                         </Button>
                     </DialogActions>
                 </Dialog>
 
-                {/* Article Details Modal */}
+                {/* Article Details Modal with Soft Blur Background */}
                 {selectedArticle && !declineModalOpen && (
-                    <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-[999999]">
-                        <div className="bg-white dark:bg-[var(--dark-secondary)] mt-16 sm:mt-18 p-6 rounded-lg shadow w-[95%] max-w-[280px] sm:max-w-lg space-y-4 relative text-[var(--dark)] dark:text-[var(--white)] max-h-[80vh] sm:max-h-[86vh] overflow-y-auto">
+                    <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex justify-center items-center z-[999999] p-3">
+                        <div className="bg-white dark:bg-[var(--dark-secondary)] p-5 sm:p-6 rounded-2xl shadow-lg w-[95%] max-w-[90%] sm:max-w-lg md:max-w-xl space-y-4 relative text-[var(--dark)] dark:text-[var(--white)] max-h-[90vh] overflow-y-auto">
                             <div className="flex justify-between items-center">
-                                <h2 className="text-2xl font-bold font-oxygen">
+                                <h2 className="text-xl sm:text-2xl font-bold font-oxygen">
                                     Article Details
                                 </h2>
                                 <button
                                     onClick={() => setSelectedArticle(null)}
-                                    className="text-lg px-2 bg-[var(--primary)] text-[var(--white)] hover:bg-[#ffe0b3] hover:text-[var(--primary)] rounded-full transition duration-500 border-none shadow-none cursor-pointer"
+                                    className="text-lg sm:text-xl px-3 bg-[var(--primary)] text-white hover:bg-[#d33] rounded-full transition-all duration-300"
                                 >
                                     &times;
                                 </button>
                             </div>
-                            <div className="font-jost text-xs sm:text-base">
-                                <img src={selectedArticle.image} alt="Article" className="w-full h-48 object-cover rounded-lg mb-4 blur-sm" 
-                                    onLoad={(e) => e.target.classList.remove('blur-sm')} />
-                                <h3 className="text-xl font-bold mb-2">{selectedArticle.title}</h3>
-                                <p className="mb-2"><strong>Author:</strong> {selectedArticle.authorName}</p>
-                                <p className="mb-2"><strong>Email:</strong> {selectedArticle.authorEmail}</p>
-                                <p className="mb-2"><strong>Status:</strong> <StatusBadge status={selectedArticle.status} /></p>
-                                <p className="mb-2"><strong>Premium:</strong> {selectedArticle.isPremium ? "Yes" : "No"}</p>
-                                <p className="mb-2"><strong>Posted Date:</strong> {new Date(selectedArticle.postedDate).toLocaleString()}</p>
-                                <p className="mb-2"><strong>Publisher:</strong> {selectedArticle.publisher}</p>
-                                <p className="mb-2"><strong>Tags:</strong> {selectedArticle.tags?.join(", ")}</p>
+                            <div className="font-jost text-xs sm:text-sm">
+                                <img
+                                    src={selectedArticle.image}
+                                    alt="Article"
+                                    className="w-full h-36 sm:h-48 object-cover rounded-lg mb-4 blur-sm"
+                                    onLoad={(e) => e.target.classList.remove('blur-sm')}
+                                />
+                                <h3 className="text-lg sm:text-xl font-bold mb-2">{selectedArticle.title}</h3>
+                                <p><strong>Author:</strong> {selectedArticle.authorName}</p>
+                                <p><strong>Email:</strong> {selectedArticle.authorEmail}</p>
+                                <p><strong>Status:</strong> <StatusBadge status={selectedArticle.status} /></p>
+                                <p><strong>Premium:</strong> {selectedArticle.isPremium ? "Yes" : "No"}</p>
+                                <p><strong>Posted Date:</strong> {new Date(selectedArticle.postedDate).toLocaleString()}</p>
+                                <p><strong>Publisher:</strong> {selectedArticle.publisher}</p>
+                                <p><strong>Tags:</strong> {selectedArticle.tags?.join(", ")}</p>
                                 {selectedArticle.declineReason && (
-                                    <p className="mb-2"><strong>Decline Reason:</strong> {selectedArticle.declineReason}</p>
+                                    <p><strong>Decline Reason:</strong> {selectedArticle.declineReason}</p>
                                 )}
-                                <p className="mt-4"><strong>Description:</strong></p>
-                                <p className="text-gray-700 dark:text-gray-300">{selectedArticle.description}</p>
+                                <p className="mt-3"><strong>Description:</strong></p>
+                                <p className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm">{selectedArticle.description}</p>
                             </div>
                         </div>
                     </div>
                 )}
-            </div >
+            </div>
         </>
     );
 };

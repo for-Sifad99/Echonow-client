@@ -245,7 +245,7 @@ const Register = () => {
                 </form>
 
                 {/* Social login */}
-                <div className="flex justify-center mt-4">
+                <div className="flex mt-2">
                     <SocialLogin />
                 </div>
             </div>
